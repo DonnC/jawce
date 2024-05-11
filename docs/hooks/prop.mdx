@@ -1,0 +1,26 @@
+---
+title: Prop
+description: Save user input
+---
+
+# Prop
+
+If you have been developing websites, you probably come across this word. Here, Props are custom variables that you can use however you'd like - to store data in the user session under that variable
+
+## Defining a prop
+
+To define a prop on a particular template
+
+```yaml
+1000:
+  type: text
+  prop: name
+  message: "What is your name?"
+  routes:
+    "re:.*": next-stage
+```
+
+In the above, when user provides a response, it will be saved in the user session with the key `name`
+
+You can then access this data later in your program by this key from the user session.
+

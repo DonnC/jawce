@@ -1,0 +1,37 @@
+---
+title: Configuration
+description: Configure engine
+---
+
+## Configuration
+
+
+### Default configurations
+The engine comes with default H2 embedded in-memory database which you can change to your preffered datasource in `application.yml`
+
+Internally the engine uses a simple session manager: `ConcurrentMapCache` which resets everytime you restart the service.
+
+For a persistant or more advanced session / cache manager consider using `HazelCast` or `Redis` for persistent cache or any of your preffered choice.
+
+### Getting Started
+
+Open the project with IntelliJ or any IDE of your choice and install the dependencies. This project uses `maven`.
+
+The H2 Database name is `mem:JavaWhatsappEngineDb` but you can change this in the `application.yml`
+
+Default running port is `8080`
+
+Set your WhatsApp credentials in the database by making a POST request to
+
+`http://localhost:8080/webhook/config`
+
+```json
+{
+    "accessToken": "",
+    "hubToken": "",
+    "phoneNumberId": "",
+    "apiVersion": "v18.0"
+}
+```
+
+Thats all, you can now play around with your configured message templates and check your bot in action 🙂.

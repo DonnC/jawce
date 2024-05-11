@@ -1,0 +1,25 @@
+resources:
+  templates: classpath*:templates/**/*.{yaml,yml}
+  triggers: classpath*:triggers/**/*.{yaml,yml}
+
+spring:
+  mustache:
+    check-template-location: false
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:JavaWhatsappEngineDb
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true

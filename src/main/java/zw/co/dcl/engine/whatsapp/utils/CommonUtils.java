@@ -1,0 +1,397 @@
+package zw.co.dcl.engine.whatsapp.utils;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import zw.co.dcl.engine.whatsapp.constants.EngineConstants;
+import zw.co.dcl.engine.whatsapp.entity.DefaultHookArgs;
+import zw.co.dcl.engine.whatsapp.entity.dto.ChannelUserInput;
+import zw.co.dcl.engine.whatsapp.entity.dto.DataDatumDTO;
+import zw.co.dcl.engine.whatsapp.entity.dto.SupportedMessageType;
+import zw.co.dcl.engine.whatsapp.entity.dto.WaCurrentUser;
+import zw.co.dcl.engine.whatsapp.enums.ListSectionType;
+import zw.co.dcl.engine.whatsapp.enums.PayloadType;
+import zw.co.dcl.engine.whatsapp.enums.WebhookIntrMsgType;
+import zw.co.dcl.engine.whatsapp.enums.WebhookResponseMessageType;
+import zw.co.dcl.engine.whatsapp.exceptions.EngineInternalException;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CommonUtils {
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+    static final private ObjectMapper objectMapper = new ObjectMapper();
+    final static private DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+
+    public static Map<String, Object> getStaticPayload(String recipient, PayloadType type, String previousMessageId) {
+        Map<String, Object> payload = new HashMap<>(Map.of(
+                "messaging_product", "whatsapp",
+                "recipient_type", "individual",
+                "to", recipient,
+                "type", type.name().toLowerCase()
+        ));
+
+        if (previousMessageId != null && !previousMessageId.isEmpty()) {
+            payload.put("context", Map.of("message_id", previousMessageId));
+        }
+
+        return payload;
+    }
+
+    public static String formatZonedDateTime(ZonedDateTime dateTime) {
+        return dateTime.format(dtFormatter);
+    }
+
+    public static ZonedDateTime parseZonedDateTime(String dateTimeString) {
+        return ZonedDateTime.parse(dateTimeString, dtFormatter);
+    }
+
+    public static ZonedDateTime currentSystemDate() {
+        return ZonedDateTime.now(ZoneId.systemDefault());
+    }
+
+    public static String getSessionExpiryTime(Long expiryInMins) {
+        return formatZonedDateTime(currentSystemDate().plusMinutes(expiryInMins));
+    }
+
+    public static boolean hasSessionExpired(String sessionTime) {
+        if (sessionTime == null) return true;
+        return currentSystemDate().isAfter(parseZonedDateTime(sessionTime));
+    }
+
+    public static boolean hasInteractionExpired(String lastInteractionTime, int maxInteractionInMins) {
+        if (lastInteractionTime == null) return false;
+        return Duration.between(parseZonedDateTime(lastInteractionTime), currentSystemDate()).abs().toMinutes() > maxInteractionInMins;
+    }
+
+    public static boolean isRegexInput(String input) {
+        return input.startsWith(EngineConstants.TPL_REGEX_PLACEHOLDER_KEY);
+    }
+
+    public static String getRegexPattern(String regex) {
+        if (!isRegexInput(regex)) throw new EngineInternalException("expected a valid regex pattern");
+
+        String[] parts = regex.split(EngineConstants.TPL_REGEX_PLACEHOLDER_KEY);
+
+        if (parts.length == 2) return parts[1];
+
+        throw new EngineInternalException("invalid regex format");
+    }
+
+    public static String createEngineErrorMsg(String stage, String recipient, String msg) {
+        return stage.trim() + EngineConstants.ENGINE_EXC_MSG_SPLITTER + recipient.trim() + EngineConstants.ENGINE_EXC_MSG_SPLITTER + msg.trim();
+    }
+
+    public static String getPreviousMessageId(Map<String, Object> tpl) {
+        return (String) tpl.getOrDefault(EngineConstants.TPL_REPLY_MESSAGE_ID_KEY, null);
+    }
+
+    /**
+     * For channel error response ->
+     * <p>
+     * stage | recipient | message
+     *
+     * @param splitter regex pattern or char to split the given input
+     * @param input    Input data to split using [splitter]
+     * @return DataDatumDTO
+     */
+    public static DataDatumDTO getDataDatumArgs(String splitter, String input) {
+        String[] parts = input.split(splitter);
+
+        if (parts.length == 2) {
+            return new DataDatumDTO(parts[0], parts[1], null);
+        } else if (parts.length == 3) {
+            return new DataDatumDTO(parts[0], parts[1], parts[2]);
+        }
+
+        throw new EngineInternalException("invalid format to parse");
+    }
+
+    public static boolean isRegexPatternMatch(String regexPattern, String text) {
+        Pattern pattern = Pattern.compile(regexPattern);
+        Matcher matcher = pattern.matcher(text);
+        return matcher.find();
+    }
+
+    public static ListSectionType detectListSectionType(LinkedHashMap<String, Object> sectionData) {
+        final String kTitleKey = "title";
+        final String kDescKey = "description"; // optional
+
+        boolean hasSectionTitles = !sectionData.isEmpty() && sectionData.values().stream().allMatch(value ->
+                value instanceof Map && ((Map<?, ?>) value)
+                        .values()
+                        .stream()
+                        .allMatch(
+                                innerValue -> innerValue instanceof Map && ((Map<?, ?>) innerValue).containsKey(kTitleKey)
+                        )
+        );
+
+        if (hasSectionTitles) return ListSectionType.SECTION_TITLES;
+
+        boolean allAreRows = sectionData.size() <= 10 && sectionData.values().stream().allMatch(value ->
+                value instanceof Map && ((Map<?, ?>) value).containsKey(kTitleKey));
+
+        if (allAreRows) return ListSectionType.ROWS_ONLY;
+
+        return ListSectionType.INVALID;
+    }
+
+    static public Map<String, Object> objectToMap(Object object) {
+        try {
+            return objectMapper.readValue(object.toString(), new TypeReference<Map<String, Object>>() {
+            });
+        } catch (Exception e) {
+            logger.warn("[ENGINE] failed to convert obj to map: {}", e.getMessage());
+            return Map.of();
+        }
+    }
+
+    public static Object convertResponseToHookObj(String response) {
+        return fromJsonMap(objectToMap(response), DefaultHookArgs.class);
+    }
+
+    static public Map<String, Object> linkedHashToMap(LinkedHashMap lhm) {
+        try {
+            return (Map<String, Object>) lhm;
+        } catch (Exception e) {
+            return lhm;
+        }
+    }
+
+    public static boolean isValidChannelResponse(String payload) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(payload);
+            String messagingProduct = rootNode.path("messaging_product").asText();
+            if (!"whatsapp".equals(messagingProduct)) return false;
+
+            // Check if messages has 1 entry with an id starting with "wamid"
+            JsonNode messagesNode = rootNode.path("messages");
+            if (messagesNode.isArray() && messagesNode.size() == 1) {
+                return messagesNode.get(0).path("id").asText().startsWith("wamid");
+            }
+
+            return false;
+        } catch (Exception err) {
+            return false;
+        }
+    }
+
+    static public boolean isValidChannelMessage(Map<String, Object> map) {
+        if (map.containsKey("object") && map.get("object").equals("whatsapp_business_account")) {
+            List<Map<String, Object>> entries = (List<Map<String, Object>>) map.get("entry");
+            for (Map<String, Object> entry : entries) {
+                final List<Map<String, Object>> changes = (List<Map<String, Object>>) entry.get("changes");
+                Map<String, Object> valueMap = changes.get(0);
+                Map<String, Object> innerValue = (Map<String, Object>) valueMap.get("value");
+                if (innerValue.containsKey("messaging_product") && innerValue.get("messaging_product").equals("whatsapp")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static SupportedMessageType isValidSupportedMessageType(Map<String, Object> message) {
+        if (!message.containsKey("type")) return new SupportedMessageType(false, null, null);
+
+        String type = message.get("type").toString().toLowerCase();
+
+        var isSupported = type.equals("text") || type.equals("interactive") || type.equals("button") ||
+                type.equals("unknown") || type.equals("image") || type.equals("document");
+
+        if (!isSupported) return new SupportedMessageType(false, null, null);
+
+        if (type.equals("interactive")) {
+            var intr = (Map<String, Object>) message.get("interactive");
+            String intrType = intr.get("type").toString();
+
+            return switch (intrType) {
+                case "button_reply" ->
+                        new SupportedMessageType(true, WebhookResponseMessageType.INTERACTIVE, WebhookIntrMsgType.BUTTON_REPLY);
+                case "nfm_reply" ->
+                        new SupportedMessageType(true, WebhookResponseMessageType.INTERACTIVE, WebhookIntrMsgType.NFM_REPLY);
+                case "list_reply" ->
+                        new SupportedMessageType(true, WebhookResponseMessageType.INTERACTIVE, WebhookIntrMsgType.LIST_REPLY);
+                default -> new SupportedMessageType(false, null, null);
+            };
+        }
+
+        if (type.equals("document")) {
+            return new SupportedMessageType(true, WebhookResponseMessageType.DOCUMENT, null);
+        }
+
+        if (type.equals("button")) {
+            return new SupportedMessageType(true, WebhookResponseMessageType.BUTTON, null);
+        }
+
+        if (type.equals("unknown")) {
+            return new SupportedMessageType(true, WebhookResponseMessageType.UNKNOWN, null);
+        }
+
+        if (type.equals("image")) {
+            return new SupportedMessageType(true, WebhookResponseMessageType.IMAGE, null);
+        }
+
+        return new SupportedMessageType(true, WebhookResponseMessageType.TEXT, null);
+    }
+
+    public static ChannelUserInput getListInteractiveIdInput(WebhookIntrMsgType lType, Map interactiveObj) {
+        return switch (lType) {
+            case LIST_REPLY, BUTTON_REPLY ->
+                    new ChannelUserInput(((Map) interactiveObj.get(lType.name().toLowerCase())).get("id").toString(), null);
+            case NFM_REPLY -> {
+                var flowObj = (Map) interactiveObj.get(lType.name().toLowerCase());
+                var flowResponsePayload = objectToMap(flowObj.get("response_json"));
+                yield new ChannelUserInput(flowResponsePayload.get("screen").toString(), flowResponsePayload);
+            }
+            default -> throw new EngineInternalException("unsupported interactive message type received");
+        };
+    }
+
+    /*
+        if true, we received a whatsapp error message about something
+     */
+    public static boolean isChannelErrorMessage(Map<String, Object> payload) {
+        if (!payload.containsKey("error")) return false;
+
+        Object errorObject = payload.get("error");
+        if (!(errorObject instanceof Map<?, ?> errorMap)) return false;
+
+        return errorMap.containsKey("type") && errorMap.containsKey("code");
+    }
+
+    public static WaCurrentUser extractWaCurrentUserObj(Map<String, Object> map) {
+        String name = null;
+        String waId = null;
+        String msgId = null;
+        Long timestamp = null;
+
+        List<Map<String, Object>> entries = (List<Map<String, Object>>) map.get("entry");
+        for (Map<String, Object> entry : entries) {
+            List<Map<String, Object>> changes = (List<Map<String, Object>>) entry.get("changes");
+            for (Map<String, Object> change : changes) {
+                Map<String, Object> value = (Map<String, Object>) change.get("value");
+                List<Map<String, Object>> contacts = (List<Map<String, Object>>) value.get("contacts");
+                for (Map<String, Object> contact : contacts) {
+                    Map<String, Object> profile = (Map<String, Object>) contact.get("profile");
+                    name = (String) profile.get("name");
+                    waId = (String) contact.get("wa_id");
+                }
+
+                List<Map<String, Object>> messages = (List<Map<String, Object>>) value.get("messages");
+
+                for (Map<String, Object> message : messages) {
+                    String id = (String) message.get("id");
+                    timestamp = Long.valueOf(message.get("timestamp").toString());
+                    if (id.startsWith("wamid")) msgId = id;
+                }
+            }
+        }
+
+        assert waId != null;
+
+        return new WaCurrentUser(name, waId, msgId, timestamp);
+    }
+
+    public static boolean hasChannelMsgObject(Map<String, Object> map) {
+//        sometimes WA sends webhook on msg status change, ignore these
+        try {
+            List<Map<String, Object>> entries = (List<Map<String, Object>>) map.get("entry");
+            for (Map<String, Object> entry : entries) {
+                List<Map<String, Object>> changes = (List<Map<String, Object>>) entry.get("changes");
+                for (Map<String, Object> change : changes) {
+                    Map<String, Object> value = (Map<String, Object>) change.get("value");
+                    return value.containsKey("messages");
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    public static Map<String, Object> extractWaMessage(Map<String, Object> map) {
+        List<Map<String, Object>> entries = (List<Map<String, Object>>) map.get("entry");
+        for (Map<String, Object> entry : entries) {
+            List<Map<String, Object>> changes = (List<Map<String, Object>>) entry.get("changes");
+            for (Map<String, Object> change : changes) {
+                Map<String, Object> value = (Map<String, Object>) change.get("value");
+                List<Map<String, Object>> messages = (List<Map<String, Object>>) value.get("messages");
+                if (!messages.isEmpty()) return messages.get(0);
+            }
+        }
+        return Map.of();
+    }
+
+    static public Map<String, Object> requestHeadersToMap(HttpServletRequest request) {
+        if (request == null) {
+            logger.warn("HttpServletRequest is null, returning..");
+            return Map.of();
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        var headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            map.put(key, request.getHeader(key));
+        }
+
+        return map;
+    }
+
+    public static LocalDateTime convertTimestamp(long timestamp) {
+        return Instant.ofEpochSecond(timestamp).atZone(ZoneOffset.systemDefault()).toLocalDateTime();
+    }
+
+    public static boolean isOldWebhook(long timestamp, int threshold) {
+        return Duration.between(
+                        convertTimestamp(timestamp),
+                        currentSystemDate()
+                )
+                .abs()
+                .toSeconds() > threshold;
+    }
+
+    /**
+     * if engine has restricted origin,
+     * pass the Pattern to match the user number
+     *
+     * @param patterns  list of patterns to verify
+     * @param recipient to check if it matches provided patterns
+     * @return boolean
+     */
+    public static boolean isAllowedChannelOrigin(List<Pattern> patterns, String recipient) {
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(recipient);
+            if (matcher.matches()) return true;  // Input matches at least one pattern
+        }
+        return false;  // Input does not match any pattern
+    }
+
+    public static <T> T fromJsonMap(Map linkedHashMap, Class<T> type) {
+        return objectMapper.convertValue(linkedHashMap, type);
+    }
+
+    public static Map<String, Object> decodePayload(Map<String, Object> payload) {
+        try {
+            String jsonString = objectMapper.writeValueAsString(payload);
+            String decodedJsonString = URLDecoder.decode(jsonString, StandardCharsets.UTF_8);
+            return objectToMap(decodedJsonString);
+        } catch (Exception e) {
+            logger.warn("Failed to url decode WA payload: {}", e.getMessage());
+        }
+        return payload;
+    }
+}

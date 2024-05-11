@@ -1,0 +1,40 @@
+---
+title: Contributing
+description: Learn how to run JAWCE locally and help contribute to the project.
+---
+
+# Contributing
+
+Learn how to run JAWCE locally and help contribute to the project.
+
+## Running locally
+
+Firstly, fork the [https://github.com/invertase/docs.page](https://github.com/invertase/docs.page) repository.
+Once forked, clone the repository locally:
+
+```bash
+git clone git@github.com:invertase/docs.page.git
+```
+
+Open the project with IntelliJ or any IDE or choice and install the dependencies.
+
+It uses H2 embedded database for quick testing. Database name is `mem:JavaWhatsappEngineDb` but you can change this in the `application.yml`
+
+
+Before running, you must have WhatsApp credentials all set
+
+You can set the credentials for the engine by making a POST via REST API to
+
+`http://localhost:port/webhook/config`
+
+```json
+{
+    "accessToken": "",
+    "hubToken": "",
+    "phoneNumberId": "",
+    "apiVersion": "v18.0"
+}
+```
+
+> Checkout the getting started to [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started/).
+

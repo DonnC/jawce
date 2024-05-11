@@ -1,0 +1,50 @@
+{
+  "name": "jawe",
+  "logo": "https://static.invertase.io/assets/docs.page/docs-page-logo.png",
+  "theme": "#36B9B9",
+  "twitter": "donix_22",
+  "anchors": [
+    { "title": "Homepage", "icon": "house", "link": "https://docs.page" },
+    { "title": "LinkedIn", "icon": "linkedin", "link": "https://www.linkedin.com/in/donchinhuru/" }
+  ],
+  "sidebar": [
+    [
+      "Getting Started",
+      [
+        ["Overview", "/"],
+        ["Getting Started", "/getting-started"],
+        ["Configuration", "/configuration"],
+        ["Writing Content", "/writing-content"]
+      ]
+    ],
+    [
+      "Components",
+      [
+        ["Accordion", "/components/accordion"],
+        ["Code Blocks", "/components/code-blocks"],
+        ["Callouts", "/components/callouts"],
+        ["Headings", "/components/headings"],
+        ["Tweet", "/components/tweet"],
+        ["Tabs", "/components/tabs"],
+        ["Images", "/components/images"],
+        ["YouTube", "/components/youtube"],
+        ["Vimeo", "/components/vimeo"],
+        ["Video", "/components/video"],
+        ["Zapp!", "/components/zapp"],
+        ["Custom Components", "/components/custom"]
+      ]
+    ],
+    [
+      "Advanced",
+      [
+        ["Frontmatter", "/frontmatter"],
+        ["Previews", "/previews"],
+        ["Search", "/search"],
+        ["Custom Domains", "/custom-domains"],
+        ["Locales", "/locales"],
+        ["GitHub Bot", "/github-bot"]
+      ]
+    ],
+    ["Misc.", [["Contributing", "/contributing"]]]
+  ]
+}

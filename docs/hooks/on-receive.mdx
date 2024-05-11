@@ -1,0 +1,26 @@
+---
+title: On-Receive
+description: Handle logic when user responds
+---
+
+# on-receive
+As the name implies - do something when we receive user respond
+
+
+```yaml
+1000:
+  type: text
+  on-receive: "rest:https://example.com/api/notify"
+  message: "Type `yes` to receive a Slack notification from us"
+  routes:
+    "yes": "next-stage"
+```
+
+When user responds and `on-receive` is defined, the hook is processed. 
+
+To define *REST API* based hooks, prefix them with `rest:`
+
+Each rest based hook must be a **POST** request which accepts the below object
+
+
+

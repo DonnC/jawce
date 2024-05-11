@@ -1,0 +1,42 @@
+"BOOK_STAGE":
+  type: button
+  message:
+    body: "You are making the right choice. Kindly confirm your system demo booking request by clicking the start button"
+    footer: ERP Demo
+    buttons:
+      - Start
+      - Return
+  routes:
+    "start": 1000
+    "return": "MAIN_MENU"
+
+1000:
+  type: button
+  prop: erp
+  message:
+    body: "Great choice, select your ERP of choice"
+    buttons:
+      - ERPNext
+      - SAP
+      - Odoo
+  routes:
+    "re:.*": 2000
+
+2000:
+  type: text
+  prop: bookingDate
+  message:
+    - "Kindly provide your preferred demo date and time in 24hr format"
+    - ""
+    - "Format: _DD/MM/YYYY HH:MM_ e.g *23/05/2024 10:00*"
+  routes:
+    "re:.*": 3000
+
+3000:
+  type: button
+  message:
+    body: "Your booking as been recorded. I will notify you 30mins before on your selected demo day 🙂"
+    buttons:
+      - Menu
+  routes:
+    "menu": "MAIN_MENU"

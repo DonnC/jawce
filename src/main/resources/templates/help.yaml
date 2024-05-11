@@ -1,0 +1,8 @@
+"HELP_MENU":
+  type: text
+  message:
+    - "This is an example help menu"
+    - ""
+    - "Type _start_ to begin"
+  routes:
+    "re:.*": "MAIN_MENU"

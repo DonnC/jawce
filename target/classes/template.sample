@@ -1,0 +1,167 @@
+400:
+  type: flow
+  template: "com.org.example.service.clsName:methodName"
+  message:
+    id: flow-id
+    name: flow-name
+    draft: true
+    title: header
+    body: "Hie {{ name }}. Good day"
+    footer: footer / caption
+    button: CTA-btn
+  routes:
+    "re:.*": 500
+
+500:
+  type: button
+  validator: "rest:/login/process"
+  prop: AccountNumber
+  message:
+    title: btn-title
+    body: btn-body
+    buttons:
+      - btn-1
+      - btn-2
+  routes:
+    "btn-1": route1
+    "btn-2": route2
+
+# button with media header
+# if message has <id> or <url> - the header type will be on
+# the title field
+501:
+  type: button
+  validator: "rest:/login/process"
+  prop: AccountNumber
+  message:
+    title: image    # audio or document
+    id: 39948994    # url: https://...
+    body: btn-body
+    buttons:
+      - btn-1
+      - btn-2
+  routes:
+    "btn-1": route1
+    "btn-2": route2
+
+# general text
+3170:
+  type: text
+  message: Thank you for visiting us
+  routes:
+    "re:.*": 100
+
+# interactive list
+3000:
+  type: list
+  authenticated: true
+  message:
+    title: msg-title
+    body: body
+    footer: footer / caption
+    button: btn-text
+    sections:
+      "title1":
+        0:
+          title: item1
+          description: desc
+        1:
+          title: item2
+          description: desc
+      "title2":
+        3:
+          title: item3
+          description: desc
+        4:
+          title: item4
+          description: desc
+  routes:
+    "0": 10
+    "1": 11
+    "2": 12
+    "3": other-routes
+
+# media message
+700:
+  type: document
+  message-id: prev-msg-id
+  message:
+    id: media-id
+    caption: doc caption
+    filename: doc.pdf
+  routes:
+    "re:.*": route
+
+800:
+  type: text
+  template: "com.org.example.service.clsName:methodName" # as defined by the flow
+  router: ".."
+  transient: true
+  message: "Transient stage - no display to user"
+  routes:
+    "re:.*": 900
+    "~": next-stage
+
+900:
+  type: flow
+  template: "com.org.example.service.clsName:methodName" # as defined by the flow
+  router: "rest:/flow/route"
+  message:
+    id: flow-id
+    name: flow-name
+    draft: true # if flow is draft, else ignore
+    title: header
+    body: "Hie {{ name }}. Good day"
+    footer: footer / caption
+    button: CTA-btn
+  routes:
+    "re:.*": 500
+    "~": next-stage
+
+"ALL_HOOKS":
+  type: text
+  checkpoint: true
+  ack: true
+  authenticated: true
+  transient: true
+  prop: propKey
+  router: dynamic-route-hook
+  on-receive: on-receive-hook
+  message-id: prev-msg-id
+  on-generate: on-generate hook
+  validator: validator-hook
+  middleware: middleware-hook
+  template: template-hook
+  params:
+    p1: p-value
+    pn2: pn-value
+  message:
+    id: media-id
+    caption: doc caption
+    filename: doc.pdf
+  routes:
+    "re:.*": route
+    "back": go-back
+
+5000:
+  type: text
+  checkpoint: true
+  authenticated: true
+  transient: true
+  prop: propKey
+  router: dynamic-route-hook
+  on-receive: on-receive-hook
+  message-id: prev-msg-id
+  on-generate: on-generate hook
+  validator: validator-hook
+  middleware: middleware-hook
+  template: template-hook
+  params:
+    p1: p-value
+    pn2: pn-value
+  message:
+    id: media-id
+    text: jack
+  routes:
+    "re:.*": route2
+    "prev": prev-back

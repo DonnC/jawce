@@ -1,0 +1,4 @@
+# triggers are handled first before the stages
+# if trigger matches, engine routes to the stage specified
+
+"MAIN_MENU": "re:$start^"

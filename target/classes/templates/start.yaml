@@ -1,0 +1,10 @@
+"MAIN_MENU":
+  type: button
+  message:
+    body: "Hi there 👋.\nI am *JAWE 🤖*, your ERP booking assistant.\n\nWhat would you like to do today?"
+    buttons:
+      - Book Demo
+      - Help
+  routes:
+    "book demo": "BOOK_STAGE"
+    "help": "HELP_MENU"

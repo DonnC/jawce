@@ -1,0 +1,147 @@
+---
+title: Templates
+description: Learn about how to create bot conversation flows
+---
+
+# Getting Started
+**JAWCE** supports writing chatbot messages in [YAML](https://www.redhat.com/en/topics/automation/what-is-yaml) format. This means you can write your
+conversation flows in a familiar format and it will be rendered on the WhatsApp channel. I chose YAML apart from JSON because it is strict 😏 that's all.
+
+Alongside this, you may notice the file extension for your templates is `.yaml` or  `.yml`. This is because they are both valid YAML file extensions 😐.
+
+## Triggers
+
+Most chatbots have a start word(s) or just a keyword that can trigger a certain flow to kick in. 
+For example, most chatbots may trigger a **GREETING** message template when a user sends `start` or `hi` message. In this situation, you want the bot to respond back whenever user sends this messages. These are the `triggers` as you may have expected.
+
+Triggers are global and they are the ones to be evaluated first before any stages that you define in your `templates` folder.
+
+```yaml
+"MAIN_MENU": "re:^start$"       # recommended
+"HELP_MENU": "re:start"         # not recommended
+```
+
+The triggers above mean that, whenever user types `start` -  render the **MAIN_MENU** template to user
+
+To define `regex` triggers, always prefix them with `re:` Learn more under [Hooks](/hooks) section.
+
+Its prefferable to have your triggers as exact regex to avoid messing messages in case user types your regex pattern in between their messages. In case of `HELP_MENU` above, imagine user type `starting my day` - this will likely show unexpected results 😕.
+
+## Templates
+These are the backbone of the engine. Whats is a chatbot if we dont have conversations with the users.
+
+This is where you add your chatbot brains and define its conversation flow.
+
+Templates are predictable, are defined in "STAGES" or "STEPS" or "FLOW" whatever you want to call it, to make it easy to know where to go from 1 conversation to another. There are a couple of `hooks` you can define on your template - will cover hooks in the next section. These hooks will extend the functionality of your template as you desire. There are different message types in WhatsApp [Message Types](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-messages).
+
+The engine supports some type and some .. well you can contribute if progress is slow 🫣 ..
+
+The engine currently supports the following types
+- text
+- button
+- list
+- flow
+- dynamic - dynamically created template of any of the above types
+
+### Example bot: Booking Chatbot
+
+Imagine we have a chatbot which manages booking for a System demonstration to interested clients.
+
+We can have a start menu (first step) as below
+```yaml
+"MAIN_MENU":
+  type: button
+  message:
+    body: "Hi, I am *JAWE 🤖*, your ERP System booking assistant.\n\nWhat would you like to do today?"
+    buttons:
+      - Book Demo
+      - Help
+  routes:
+    "book demo": "BOOK_STAGE"
+    "help": "HELP_MENU"
+```
+
+A lot is happening here, but lets break it down.
+
+The `type` - specifies that this template should show as a button message on the end user.
+
+The `message` - message to show the user, like a button body
+
+The `buttons` - the buttons to show to the user which the user will select
+
+The `routes` - to know where to go when user selects any of the button options we gave them. The routes maps the user response to the next stage defined in your `templates` folder.
+
+
+<Tabs
+  values={[
+    { label: 'BOOK_STAGE', value: 'first' },
+    { label: 'Start - 1000', value: 'second' },
+    { label: 'Choose - 2000', value: 'third' },
+    { label: 'End - 3000', value: 'forth' },
+  ]}
+>
+  <TabItem value="first">
+    ```yaml
+"BOOK_STAGE":
+  type: button
+  message:
+    body: "Kindly confirm your system demo booking request by clicking the start button"
+    footer: ERP Demo
+    buttons:
+      - Start
+      - Return
+  routes:
+    "start": 1000
+    "return": "MAIN_MENU"
+```
+  </TabItem>
+
+  <TabItem value="second">
+    ```yaml
+1000:
+  type: button
+  prop: userSelectedErp
+  message:
+    body: "Great choice, select your ERP of choice"
+    buttons:
+      - ERPNext
+      - SAP
+      - Odoo
+  routes:
+    "re:.*": 2000
+```
+    </TabItem>
+
+  <TabItem value="third">
+    ```yaml
+2000:
+  type: text
+  prop: userSelectedBookingDate
+  message:
+    - "Kindly provide your preferred demo date and time in 24hr format"
+    - ""
+    - "Format: _DD/MM/YYYY HH:MM_ e.g *23/05/2024 10:00*"
+  routes:
+    "re:.*": 3000
+```
+
+  </TabItem>
+
+  <TabItem value="forth">
+    ```yaml
+3000:
+  type: button
+  message:
+    body: "Your booking as been recorded. I will notify you 30mins before on your selected demo day 🙂"
+    buttons:
+      - Menu
+  routes:
+    "menu": "MAIN_MENU"
+```
+  </TabItem>
+</Tabs>
+
+
+By now you can picture what the above is doing. You can name your stages any way you want, numbers or text - your choice.
+
+This will be the chatbot conversation brain and it will be hopping from 1 stage to the other as you define it 😀.
