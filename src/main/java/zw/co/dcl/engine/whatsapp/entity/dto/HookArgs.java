@@ -13,6 +13,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HookArgs extends DefaultHookArgs {
-    //    set to null when sending via rest call
     private ISessionManager session;
 }

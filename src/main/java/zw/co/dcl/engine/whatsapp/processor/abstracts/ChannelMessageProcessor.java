@@ -129,7 +129,7 @@ public abstract class ChannelMessageProcessor {
             ));
         };
 
-        logger.info("[ENGINE] [{}] Extracted user input: {}", stage, this.currentStageUserInput.input());
+        logger.info("[{}] Extracted user input: {}", stage, this.currentStageUserInput.input());
     }
 
     protected boolean templateHasKey(Map<String, Object> tpl, String key) {
@@ -181,10 +181,10 @@ public abstract class ChannelMessageProcessor {
             }
         }
 
-        if (dto.ISessionManager().get(SessionConstants.CURRENT_MSG_ID_KEY) == null) {
-            dto.ISessionManager().clear();
-            throw new EngineInternalException("Ambigious old webhook response: skipping..");
-        }
+//        if (dto.ISessionManager().get(SessionConstants.CURRENT_MSG_ID_KEY) == null) {
+//            dto.ISessionManager().clear();
+//            throw new EngineInternalException("Ambiguous old webhook response: skipping..");
+//        }
     }
 
     private void saveProp() {

@@ -36,8 +36,8 @@ public class WebhookController {
     }
 
     // helper method to get data from current user session by key
-    @GetMapping("/session/{key}")
-    private ResponseEntity<?> getFromSession(@PathVariable String key) {
-        return ResponseEntity.ok(service.getDataFromSession(key));
+    @GetMapping("/session/{user}/{key}")
+    private ResponseEntity<?> getFromSession(@PathVariable String user, @PathVariable String key) {
+        return ResponseEntity.ok(service.getDataFromSession(user, key));
     }
 }

@@ -12,20 +12,20 @@ Alongside this, you may notice the file extension for your templates is `.yaml` 
 ## Triggers
 
 Most chatbots have a start word(s) or just a keyword that can trigger a certain flow to kick in. 
-For example, most chatbots may trigger a **GREETING** message template when a user sends `start` or `hi` message. In this situation, you want the bot to respond back whenever user sends this messages. These are the `triggers` as you may have expected.
+For example, most chatbots may trigger a **GREETING** message template when a user sends `start` or `hi` message. In this situation, you want the bot to respond back whenever user sends this messages.
+These are the `triggers` as you may have expected.
 
 Triggers are global and they are the ones to be evaluated first before any stages that you define in your `templates` folder.
 
 ```yaml
-"MAIN_MENU": "re:^start$"       # recommended
-"HELP_MENU": "re:start"         # not recommended
+"MAIN_MENU": "re:^start$"
 ```
 
 The triggers above mean that, whenever user types `start` -  render the **MAIN_MENU** template to user
 
 To define `regex` triggers, always prefix them with `re:` Learn more under [Hooks](/hooks) section.
 
-Its prefferable to have your triggers as exact regex to avoid messing messages in case user types your regex pattern in between their messages. In case of `HELP_MENU` above, imagine user type `starting my day` - this will likely show unexpected results 😕.
+Its prefferable to have your triggers as exact regex to avoid unexpected responses 😕.
 
 ## Templates
 These are the backbone of the engine. Whats is a chatbot if we dont have conversations with the users.
@@ -52,7 +52,7 @@ We can have a start menu (first step) as below
 "MAIN_MENU":
   type: button
   message:
-    body: "Hi, I am *JAWE 🤖*, your ERP System booking assistant.\n\nWhat would you like to do today?"
+    body: "Hi, I am JAWCE 🤖, your ERP System booking assistant.\n\nWhat would you like to do today?"
     buttons:
       - Book Demo
       - Help
@@ -81,62 +81,62 @@ The `routes` - to know where to go when user selects any of the button options w
   ]}
 >
   <TabItem value="first">
-    ```yaml
+  ```yaml
 "BOOK_STAGE":
-  type: button
-  message:
-    body: "Kindly confirm your system demo booking request by clicking the start button"
-    footer: ERP Demo
-    buttons:
-      - Start
-      - Return
-  routes:
-    "start": 1000
-    "return": "MAIN_MENU"
+    type: button
+    message:
+      body: "Kindly confirm your system demo booking request by clicking the start button"
+      footer: ERP Demo
+      buttons:
+        - Start
+        - Return
+    routes:
+      "start": 1000
+      "return": "MAIN_MENU"
 ```
   </TabItem>
 
   <TabItem value="second">
-    ```yaml
+```yaml
 1000:
-  type: button
-  prop: userSelectedErp
-  message:
-    body: "Great choice, select your ERP of choice"
-    buttons:
-      - ERPNext
-      - SAP
-      - Odoo
-  routes:
-    "re:.*": 2000
+    type: button
+    prop: userSelectedErp
+    message:
+      body: "Great choice, select your ERP of choice"
+      buttons:
+        - ERPNext
+        - SAP
+        - Odoo
+    routes:
+      "re:.*": 2000
 ```
     </TabItem>
 
   <TabItem value="third">
-    ```yaml
+```yaml
 2000:
-  type: text
-  prop: userSelectedBookingDate
-  message:
-    - "Kindly provide your preferred demo date and time in 24hr format"
-    - ""
-    - "Format: _DD/MM/YYYY HH:MM_ e.g *23/05/2024 10:00*"
-  routes:
-    "re:.*": 3000
+    type: text
+    prop: userSelectedBookingDate
+    message:
+      - "Kindly provide your preferred demo date and time in 24hr format"
+      - ""
+      - "Format: _DD/MM/YYYY HH:MM_ e.g *23/05/2024 10:00*"
+    routes:
+      "re:.*": 3000
 ```
 
   </TabItem>
 
   <TabItem value="forth">
-    ```yaml
+```yaml
 3000:
-  type: button
-  message:
-    body: "Your booking as been recorded. I will notify you 30mins before on your selected demo day 🙂"
-    buttons:
-      - Menu
-  routes:
-    "menu": "MAIN_MENU"
+    type: button
+    message:
+      body: "Your booking as been recorded. I will notify you 30mins before on your selected demo day 🙂"
+      buttons:
+        - Menu
+    routes:
+      "menu": "MAIN_MENU"
 ```
   </TabItem>
 </Tabs>
