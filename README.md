@@ -5,9 +5,7 @@ Check out the [documentation available here](https://docs.page/donnc/jawce)
 A Template based Java ChatBot engine for WhatsApp Cloud API
 
 ## Demo
-
-<video src="/docs/assets/demo.mp4" width="320" height="500" controls></video>
-
+https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b
 
 
 ## Hooks
