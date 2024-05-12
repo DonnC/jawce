@@ -45,23 +45,17 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         var checkpoint = this.dto.ISessionManager().get(SessionConstants.SESSION_LATEST_CHECKPOINT_KEY);
 
-        logger.info("current stage routes: {}", currentStageRoutes);
-
         boolean gotoCheckpoint = !this.templateHasKey(currentStageRoutes, EngineConstants.RETRY_NAME)
                 && this.currentStageUserInput.toString().equalsIgnoreCase(EngineConstants.RETRY_NAME)
                 && checkpoint != null
                 && this.dto.ISessionManager().get(SessionConstants.SESSION_DYNAMIC_RETRY_KEY) != null
                 && !this.isFromTrigger;
 
-        logger.info("Goto checkpoint? : {}", gotoCheckpoint);
-
         if (gotoCheckpoint) return checkpoint.toString();
 
 //        handle dynamic router
         var hasDynamicRoute = dynamicRouter();
         if (hasDynamicRoute != null) return hasDynamicRoute;
-
-        logger.info("[ENGINE] current stage tpl, stage: [{}], tpl: {}, routes: {}", currentStage, this.currentStageTpl, currentStageRoutes);
 
         for (Map.Entry<String, Object> route : currentStageRoutes.entrySet()) {
             if (CommonUtils.isRegexInput(route.getKey().trim())) {
@@ -165,7 +159,6 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         String nextStage = preResult.stage();
 
         this.processPreHooks(nextStageTpl);
-        logger.info("~Next tpl: {}", nextStageTpl);
 
         final MessageDto messageDto = new MessageDto(
                 engineService,

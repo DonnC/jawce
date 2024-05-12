@@ -148,7 +148,6 @@ public class WhatsappEngineProcessor {
 //        initialize session
         ISessionManager session = config.ISessionManager().session(waCurrentUser.waId());
 
-        logger.warn("Message Queue size: {}", getMessageQueue(session).size());
         if (getMessageQueue(session).contains(waCurrentUser.msgId())) {
             logger.warn("Duplicate message found: {}. Skipping..", msgData);
             return;
@@ -157,7 +156,6 @@ public class WhatsappEngineProcessor {
         Long lastDebounceTimestamp = session.get(SessionConstants.CURRENT_DEBOUNCE_KEY, Long.class);
         long currentTime = System.currentTimeMillis();
 
-        logger.info("CURRENT DEBOUNCE TS: {} | now: {}", lastDebounceTimestamp, currentTime);
         if (lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= config.sessionSettings().getDebounceTimeoutInMs()) {
             session.save(SessionConstants.CURRENT_DEBOUNCE_KEY, currentTime);
         } else {

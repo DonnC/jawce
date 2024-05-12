@@ -3,7 +3,14 @@ title: Getting Started
 description: Get started with JAWCE.
 ---
 
+# Demo
+If you successfully run this project, your simple chatbot will be available like below
+
+<Video muted autoPlay src="/assets/demo.mp4" type="video/mp4" />
+
 # Getting Started
+
+> The engine comes with sample templates - you can set your credentials and if all goes well, start your chatbot with `start`
 
 The JAWCE engine reads your conversation flow (`templates`) directly from the project `resources\templates` and `resources\triggers` folder. To get started:
 
@@ -19,4 +26,43 @@ Before running, you must have WhatsApp credentials all set
 
 
 ## Running locally
-When the project is running successfully, you can use **NGROK** to tunnel the engine service
+If running on different port, use your custom port in place of *8080*
+
+The default engine uses file based **H2 database**. The file is saved under `./data/JavaWhatsappEngineDb` when the engine starts.
+
+You can access the H2 console by opening your browser at `http://localhost:8080/h2-console`. Use the config as below to connect.
+
+<Image zoom src="/assets/h2-console.png" />
+
+After the project is up and running, set your credentials by making a post request or add the data in the database manually
+
+POST: `http://localhost:port/webhook/config`
+
+```json
+{
+    "accessToken": "",
+    "hubToken": "jawce-hub-token-123",
+    "phoneNumberId": "",
+    "apiVersion": "v18.0"
+}
+```
+
+<Image zoom src="/assets/h2-data.png" />
+
+
+If all goes well, **restart** the service.
+
+## Meta Developer
+I assume you already set your meta / facebook / whatsapp account and have access to the developer portal of your application
+
+When the project is running successfully, you can use **NGROK** to tunnel the engine service to enable WhatsApp to send webhook request to the engine
+
+```bash
+$ ngrok http 8080
+```
+
+The webhook url will be accessible on `https://ngrok-url/webhook` which you can use to configure on your meta developer application portal as below
+<Image zoom src="/assets/ngrok.png" />
+
+Portal config
+<Image zoom src="/assets/webhook-config.png" />

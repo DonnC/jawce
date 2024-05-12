@@ -10,7 +10,7 @@ public class SessionSettings {
      */
     private int inactivityTimeout = 3;
 
-    private Long debounceTimeoutInMs = 8000L;
+    private Long debounceTimeoutInMs = 2000L;
 
     /**
      * time to consider received message as valid

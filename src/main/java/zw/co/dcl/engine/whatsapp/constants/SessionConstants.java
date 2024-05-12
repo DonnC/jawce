@@ -33,7 +33,7 @@ public class SessionConstants {
     public final static String CURRENT_STAGE = "kEngineCurrStage";
 
     //    value is a Map
-    public final static String PROPS_KEY = "kEngineFlowProps";
+    public final static String PROPS_KEY = "kProps";
 
     /**
      * if this key is null or empty, ignore message processing

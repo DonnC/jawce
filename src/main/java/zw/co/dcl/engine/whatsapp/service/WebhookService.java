@@ -69,6 +69,7 @@ public class WebhookService {
 
 
     public ConfigEntity setConfig(ConfigEntity config) {
+        log.info("CONFIG: {}", config);
         return configRepository.save(config);
     }
 
@@ -77,6 +78,8 @@ public class WebhookService {
             return configRepository.findAll().iterator().next();
         }
 
+        log.warn("No WhatsApp config found. Consider adding configs via POST: /webhook/config");
+
         return new ConfigEntity(
                 0L,
                 "accessToken",
@@ -84,8 +87,6 @@ public class WebhookService {
                 "phoneNumberId",
                 "v18.0"
         );
-
-//        throw new RuntimeException("Could not found engine configs");
     }
 
     public ResponseEntity<?> verifyToken(String mode, String challenge, String token, HttpServletRequest request) {
@@ -105,7 +106,14 @@ public class WebhookService {
     }
 
 
-    public Object getDataFromSession(String key) {
-        return sessionManager.get(key);
+    public Object getDataFromSession(String user, String key) {
+        if (key == null) return "Key is null";
+
+        return Map.of(
+                "key", key,
+                "data", sessionManager.session(user).get(key) == null
+                        ? "" :
+                        sessionManager.session(user).get(key)
+        );
     }
 }

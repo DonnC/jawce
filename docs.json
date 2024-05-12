@@ -3,6 +3,7 @@
   "description": "A Java based WhatsApp Cloud Template Engine",
   "theme": "#36B9B9",
   "twitter": "donix_22",
+  "zoomImages": true,
   "anchors": [
     { "title": "Homepage", "icon": "house", "link": "https://github.com/DonnC" },
     { "title": "LinkedIn", "icon": "linkedin", "link": "https://www.linkedin.com/in/donchinhuru/" }
