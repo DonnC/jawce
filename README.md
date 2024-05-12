@@ -5,7 +5,13 @@ Check out the [documentation available here](https://docs.page/donnc/jawce)
 A Template based Java ChatBot engine for WhatsApp Cloud API
 
 ## Demo
-https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b
+
+
+| Template  | In Action: WhatsApp  |
+|---|---|
+|
+![templates.png](/docs/assets/templates.png)  |  https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b |
+
 
 
 ## Hooks
