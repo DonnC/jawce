@@ -3,13 +3,16 @@ package zw.co.dcl.engine.whatsapp.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.stereotype.Service;
 import zw.co.dcl.engine.whatsapp.constants.SessionConstants;
+import zw.co.dcl.engine.whatsapp.exceptions.EngineInternalException;
 import zw.co.dcl.engine.whatsapp.service.iface.ISessionManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 @Slf4j
@@ -65,8 +68,11 @@ public class SessionManager implements ISessionManager {
         return this.cache.get(key, type);
     }
 
-    public Map fetchAll() {
-        return null;
+    public ConcurrentMap<Object, Object> fetchAll() {
+        if (cache != null) {
+            return ((ConcurrentMapCache) cache).getNativeCache();
+        }
+        throw new EngineInternalException("Cache not found or not a ConcurrentMapCache");
     }
 
     public void evict(String key) {

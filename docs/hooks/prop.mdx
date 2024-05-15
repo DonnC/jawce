@@ -24,3 +24,10 @@ In the above, when user provides a response, it will be saved in the user sessio
 
 You can then access this data later in your program by this key from the user session.
 
+A helper endpoint to get user session data by key is defined and can be accessible via
+
+```bash
+$ curl GET http://localhost:8080/webhook/{user_mobile}/{session_key}
+```
+
+to get all user session data pass `session_key` as asterik `*`

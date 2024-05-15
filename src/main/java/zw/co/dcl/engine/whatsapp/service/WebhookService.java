@@ -10,7 +10,9 @@ import zw.co.dcl.engine.whatsapp.entity.SessionSettings;
 import zw.co.dcl.engine.whatsapp.entity.WhatsappSettings;
 import zw.co.dcl.engine.whatsapp.entity.dto.ChannelOriginConfig;
 import zw.co.dcl.engine.whatsapp.entity.dto.EngineHookSettings;
+import zw.co.dcl.engine.whatsapp.entity.dto.RestSaveSession;
 import zw.co.dcl.engine.whatsapp.entity.dto.WaEngineConfig;
+import zw.co.dcl.engine.whatsapp.exceptions.EngineInternalException;
 import zw.co.dcl.engine.whatsapp.repository.ConfigEntityRepository;
 import zw.co.dcl.engine.whatsapp.utils.CommonUtils;
 
@@ -70,15 +72,16 @@ public class WebhookService {
 
     public ConfigEntity setConfig(ConfigEntity config) {
         log.info("CONFIG: {}", config);
+        configRepository.deleteAll();
         return configRepository.save(config);
     }
 
     public ConfigEntity getConfig() {
-        if (configRepository.count() == 1) {
+        if (configRepository.count() != 0) {
             return configRepository.findAll().iterator().next();
         }
 
-        log.warn("No WhatsApp config found. Consider adding configs via POST: /webhook/config");
+        log.error("No WhatsApp config found: [{}]. Consider adding configs via POST: /webhook/config", configRepository.count());
 
         return new ConfigEntity(
                 0L,
@@ -106,8 +109,13 @@ public class WebhookService {
     }
 
 
-    public Object getDataFromSession(String user, String key) {
-        if (key == null) return "Key is null";
+    public Map getDataFromSession(String user, String key) {
+        if (key == null) throw new EngineInternalException("key is null");
+
+        if (key.equals("*")) return Map.of(
+                "key", key,
+                "data", sessionManager.session(user).fetchAll()
+        );
 
         return Map.of(
                 "key", key,
@@ -115,5 +123,9 @@ public class WebhookService {
                         ? "" :
                         sessionManager.session(user).get(key)
         );
+    }
+
+    public void saveToSession(RestSaveSession dto) {
+        sessionManager.session(dto.user()).save(dto.key(), dto.data());
     }
 }

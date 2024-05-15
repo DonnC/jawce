@@ -2,7 +2,7 @@
   type: button
   message:
     title: Greetings
-    body: "Hi there 👋.\nI am JAWCE, your ERP booking assistant 🤖.\n\nWhat would you like to do today?"
+    body: "Hi there.\nI am JAWCE, your ERP booking assistant 🤖.\n\nWhat would you like to do today?"
     buttons:
       - Book Demo
       - Help

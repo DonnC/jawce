@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zw.co.dcl.engine.whatsapp.entity.ConfigEntity;
+import zw.co.dcl.engine.whatsapp.entity.dto.RestSaveSession;
 import zw.co.dcl.engine.whatsapp.service.WebhookService;
 
 @RestController
@@ -35,9 +36,14 @@ public class WebhookController {
         return ResponseEntity.ok(service.setConfig(config));
     }
 
-    // helper method to get data from current user session by key
     @GetMapping("/session/{user}/{key}")
     private ResponseEntity<?> getFromSession(@PathVariable String user, @PathVariable String key) {
         return ResponseEntity.ok(service.getDataFromSession(user, key));
+    }
+
+    @PostMapping("/session")
+    private ResponseEntity<?> addToSession(@RequestBody RestSaveSession dto) {
+        service.saveToSession(dto);
+        return ResponseEntity.ok("Saved");
     }
 }

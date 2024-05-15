@@ -13,6 +13,7 @@
       "Getting Started",
       [
         ["Overview", "/"],
+        ["Demo", "/demo"],
         ["Getting Started", "/getting-started"],
         ["Configuration", "/configuration"],
         ["Writing Templates", "/writing-templates"]
@@ -24,7 +25,7 @@
         ["Introduction", "/hooks/introduction"],
         ["Message", "/hooks/messages"],
         ["Prop", "/hooks/prop"],
-        ["On Receive", "/hooks/on-receive"]
+        ["General Hooks", "/hooks/general-hooks"]
       ]
     ],
     [

@@ -1,0 +1,58 @@
+---
+title: Hooks
+description: Handle hooks logic
+---
+
+# General Hooks
+This section will show how the general hooks are processed, These hooks include:
+
+- on-receive
+- on-generate
+- template
+- middleware
+- validator
+
+Consider the example for `on-receive` below
+
+## Example Hook: On-Receive
+
+```yaml
+1000:
+  type: text
+  on-receive: "rest:https://example.com/api/notify"
+  message: "Type `yes` to receive a Slack notification from us"
+  routes:
+    "yes": "next-stage"
+```
+
+When user responds and `on-receive` is defined, the hook is processed.
+
+To define *REST API* based hooks, prefix them with `rest:`
+
+Each rest based hook must be a **POST** request which accepts a `HookArgs` object
+
+Consider a sample python rest hook
+
+```python
+# ...
+
+@app.post("/notify")
+def slack_notify(args: HookArgs):
+    print("Received args: {}".format(args))
+
+    # assume user input slack id and its saved
+    # in user session
+
+    slack_id = get_data_from_session(
+        user=args.channelUser.waId,
+        data_key="slack_id"
+    )
+
+    # send notification via slack
+
+    return args
+
+# ...
+```
+
+
