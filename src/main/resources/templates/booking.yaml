@@ -11,14 +11,25 @@
     "return": "MAIN_MENU"
 
 1000:
-  type: button
+  type: list
   prop: erp
   message:
-    body: "Great choice, select your ERP of choice"
-    buttons:
-      - ERPNext
-      - SAP
-      - Odoo
+    title: "System"
+    body: "Great choice, select your ERP of choice from the options below"
+    button: "Select"
+    sections:
+      "ERP Systems":
+        "ERPNext":
+          title: ERPNext
+          description: A versatile, open-source ERP
+        "Odoo":
+          title: Odoo
+          description: A versatile open-source system for a medium organization
+        "SAP":
+          title: SAP
+          description: A commercial ERP for medium-large organization
+        3:
+          title: Other
   routes:
     "re:.*": 2000
 
@@ -35,7 +46,7 @@
 3000:
   type: button
   message:
-    body: "Your booking as been saved. I will notify you 30mins before on your selected demo day 🙂"
+    body: "Your booking has been saved. I will notify you 30mins before on your selected demo day 🙂"
     footer: ERP Demo
     buttons:
       - Menu

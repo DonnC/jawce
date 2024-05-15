@@ -11,14 +11,25 @@
     "return": "MAIN_MENU"
 
 1000:
-  type: button
+  type: list
   prop: erp
   message:
-    body: "Great choice, select your ERP of choice"
-    buttons:
-      - ERPNext
-      - SAP
-      - Odoo
+    title: "System"
+    body: "Great choice, select your ERP of choice from the options below"
+    button: "Select"
+    sections:
+      "ERP Systems":
+        "ERPNext":
+          title: ERPNext
+          description: A versatile, open-source ERP
+        "Odoo":
+          title: Odoo
+          description: A versatile open-source system for a medium organization
+        "SAP":
+          title: SAP
+          description: A commercial ERP for medium-large organization
+        3:
+          title: Other
   routes:
     "re:.*": 2000
 
@@ -30,12 +41,26 @@
     - ""
     - "Format: _DD/MM/YYYY HH:MM_ \ne.g *23/05/2024 10:00*"
   routes:
-    "re:.*": 3000
+    "re:^(0[1-9]|[12]\\d|3[01])/(0[1-9]|1[0-2])/\\d{4} ([01]\\d|2[0-3]):[0-5]\\d$": 3000
 
 3000:
   type: button
+  on-receive: "rest:http://localhost:8090/chatbot/save-booking"
+  template: "rest:http://localhost:8090/chatbot/confirm-booking"
   message:
-    body: "Your booking as been saved. I will notify you 30mins before on your selected demo day 🙂"
+    title: Confirm Booking?
+    body: "{{ confirmation }}"
+    buttons:
+      - Restart
+      - Confirm
+  routes:
+    "restart": "BOOK_STAGE"
+    "confirm": 4000
+
+4000:
+  type: button
+  message:
+    body: "Your booking has been saved. I will notify you 30mins before on your selected demo day 🙂"
     footer: ERP Demo
     buttons:
       - Menu

@@ -3,11 +3,6 @@ title: Getting Started
 description: Get started with JAWCE.
 ---
 
-# Demo
-If you successfully run this project, your simple chatbot will be available like below
-
-<Video muted autoPlay src="/assets/demo.mp4" type="video/mp4" />
-
 # Getting Started
 
 > The engine comes with sample templates - you can set your credentials and if all goes well, start your chatbot with `start`
@@ -38,6 +33,8 @@ After the project is up and running, set your credentials by making a post reque
 
 POST: `http://localhost:port/webhook/config`
 
+Checkout the [Postman Collection](/assets/postman.json)
+
 ```json
 {
     "accessToken": "",
@@ -50,7 +47,7 @@ POST: `http://localhost:port/webhook/config`
 <Image zoom src="/assets/h2-data.png" />
 
 
-If all goes well, **restart** the service.
+If all goes well, **RESTART** the service.
 
 ## Meta Developer
 I assume you already set your meta / facebook / whatsapp account and have access to the developer portal of your application
@@ -66,3 +63,4 @@ The webhook url will be accessible on `https://ngrok-url/webhook` which you can 
 
 Portal config
 <Image zoom src="/assets/webhook-config.png" />
+

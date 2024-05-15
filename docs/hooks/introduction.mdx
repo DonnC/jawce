@@ -4,9 +4,9 @@ description: Get to know hooks
 ---
 
 # Intro
-Hooks supercharge the **JAWCE** project. It makes it possible to hook custom additional functionality during message processing.
+Hooks supercharge the **JAWCE** engine. It makes it possible to hook custom additional functionality during message processing.
 
-You want to send a Slack notification when user confirms their order? Hook a hook for that.
+You want to send a Slack notification when user confirms their order? Add a hook.
 
 How about to dynamically populate a message with some dynamic variables? .. yes .. hooks!
 
@@ -33,17 +33,47 @@ Hooks are segmented into `POST` or `PRE` hooks
 ## Pre Hooks
 These are processed **BEFORE** the message is rendered and send to the user on WhatsApp.
 
+> In the order which they are processed
+
 These includes
-- on-generate
+- params
 - template
-- message
+- on-generate
 
 ## Post Hooks
 These hooks are processed **AFTER** the user responds to a message.
 
+> In the order which they are processed
+
 - params
-- on-receive
 - validator
+- on-receive
 - middleware
 - prop
-- routes
+
+All `REST API` based hooks should accept a `HooksArgs` model
+
+**HookArgs** object in Python will be as below
+```python
+class ChannelUser(BaseModel):
+    name: str
+    waId: str
+    msgId: str
+    timestamp: int
+
+
+class TemplateDynamicBody(BaseModel):
+    type: Union[str, None] = None
+    payload: Union[dict, None] = None
+    renderPayload: Union[dict, None] = None
+
+
+class HookArgs(BaseModel):
+    channelUser: ChannelUser
+    userInput: Union[str, None] = None
+    flow: Union[str, None] = None
+    additionalData: Union[dict, None] = None
+    templateDynamicBody: Union[TemplateDynamicBody, None] = None
+    methodArgs: Union[dict, None] = None
+
+```

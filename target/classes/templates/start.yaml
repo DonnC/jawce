@@ -1,8 +1,9 @@
 "MAIN_MENU":
   type: button
+  template: "rest:http://localhost:8090/chatbot/get-username"
   message:
     title: Greetings
-    body: "Hi there 👋.\nI am JAWCE, your ERP booking assistant 🤖.\n\nWhat would you like to do today?"
+    body: "Hi {{ user }}.\nI am JAWCE, your ERP booking assistant 🤖.\n\nWhat would you like to do today?"
     buttons:
       - Book Demo
       - Help

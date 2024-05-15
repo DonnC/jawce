@@ -86,8 +86,9 @@ public class EngineRequestService {
     String processRestHook(String endpoint, HookArgs argsParam) {
         HookArgsRest args = dtoMapper.map(argsParam);
 
-        if (config.requestSettings().baseUrl() == null || restTemplate == null)
-            throw new EngineInternalException("could not get channel request configs");
+        if (!endpoint.startsWith("http"))
+            if (config.requestSettings().baseUrl() == null || restTemplate == null)
+                throw new EngineInternalException("could not get channel request configs");
 
         if (config.requestSettings().authorizationToken() == null)
             logger.warn("No hook request auth token. Provide token for extra security!");
