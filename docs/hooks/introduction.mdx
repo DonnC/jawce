@@ -54,8 +54,8 @@ These hooks are processed **AFTER** the user responds to a message.
 # REST API Hook Model
 All `REST API` based hooks should accept a `HookArgs` model
 
+<CodeGroup title="Hook Model: HookArgs">
 ```java
-
 public record WaCurrentUser(
         String name,        // display name
         String waId,        // mobile number
@@ -103,6 +103,6 @@ class HookArgs(BaseModel):
     additionalData: Union[dict, None] = None
     templateDynamicBody: Union[TemplateDynamicBody, None] = None
     methodArgs: Union[dict, None] = None
-
 ```
+</CodeGroup>
 
