@@ -11,10 +11,14 @@ A Template based Java ChatBot engine for WhatsApp Cloud API
       <td> In Action: WhatsApp</td>
    </tr>
    <tr>
-      <td><img src="/docs/assets/templates.png"></td>
-      <td><video src="https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b"></td>
+      <td><img width="320" src="/docs/assets/templates.png"></td>
+      <td><video width="320" height="640" src="https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b"></td>
    </tr>
 </table>
+
+You can use any other language / framework of choice for your chatbot logic. The engine supports REST API based hooks so you can run this engine entirely separate from your logic.
+
+Check out this [Python ChatBot](https://github.com/DonnC/py-jawce-chatbot) template developed and running using this engine.
 
 
 ## Hooks
@@ -45,18 +49,6 @@ All hook params will be a Map object.
   message: "Provide reference for txn: {{ type }}, {{ currency }} {{ amount }}"
 ```
 
-The `HookArgs` is defined as
-
-```java
-public record HookArgs(
-        SessionManager session,  // current user session manager
-        WaCurrentUser channelUser, // contains waId, current msgId
-        String userInput, // the processed user input for the current stage
-        Map<String, Object> additionalData, // Flow data or any other data
-        Map<String, Object> methodArgs
-) {
-}
-```
 
 ### Reflective Example
 ```java

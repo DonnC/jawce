@@ -22,10 +22,12 @@
     [
       "Hooks",
       [
-        ["Introduction", "/hooks/introduction"],
+        ["Intro", "/hooks/introduction"],
         ["Message", "/hooks/messages"],
         ["Prop", "/hooks/prop"],
-        ["General Hooks", "/hooks/general-hooks"]
+        ["General Hooks", "/hooks/general-hooks"],
+        ["Template Hook", "/hooks/templates"],
+        ["Other Hooks", "/hooks/others"]
       ]
     ],
     [

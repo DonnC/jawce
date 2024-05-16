@@ -1,0 +1,76 @@
+---
+title: Template Hook
+description: Dynamically use variables in a template
+---
+
+# Template Hook
+Template hook is used to act as a template for the dynamic message body given. The engine uses the `{{ mustache }}` templating
+engine to populate the dynamic variables
+
+A defined template hook should return a `Map` of the template variables and their values to populate in the template.
+
+```yaml
+"PAYMENT_ORDER":
+  type: text
+  template: "rest:http://domain.url/order"
+  message:
+   - "Thank you {{ user }}."
+   - ""
+   - "Your Avon order has been processed with reference: {{ reference }}"
+   - "for {{ currency }} {{ amount }}"
+  routes:
+    "re:.*": "START_MENU"
+```
+
+The tagged template should just return a Map with the dynamic variables to be populated.
+
+
+<CodeGroup title="Hook: template">
+```python
+# ...
+@app.post("/order")
+def order_details(args: HookArgs):
+    print("Received args: {}".format(args))
+
+    # assume order has been processed and saved to DB
+    order = get_order_by_user(user=args.channelUser.waId)
+
+    template = TemplateDynamicBody()
+
+    template.renderPayload = {
+        "user": args.channelUser.name,
+        "reference": order.get('reference'),
+        "currency": order.get('currency'),
+        "amount": order.get('amount')
+    }
+
+    args.templateDynamicBody = template
+
+    return args
+```
+
+```java
+@RestController
+class OrderService {
+    @PostMapping("/order")
+    public HookArgsRest orderDetailsTemplate(@RequestBody HookArgsRest args) {
+      // .. any other business logic ..
+
+      args.setTemplateDynamicBody(
+        new TemplateDynamicBody(
+            null,
+            null,
+            Map.of(
+                    "user", args.getChannelUser().name(),
+                    "reference", "avon-order-1234",
+                    "currency", "USD",
+                    "amount", 20.50
+            )
+        ));
+
+    return args;
+    }
+}
+```
+</CodeGroup>
+

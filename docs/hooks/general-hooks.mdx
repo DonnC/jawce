@@ -12,7 +12,13 @@ This section will show how the general hooks are processed, These hooks include:
 - middleware
 - validator
 
+
+> Any hook can have other business logic in it e.g A template hook can return the required dynamic data but it may also have logic to do other 
+> processes on it. E.g save some data to user session or call another service. A middleware hook might validate some input etc
+
 Consider the example for `on-receive` below
+
+> The example below works for `on-receive`, `on-generate`, `middleware`, `validator` hooks
 
 ## Example Hook: On-Receive
 
@@ -31,28 +37,42 @@ To define *REST API* based hooks, prefix them with `rest:`
 
 Each rest based hook must be a **POST** request which accepts a `HookArgs` object
 
-Consider a sample python rest hook
+Consider a sample rest hook
 
+<CodeGroup title="on-receive hook: Notify">
 ```python
 # ...
+# using FAST API
+
+# constant prop key in engine session
+ENGINE_PROP_KEY = "kProps"
 
 @app.post("/notify")
 def slack_notify(args: HookArgs):
     print("Received args: {}".format(args))
 
-    # assume user input slack id and its saved
-    # in user session
-
-    slack_id = get_data_from_session(
+    user_props_data = get_data_from_session(
         user=args.channelUser.waId,
-        data_key="slack_id"
+        data_key=ENGINE_PROP_KEY
     )
 
-    # send notification via slack
+    # assume there was a template that asked user for
+    # their Slack Id and had a prop key of `slack_id`
+    slack_response = notify_via_slack(slack_id=user_props_data.get('"slack_id"'))
 
     return args
-
-# ...
 ```
 
+ ```java
+@RestController
+@RequestMapping("/notify")
+class SlackService {
+    @PostMapping
+    public HookArgsRest notify(@RequestBody HookArgsRest args) {
+    //   ... handle send notification
+      return args;
+    }
+}
+```
+</CodeGroup>
 

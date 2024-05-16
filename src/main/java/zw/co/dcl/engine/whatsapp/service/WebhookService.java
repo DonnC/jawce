@@ -126,6 +126,9 @@ public class WebhookService {
     }
 
     public void saveToSession(RestSaveSession dto) {
-        sessionManager.session(dto.user()).save(dto.key(), dto.data());
+        if (dto.prop()) {
+            sessionManager.session(dto.user()).saveProp(dto.key(), dto.data());
+        } else
+            sessionManager.session(dto.user()).save(dto.key(), dto.data());
     }
 }
