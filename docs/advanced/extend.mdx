@@ -1,0 +1,34 @@
+---
+title: Extend JAWCE
+description: Learn how to add the engine as a custom dependency.
+---
+
+# Add JAWCE as a dependency
+In case you dont want to run the engine as a standalone service. You can add the engine as a dependency to your existing project to couple it together with your business logic.
+
+
+In your `pom.xml` dependencies add the following
+
+```xml
+<!-- your other dependencies -->
+
+<dependency>
+    <groupId>zw.co.dcl.engine</groupId>
+    <artifactId>whatsapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+Make sure you create a rest controller which handles 2 of the important logic
+- webhook verification
+- webhook payload
+
+
+You can look at the logic for the default [webhook verification](https://github.com/DonnC/jawce/blob/2882dbd73a29657cc33785f95171070ad4e4f90f/src/main/java/zw/co/dcl/engine/whatsapp/controller/WebhookController.java#L21)
+and [webhook payload](https://github.com/DonnC/jawce/blob/2882dbd73a29657cc33785f95171070ad4e4f90f/src/main/java/zw/co/dcl/engine/whatsapp/controller/WebhookController.java#L30) here.
+
+
+> Take note to create an instance of `WhatsappEngineProcessor` which handles all necessary methods
+
+Its advisable that you also implement your own Session Service from the [ISessionManager  interface.](https://github.com/DonnC/jawce/blob/main/src/main/java/zw/co/dcl/engine/whatsapp/service/iface/ISessionManager.java)
