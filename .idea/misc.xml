@@ -4,12 +4,16 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/jawce-session/pom.xml" />
+        <option value="$PROJECT_DIR$/jawce-core-java/pom.xml" />
+        <option value="$PROJECT_DIR$/jawce-engine-kt/pom.xml" />
+        <option value="$PROJECT_DIR$/engine-java/pom.xml" />
+        <option value="$PROJECT_DIR$/session/pom.xml" />
+        <option value="$PROJECT_DIR$/engine-kt/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK" />
-  <component name="ProjectType">
-    <option name="id" value="jpab" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
