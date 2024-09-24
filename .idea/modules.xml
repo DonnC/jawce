@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/whatsapp.iml" filepath="$PROJECT_DIR$/whatsapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/jawce.iml" filepath="$PROJECT_DIR$/.idea/jawce.iml" />
     </modules>
   </component>
 </project>

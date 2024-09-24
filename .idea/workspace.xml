@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/jawce.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/WhatsappApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/config/EngineConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/constants/AppConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/constants/EngineConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/constants/SessionConstants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/controller/WebhookController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/ConfigEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/DefaultHookArgs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/SessionSettings.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/WhatsappSettings.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/ChannelOriginConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/ChannelRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/ChannelUserInput.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/DataDatumDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/EngineHookSettings.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/EnginePreProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/HookArgs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/HookArgsRest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/MessageDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/MsgProcessorDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/MsgProcessorResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/QuickBtnPayload.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/RestSaveSession.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/SupportedMessageType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/TemplateDynamicBody.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/WaCurrentUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/WaEngineConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/dto/WhatsappTemplateBody.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/entity/mappers/EngineDtoMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/InteractivePayloadType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/ListSectionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/PayloadType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/TemplateType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/WebhookIntrMsgType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/enums/WebhookResponseMessageType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/EngineInternalException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/EngineResponseException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/EngineSessionExpiredException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/EngineSessionInactivityException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/EngineWhatsappException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/exceptions/WaEngineException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/ButtonMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/DynamicMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/FlowMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/GeneralText.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/InteractiveListMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/MediaMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/MessageProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/ProcessorRender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/ReactionMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/TemplateMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/abstracts/ChannelMessageProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/abstracts/ChannelPayloadProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/iface/IMessageProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/iface/IPayloadProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/interfaces/IMessageProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/processor/interfaces/IPayloadProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/repository/ConfigEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/service/EngineRequestService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/service/SessionManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/service/WebhookService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/service/WhatsappEngineProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/service/iface/ISessionManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/utils/ChannelPayloadGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/zw/co/dcl/engine/whatsapp/utils/CommonUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/template.sample" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/booking.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/help.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/start.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/triggers/sample-trigger.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/zw/co/dcl/engine/whatsapp/WhatsappApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/template.sample" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/booking.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/help.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/start.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/triggers/sample-trigger.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/zw/co/dcl/engine/whatsapp/entity/mappers/EngineDtoMapperImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/whatsapp.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2mVznEn0MApBJkdilSpiePvDVBg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.engine [clean,install].executor": "Run",
+    "Maven.engine [clean].executor": "Run",
+    "Maven.engine [install].executor": "Run",
+    "Maven.java-engine [clean,install].executor": "Run",
+    "Maven.kt-engine [clean,install].executor": "Run",
+    "Maven.session [clean,install].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Projects/Java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="JawceEngineKtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="engine-kt" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.JawceEngineKtApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
+      <created>1697615047803</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1697615047803</updated>
+      <workItem from="1727176698058" duration="940000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

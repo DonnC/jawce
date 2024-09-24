@@ -1,0 +1,92 @@
+"PICKUP-DRIVE":
+  type: button
+  message:
+    title: PickDrive
+    body: "Hello, I'm PickDrive Assistant 🚕\nI make your inner-city travelling a breeze.\n\nTo start, select your preferred ride type"
+    buttons:
+      - Ride
+      - Standard
+      - Luxury
+  routes:
+    "re:.*": "PICKUP-LOCATION"
+
+PICKUP-LOCATION:
+  type: request-location
+  message: "Where would you like to be picked from?"
+  routes:
+    "location_request": "DESTINATION-LOCATION"
+
+DESTINATION-LOCATION:
+  type: request-location
+  message: "Where would you like to go?"
+  routes:
+    "location_request": "RIDE-OFFER"
+
+RIDE-OFFER:
+  type: button
+  message:
+    title: Ride Fee
+    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 10mins"
+    buttons:
+      - Accept
+      - Counter Offer
+  routes:
+    "accept": "RIDE-COMMENT"
+    "counter offer": "RIDE-COUNTER-OFFER"
+
+RIDE-COMMENT:
+  type: text
+  prop: rideComment
+  message: "Provide additional info to the driver"
+  routes:
+    "re:.*": "AVAILABLE-DRIVERS"
+
+"AVAILABLE-DRIVERS":
+  type: list
+  prop: driver
+  message:
+    title: Available Drivers
+    body: "I found rides matching your choice. Select one you like and they will be ready to pick you up"
+    footer: PickDrive
+    button: Rides
+    sections:
+      "Available Rides":
+        0:
+          title: Donald | $3.50
+          description: Honda Fit, 300m - (4.0) ⭐
+        1:
+          title: Pamela | $3.20
+          description: Toyota Aqua, 300m - (3.8) ⭐
+        2:
+          title: Tanaka | $3.00
+          description: Honda Fit, 250m - (4.2) ⭐
+        3:
+          title: Constance | $4.00
+          description: Nissan Note, 100m - (2.8) ⭐
+        4:
+          title: Mr Nyoni | $3.00
+          description: Toyota Vitz, 320m - (3.2) ⭐
+  routes:
+    "re:.*": "CONFIRM-OFFER"
+
+CONFIRM-OFFER:
+  type: button
+  message:
+    title: PickDrive Ride
+    body: "Driver: Donald\nVehicle Color: Silver\nReg Number: QZW 4q5C\n\nConfirm to notify the driver to come pick you up now"
+    buttons:
+      - Confirm
+      - Abort
+  routes:
+    "confirm": "DRIVER-COMMAND-COME"
+    "abort": "PICKUP-DRIVE"
+
+DRIVER-COMMAND-COME:
+  type: button
+  message:
+    title: PickDrive
+    body: "Driver is coming to your location now"
+    buttons:
+      - Rate
+  routes:
+    "rate": "RATE-REVIEW-STAGE"

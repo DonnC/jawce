@@ -1,0 +1,82 @@
+loc:
+  type: location
+  message:
+    "latitude": "37.44216251868683"
+    "longitude": "-122.16153582049394"
+    "name": "My address name",
+    "address": "my address"
+  routes:
+    "re:.*": route1
+
+loc_request:
+  type: request-location
+  message: "Send your food delivery address."
+  routes:
+    "location_request": route2   # if user provides loc, the input will always be `location_request`
+    "re:.*": route1
+
+# interactive list
+3000:
+  type: list
+  message:
+    title: msg-title
+    body: body
+    button: btn-text
+    sections:
+      "title1":
+        0:
+          title: item1
+          description: desc
+        1:
+          title: item2
+          description: desc
+      "title2":
+        3:
+          title: item3
+          description: desc
+        4:
+          title: item4
+          description: desc
+  routes:
+    "0": 10
+    "1": 11
+    "2": 12
+    "3": other-routes
+
+900:
+  type: flow
+  message:
+    id: flow-id
+    name: flow-name
+    draft: true
+    title: header
+    body: "message"
+    button: CTA-btn
+  routes:
+    "re:.*": 500
+    "~": next-stage
+
+"ALL_HOOKS":
+  type: text
+  checkpoint: true
+  ack: true
+  authenticated: true
+  transient: true
+  prop: propKey
+  router: dynamic-route-hook
+  on-receive: on-receive-hook
+  message-id: prev-msg-id
+  on-generate: on-generate hook
+  validator: validator-hook
+  middleware: middleware-hook
+  template: template-hook
+  params:
+    p1: p-value
+    pn2: pn-value
+  message:
+    id: media-id
+    caption: doc caption
+    filename: doc.pdf
+  routes:
+    "re:.*": route
+    "back": go-back
