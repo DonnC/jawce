@@ -7,7 +7,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -27,17 +26,29 @@ import java.util.List;
 
 import static zw.co.dcl.jawce.engine.constants.EngineConstants.TIMEOUT_REQUEST_RETRY_COUNT;
 
-@Service
-public class EngineRequestService {
-    private final Logger logger = LoggerFactory.getLogger(EngineRequestService.class);
+public class RequestService {
+    private static volatile RequestService instance;
+    private final Logger logger = LoggerFactory.getLogger(RequestService.class);
+
     private final WaEngineConfig config;
     private final EngineDtoMapper dtoMapper;
     private final RestTemplate restTemplate;
 
-    public EngineRequestService(WaEngineConfig config) {
+    private RequestService(WaEngineConfig config) {
         this.config = config;
         this.dtoMapper = Mappers.getMapper(EngineDtoMapper.class);
         this.restTemplate = new RestTemplate();
+    }
+
+    public static RequestService getInstance(WaEngineConfig config) {
+        if(instance == null) {
+            synchronized (RequestService.class) {
+                if(instance == null) {
+                    instance = new RequestService(config);
+                }
+            }
+        }
+        return instance;
     }
 
     private ResponseEntity<String> sendWaRequest(ChannelOriginConfig channelOriginConfig, OnceOffRequestDto dto) {

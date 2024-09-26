@@ -2,11 +2,13 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="engine-kt" />
+        <module name="chatbot" />
         <module name="session" />
       </profile>
       <profile name="Annotation profile for java-engine" enabled="true">
@@ -32,6 +34,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chatbot" options="-parameters" />
       <module name="engine" options="-parameters" />
       <module name="engine-kt" options="-parameters" />
       <module name="jawce-engine-kt" options="-parameters" />
