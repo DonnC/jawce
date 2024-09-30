@@ -17,3 +17,7 @@ server:
   servlet:
     context-path: /jawce
   port: 8080
+
+spring:
+  application:
+    name: JAWCE-CHATBOT

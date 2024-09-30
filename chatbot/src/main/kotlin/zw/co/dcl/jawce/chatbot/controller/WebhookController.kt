@@ -1,6 +1,7 @@
 package zw.co.dcl.jawce.chatbot.controller
 
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -41,6 +42,6 @@ class WebhookController(private val webhookService: WebhookService) {
     @DeleteMapping("/api/{userSessionId}")
     private fun resetUserSession(@PathVariable("userSessionId") userSessionId: String): ResponseEntity<String> {
         webhookService.clearUserSession(userSessionId)
-        return ResponseEntity<String>.ok("session cleared")
+        return ResponseEntity("User session was cleared", HttpStatus.OK)
     }
 }
