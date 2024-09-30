@@ -1,18 +1,24 @@
+# an example chatbot stage templates
+# the templates can be separated into different files for easy management
+# stage names can be numbers or any supported YAML data type
+
 "START-MENU":
   type: button
+  template: "zw.co.dcl.jawce.chatbot.hooks.UserHook.getDefaultUsername"
   message:
     title: PickDrive
-    body: "Hello, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
+    body: "Hi {{ user }}, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
     buttons:
       - Proceed
   routes:
-    "re:.*": "PICKUP-DRIVE-MAIN-MENU"
+    "proceed": "PICKUP-DRIVE-MAIN-MENU"
 
 "PICKUP-DRIVE-MAIN-MENU":
   type: button
+  prop: RideType
   message:
     title: PickDrive
-    body: "Hello, I'm PickDrive Assistant 🚕\nI make your inner-city travelling a breeze.\n\nTo start, select your preferred ride type"
+    body: "To offer you with exclusive riding experience, select your preferred ride type"
     buttons:
       - Ride
       - Standard
@@ -36,7 +42,7 @@ RIDE-OFFER:
   type: button
   message:
     title: Ride Fee
-    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 10mins"
+    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 8mins"
     buttons:
       - Accept
       - Counter Offer
@@ -74,13 +80,14 @@ RIDE-COMMENT:
           title: Constance | $4.00
           description: Nissan Note, 100m - (2.8) ⭐
         4:
-          title: Mr Nyoni | $3.00
+          title: Mr Smith | $3.00
           description: Toyota Vitz, 320m - (3.2) ⭐
   routes:
     "re:.*": "CONFIRM-OFFER"
 
 CONFIRM-OFFER:
   type: button
+  on-receive: "rest:/users/capture"
   message:
     title: PickDrive Ride
     body: "Driver: Donald\nVehicle Color: Silver\nReg Number: QZW 4q5C\n\nConfirm to notify the driver to come pick you up now"

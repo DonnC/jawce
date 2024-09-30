@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ConfigurationProperties(prefix = "chatbot.configs")
-data class ChannelCredentialConfigs(
-    var hubToken: String = "",
-    var accessToken: String = "",
-    var phoneNumberId: String = ""
+data class CredentialConfigs(
+    var hubToken: String? = null,
+    var accessToken: String? = null,
+    var phoneNumberId: String? = null,
+    var sessionTtl: Int? = null,
+    var initialStage: String? = null,
 )

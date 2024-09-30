@@ -1,14 +1,17 @@
 resources:
-  templates: classpath*:templates/**/*.{yaml,yml}
-  triggers: classpath*:triggers/**/*.{yaml,yml}
+  templates: "classpath*:templates/**/*.{yaml,yml}"
+  triggers: "classpath*:triggers/**/*.{yaml,yml}"
   hooks:
     base-url: "http://localhost:${server.port}${server.servlet.context-path}"
+    security-token: "hook-url-auth-token"
 
 chatbot:
   configs:
-    hub-token: my-hub-token
-    access-token: my-access-token
-    phone-number-id: my-phone-number-id
+    initial-stage: "MY-BOT-START-STAGE"
+    session-ttl: 30
+    hub-token: "replace-with-your-hub-token"
+    access-token: "replace-with-your-access-token"
+    phone-number-id: "replace-with-your-phone-number-id"
 
 server:
   servlet:

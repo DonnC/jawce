@@ -29,6 +29,10 @@ class BotConfigs() {
     @Value("\${resources.hooks.base-url}")
     var botEngineHookBaseUrl: String? = null;
 
+    @Getter
+    @Value("\${resources.hooks.security-token}")
+    var botEngineHookUrlToken: String? = null;
+
     @Bean
     fun restTemplate(): RestTemplate {
         return RestTemplate();
@@ -50,7 +54,7 @@ class BotConfigs() {
         val resources = resolver.getResources(path);
 
         for (resource in resources) {
-            logger.warn("Processing resource: ${resource.filename}..")
+            logger.warn("Processing bot resource: ${resource.filename}..")
             map.putAll(mapper.readValue<Map<String, Object>>(resource.inputStream))
         }
 
