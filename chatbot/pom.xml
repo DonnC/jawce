@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>chatbot</name>
 	<description>JAWCE default demo chatbot</description>
+
 	<url/>
 	<licenses>
 		<license/>
@@ -114,6 +115,30 @@
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>attach-artifact</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<zip destfile="${project.artifactId}.zip"
+									 basedir="."
+									 includes="*.jar"
+								/>
+								<attachartifact file="${project.artifactId}.zip" classifier="src" type="zip"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -39,17 +39,17 @@ class BotConfigs() {
     }
 
     @Bean("botTemplates")
-    fun readBotTemplates(): Map<String, Object> {
+    fun readBotTemplates(): Map<String, Any> {
         return getResourceAsMap(botTemplatesLocation!!)
     }
 
     @Bean("botTriggers")
-    fun readBotTriggers(): Map<String, Object> {
+    fun readBotTriggers(): Map<String, Any> {
         return getResourceAsMap(botTriggersLocation!!)
     }
 
-    private fun getResourceAsMap(path: String): Map<String, Object> {
-        var map: MutableMap<String, Object> = mutableMapOf();
+    private fun getResourceAsMap(path: String): Map<String, Any> {
+        var map: MutableMap<String, Any> = mutableMapOf();
 
         val resources = resolver.getResources(path);
 

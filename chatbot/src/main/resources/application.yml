@@ -7,7 +7,7 @@ resources:
 
 chatbot:
   configs:
-    initial-stage: "MY-BOT-START-STAGE"
+    initial-stage: "START-MENU"
     session-ttl: 30
     hub-token: "replace-with-your-hub-token"
     access-token: "replace-with-your-access-token"

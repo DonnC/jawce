@@ -6,7 +6,8 @@ import zw.co.dcl.jawce.engine.model.dto.HookArgs
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody
 import zw.co.dcl.jawce.session.ISessionManager
 
-class UserHook {
+// UserHook being used via reflection API
+class ReflUserHook {
     private val args: HookArgs
     private val session: ISessionManager?
     private val sessionId: String

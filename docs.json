@@ -1,6 +1,6 @@
 {
   "name": "JAWCE",
-  "description": "A Java based WhatsApp Cloud Template Engine",
+  "description": "A Template based WhatsApp Cloud API Engine",
   "theme": "#36B9B9",
   "twitter": "donix_22",
   "zoomImages": true,

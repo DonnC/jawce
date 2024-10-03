@@ -10,12 +10,8 @@ class SessionLocator {
         var sessionManager: ISessionManager? = null
     }
 
-    public fun getSession(): ISessionManager? {
-        return sessionManager;
-    }
-
     @Autowired
     fun setISessionManager(sessionConfig: SessionConfig) {
-        SessionLocator.sessionManager = sessionConfig.sessionManager()
+        sessionManager = sessionConfig.sessionManager()
     }
 }
