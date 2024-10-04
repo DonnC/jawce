@@ -6,13 +6,9 @@ import java.util.Map;
 
 public record TemplateDynamicBody(
         WebhookResponseMessageType type,
+        // for Flow payload
         Map<String, Object> payload,
-
-        /**
-         * if defined flow template has dynamic variable fields
-         * <p>
-         *     set them here to be dynamically rendered
-         */
+        // for Template payload
         Map<String, Object> renderPayload
 ) {
 }

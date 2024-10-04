@@ -182,7 +182,6 @@ public class FileBasedSessionManager implements ISessionManager {
 
         if(retainKeys.isEmpty()) return;
 
-        // collect keys first and then evict to avoid ConcurrentModificationException
         List<String> keysToEvict = new ArrayList<>();
 
         fetchAll(user).forEach((k, v) -> {
@@ -191,9 +190,7 @@ public class FileBasedSessionManager implements ISessionManager {
             }
         });
 
-        for (String key : keysToEvict) {
-            evict(user, key);
-        }
+        evictAll(user, keysToEvict);
     }
 
     @Override

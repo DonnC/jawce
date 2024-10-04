@@ -169,7 +169,7 @@ public abstract class ChannelMessageProcessor {
     }
 
     private void processStageTrigger() {
-        for (Map.Entry<String, Object> trigger : config.templateContext().entrySet()) {
+        for (Map.Entry<String, Object> trigger : config.triggerContext().entrySet()) {
             if(trigger.getValue() instanceof LinkedHashMap<?, ?> triggerMap) {
                 if(CommonUtils.isRegexPatternMatch(CommonUtils.getRegexPattern(triggerMap.get("trigger").toString()), this.currentStageUserInput.input().trim())) {
                     triggerStageProcessor(trigger);

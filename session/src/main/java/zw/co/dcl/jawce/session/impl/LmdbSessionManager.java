@@ -192,9 +192,7 @@ public class LmdbSessionManager implements ISessionManager {
             }
         });
 
-        for (String key : keysToEvict) {
-            evict(user, key);
-        }
+        evictAll(user, keysToEvict);
     }
 
     @Override
