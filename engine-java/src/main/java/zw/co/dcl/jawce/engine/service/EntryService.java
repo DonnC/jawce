@@ -240,7 +240,7 @@ public class EntryService {
                             "Failed to process your message",
                             null,
                             "Message",
-                            List.of("Retry"),
+                            List.of("Retry", "Report"),
                             null
                     )
             );
@@ -252,9 +252,9 @@ public class EntryService {
                     new QuickBtnPayload(
                             sessionId,
                             "%s.\n\n%s".formatted(errBody.other(), "You may click the button to return to Menu"),
-                            "Tip: type / for shortcuts",
+                            null,
                             "Message",
-                            List.of("Menu"),
+                            List.of("Menu", "Report"),
                             null
                     )
             );

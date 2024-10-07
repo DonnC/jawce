@@ -54,6 +54,12 @@ public class CommonUtils {
         return payload;
     }
 
+    // Check for unrendered mustache placeholders (i.e., {{ ... }})
+    public static boolean hasUnrenderedPlaceholders(String message) {
+        String mustachePattern = "\\{\\{\\s*\\w+\\s*\\}\\}";
+        return isRegexPatternMatch(mustachePattern, message);
+    }
+
     public static String formatZonedDateTime(ZonedDateTime dateTime) {
         return dateTime.format(dtFormatter);
     }
