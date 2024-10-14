@@ -94,11 +94,12 @@ public class RequestService {
     }
 
     public DefaultHookArgs processHook(String hook, HookArgs args) throws Exception {
-        logger.warn("[{}] PROCESSING HOOK: {}", args.getChannelUser().waId(), hook);
+        var sessionId = args.getChannelUser().waId();
+        logger.warn("[{}] PROCESSING HOOK: {}", sessionId, hook);
 
         if(hook.startsWith(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY)) {
             String endpoint = CommonUtils.getDataDatumArgs(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY, hook).datum();
-            String hookResult = processRestHook(endpoint, args);
+            String hookResult = processRestHook(sessionId, endpoint, args);
 
             if(hookResult == null) throw new EngineInternalException("hook rest request returned null");
             var responseArg = CommonUtils.convertResponseToHookObj(hookResult);
@@ -136,14 +137,12 @@ public class RequestService {
      * @param argsParam: engine Hook to pass downstream
      * @return String: <str>HookArgsRest
      */
-    String processRestHook(String endpoint, HookArgs argsParam) {
+    String processRestHook(String sessionId, String endpoint, HookArgs argsParam) {
         HookArgsRest args = dtoMapper.map(argsParam);
+        var userSession = argsParam.getSession();
 
         if(config.requestSettings().baseUrl() == null || restTemplate == null)
             throw new EngineInternalException("could not get channel request configs");
-
-        if(config.requestSettings().authorizationToken() == null)
-            logger.warn("No hook request auth token. Provide token for extra security!");
 
         try {
             String url = endpoint.startsWith("http")
@@ -152,10 +151,14 @@ public class RequestService {
 
             HttpHeaders fwdHeaders = new HttpHeaders();
             fwdHeaders.setContentType(MediaType.APPLICATION_JSON);
-            fwdHeaders.set(EngineConstants.X_WA_ENGINE_HEADER_KEY, config.requestSettings().authorizationToken());
 
-            if(argsParam.getSession().get(argsParam.getChannelUser().waId(), SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class) != null)
-                fwdHeaders.setBearerAuth(argsParam.getSession().get(argsParam.getChannelUser().waId(), SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class));
+            if(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class) != null) {
+                fwdHeaders.setBearerAuth(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class));
+            } else {
+                if(config.requestSettings().authorizationToken() != null) {
+                    fwdHeaders.set("Authorization", config.requestSettings().authorizationToken());
+                }
+            }
 
             ResponseEntity<String> response = restTemplate.postForEntity(url, new HttpEntity<>(args, fwdHeaders), String.class);
 
@@ -212,7 +215,8 @@ public class RequestService {
         }
     }
 
-    public String sendWhatsappRequest(ChannelRequestDto requestDto, boolean handleSession, ChannelOriginConfig channelOriginConfig) {
+    public String sendWhatsappRequest(ChannelRequestDto requestDto, boolean handleSession, ChannelOriginConfig
+            channelOriginConfig) {
         ISessionManager session = requestDto.session();
         String recipient = requestDto.response().recipient();
 

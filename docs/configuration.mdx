@@ -1,35 +1,39 @@
 ---
 title: Configuration
-description: Configure engine
+description: ChatBot configurations
 ---
+The sample project you just ran comes with default configurations.
+A lot of configurations can be overridden too but for simplicity only these are used in the sample project.
 
-## Configuration
+```yaml
+resources:
+  templates: "classpath*:templates/**/*.{yaml,yml}"
+  triggers: "classpath*:triggers/**/*.{yaml,yml}"
+  hooks:
+    base-url: "http://localhost:${server.port}${server.servlet.context-path}"
+    security-token: "hook-url-auth-token"
 
+chatbot:
+  configs:
+    initial-stage: "START-MENU"
+    session-ttl: 30
+    hub-token: "replace-with-your-hub-token"
+    access-token: "replace-with-your-access-token"
+    phone-number-id: "replace-with-your-phone-number-id"
 
-### Default configurations
-The engine comes with default H2 embedded file-based database which you can change to your preffered datasource in `application.yml`
-
-Internally the engine uses a simple session manager: `ConcurrentMapCache` which resets everytime you restart the service.
-
-For a persistant or more advanced session / cache manager consider using `HazelCast` or `Redis` for persistent cache or any of your preffered choice.
-
-### Getting Started
-
-Open the project with IntelliJ or any IDE of your choice and install the dependencies. This project uses `maven`.
-
-Default running port is `8080`
-
-Set your WhatsApp credentials in the database by making a POST request to
-
-`http://localhost:8080/webhook/config`
-
-```json
-{
-    "accessToken": "",
-    "hubToken": "",
-    "phoneNumberId": "",
-    "apiVersion": "v18.0"
-}
+server:
+  servlet:
+    context-path: /jawce
+  port: 8080
 ```
 
-Thats all, you can now play around with your configured message templates and check your bot in action 🙂.
+### Resources
+The resources section defines where to find the templates and triggers, you wont probably change this part.
+
+The `hooks` is a powerful feature which enables the engine to make request calls to external service where your chatbot logic sits.
+
+The `security-token` is a security credential to send in your hook requests. This can be for a secured hook endpoint using JWT, Bearer Token or any security
+token you implement.
+
+### Chatbot
+These configs are mainly to include your WhatsApp account credentials.

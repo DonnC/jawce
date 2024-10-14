@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/docs/templates/example-template.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/configuration.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/configuration.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/getting-started.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting-started.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/introduction.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/introduction.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/messages.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/messages.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/prop.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/prop.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/writing-templates.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/writing-templates.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/service/RequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/service/RequestService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +137,10 @@
       <workItem from="1728283359343" duration="5371000" />
       <workItem from="1728483633957" duration="661000" />
       <workItem from="1728541679636" duration="906000" />
+      <workItem from="1728642967264" duration="207000" />
+      <workItem from="1728647518588" duration="336000" />
+      <workItem from="1728895448455" duration="1461000" />
+      <workItem from="1728905049322" duration="11332000" />
     </task>
     <servers />
   </component>

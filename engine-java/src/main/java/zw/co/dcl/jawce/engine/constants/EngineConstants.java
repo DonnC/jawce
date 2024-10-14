@@ -26,7 +26,6 @@ public class EngineConstants {
     public final static String TPL_TEMPLATE_KEY = "template";
     public final static String TPL_METHOD_PARAMS_KEY = "params";
     public final static String X_HUB_SIG_HEADER_KEY = "x-hub-signature-256";
-    public final static String X_WA_ENGINE_HEADER_KEY = "X-WA-ENGINE-KEY";
 
     public final static String DYNAMIC_BODY_STAGE_KEY = "ENGINE_DYNAMIC_BODY_STAGE";
 
