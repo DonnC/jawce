@@ -1,42 +1,128 @@
 {
   "name": "JAWCE",
-  "description": "A Java based WhatsApp Cloud Template Engine",
-  "theme": "#36B9B9",
-  "twitter": "donix_22",
-  "zoomImages": true,
+  "description": "A Template-based JVM ChatBot engine",
+  "$schema": "https://docs.page/schema.json",
+  "theme": {
+    "primary": "#36B9B9"
+  },
+  "content": {
+    "zoomImages": true
+  },
+  "social": {
+    "x": "@donix_22",
+    "github": "DonnC"
+  },
   "anchors": [
-    { "title": "Homepage", "icon": "house", "link": "https://github.com/DonnC" },
-    { "title": "LinkedIn", "icon": "linkedin", "link": "https://www.linkedin.com/in/donchinhuru/" }
+    {
+      "title": "Homepage",
+      "icon": "github",
+      "href": "https://github.com/DonnC/jawce"
+    },
+    {
+      "title": "LinkedIn",
+      "icon": "linkedin",
+      "href": "https://www.linkedin.com/in/donchinhuru/"
+    }
   ],
   "sidebar": [
-    [
-      "Getting Started",
-      [
-        ["Overview", "/"],
-        ["Demo", "/demo"],
-        ["Getting Started", "/getting-started"],
-        ["Configuration", "/configuration"],
-        ["Writing Templates", "/writing-templates"]
+    {
+      "group": "Getting Started",
+      "pages": [
+        {
+          "title": "Overview",
+          "href": "/",
+          "icon": "home"
+        },
+        {
+          "title": "Demo",
+          "href": "/demo",
+          "icon": "snowman"
+        },
+        {
+          "title": "Getting Started",
+          "href": "/getting-started",
+          "icon": "star"
+        },
+        {
+          "title": "Configuration",
+          "href": "/configuration",
+          "icon": "gears"
+        },
+        {
+          "group": "ChatBot Templates",
+          "icon": "pen-nib",
+          "pages": [
+            {
+              "title": "Writing Templates",
+              "href": "/writing-templates"
+            },
+            {
+              "title": "Example: Booking Bot",
+              "href": "/templates/example-template"
+            }
+          ]
+        }
       ]
-    ],
-    [
-      "Hooks",
-      [
-        ["Intro", "/hooks/introduction"],
-        ["Message", "/hooks/messages"],
-        ["Prop", "/hooks/prop"],
-        ["General Hooks", "/hooks/general-hooks"],
-        ["Template Hook", "/hooks/templates"],
-        ["Other Hooks", "/hooks/others"]
+    },
+    {
+      "group": "Hooks",
+      "pages": [
+        {
+          "title": "Intro",
+          "href": "/hooks/introduction",
+          "icon": "anchor"
+        },
+        {
+          "title": "Messages",
+          "href": "/hooks/messages",
+          "icon": "facebook-messenger"
+        },
+        {
+          "title": "Prop",
+          "href": "/hooks/prop",
+          "icon": "bolt"
+        },
+        {
+          "title": "General Hook",
+          "href": "/hooks/general-hooks",
+          "icon": "atom"
+        },
+        {
+          "title": "Template Hook",
+          "href": "/hooks/templates",
+          "icon": "anchor"
+        },
+        {
+          "title": "Other Hooks",
+          "href": "/hooks/others",
+          "icon": "anchor"
+        }
       ]
-    ],
-    [
-      "Advanced",
-      [
-        ["Extend", "/advanced/extend"],
-        ["Reflective Hooks", "/advanced/reflective"]
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        {
+          "title": "Extend",
+          "href": "/advanced/extend",
+          "icon": "code"
+        },
+        {
+          "title": "Reflection API",
+          "href": "/advanced/reflective",
+          "icon": "network-wired"
+        }
       ]
-    ],
-    ["Misc.", [["Contributing", "/contributing"]]]
+    },
+    {
+      "group": "Miscellaneous",
+      "pages": [
+        {
+          "title": "Contributing",
+          "href": "/contributing",
+          "icon": "bug"
+        }
+      ]
+    }
   ]
 }

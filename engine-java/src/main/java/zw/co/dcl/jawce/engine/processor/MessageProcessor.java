@@ -5,17 +5,13 @@ import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.constants.TemplateTypes;
-import zw.co.dcl.jawce.engine.model.dto.EnginePreProcessor;
-import zw.co.dcl.jawce.engine.model.dto.MessageDto;
-import zw.co.dcl.jawce.engine.model.dto.MsgProcessorDTO;
-import zw.co.dcl.jawce.engine.model.dto.MsgProcessorResponseDTO;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.exceptions.EngineResponseException;
 import zw.co.dcl.jawce.engine.exceptions.EngineSessionExpiredException;
 import zw.co.dcl.jawce.engine.exceptions.EngineSessionInactivityException;
+import zw.co.dcl.jawce.engine.model.dto.*;
 import zw.co.dcl.jawce.engine.processor.abstracts.ChannelMessageProcessor;
 import zw.co.dcl.jawce.engine.processor.iface.IMessageProcessor;
-import zw.co.dcl.jawce.engine.service.EngineRequestService;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
 
 import java.util.ArrayList;
@@ -26,13 +22,13 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
     private final Logger logger = LoggerFactory.getLogger(MessageProcessor.class);
     List<EnginePreProcessor> nestedPreProcessorResults;
 
-    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, EngineRequestService engineService) {
-        super(messageProcessorDTO, engineService);
+    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, WaEngineConfig config) {
+        super(messageProcessorDTO, config);
     }
 
     @Override
     public String getNextRoute() {
-        if(this.isFirstTime) return dto.sessionSettings().getStartMenuStageKey();
+        if(this.isFirstTime) return config.sessionSettings().getStartMenuStageKey();
         if(hasInteractionActivityExpired()) {
             throw new EngineSessionInactivityException("You have been inactive for a while, to secure your account, kindly login again");
         }
@@ -83,13 +79,13 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     @Override
     public boolean hasInteractionActivityExpired() {
-        if(!this.dto.sessionSettings().isHandleSessionInactivity()) return false;
+        if(!this.config.sessionSettings().isHandleSessionInactivity()) return false;
 
         var authKey = this.session.get(this.sessionId, SessionConstants.ENGINE_AUTH_VALID_KEY, Boolean.class);
         var lastActive = this.session.get(this.sessionId, SessionConstants.LAST_ACTIVITY_KEY, String.class);
 
         if(authKey != null) {
-            return CommonUtils.hasInteractionExpired(lastActive, this.dto.sessionSettings().getInactivityTimeout());
+            return CommonUtils.hasInteractionExpired(lastActive, this.config.sessionSettings().getInactivityTimeout());
         }
 
         return false;
@@ -124,10 +120,10 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         } else {
             nStage = this.getNextRoute();
 
-            if(!this.templateHasKey(this.dto.tplContextMap(), nStage))
+            if(!this.templateHasKey(this.config.templateContext(), nStage))
                 throw new EngineInternalException("route: " + nStage + " not found");
 
-            nTemplate = (Map) this.dto.tplContextMap().get(nStage);
+            nTemplate = (Map) this.config.templateContext().get(nStage);
 
             if(this.templateHasKey(nTemplate, EngineConstants.TPL_DYNAMIC_ROUTER_KEY)
                     && this.templateHasKey(nTemplate, EngineConstants.TPL_ROUTE_TRANSIENT_KEY)
@@ -163,7 +159,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
                 engineService,
                 nextStageTpl,
                 hookArgs,
-                (String) this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE),
+                this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE, String.class),
                 CommonUtils.getPreviousMessageId(nextStageTpl)
         );
 

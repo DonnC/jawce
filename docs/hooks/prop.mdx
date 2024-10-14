@@ -1,20 +1,15 @@
 ---
 title: Prop
-description: Session user data
+description: Save arbitrary user data to session / cache
 ---
+If you have been developing websites, you probably come across this word. Here, Props are custom variables that you can use however you'd like -
+to store data in the user session under that variable.
 
-# Prop
-
-If you have been developing websites, you probably come across this word. Here, Props are custom variables that you can use however you'd like - to store data in the user session under that variable
-
-The engine have a constant internal key for user props.
-
-All props defined in templates are saved into a `Map` under the key **kProps**.
-
+The engine keeps track of the user session props internally.
 
 ## Defining a prop
 
-To define a prop on a particular template
+To define a prop on a particular template, provide the `prop` attr with your defined variable name
 
 ```yaml
 1000:
@@ -22,38 +17,40 @@ To define a prop on a particular template
   prop: userName
   message: "What is your name?"
   routes:
-    "re:.*": next-stage
+    "re:\\w+": next-stage
 ```
 
 In the above, when user provides a response, it will be saved in the user session props under the key `userName`
 
-# Get From Session
-You can then access this data later in your program by the prop key from the user session.
+PS: The default chatbot comes with `file-based session manager` implementation. So you can view this file anytime and see
+how the data is being used
 
-A helper endpoint to get user session data by key is defined and can be accessible via
+You can then access this user session data in your bot logic.
+
+# Managing Session Data
+Depending on your Session Manager implementation, you might not be able to view the session data plainly.
+
+The example bot comes with a helper endpoint to play around with session data
 
 ```
-[GET request] http://localhost:8080/webhook/{user-mobile}/{session-key}
+[PUT request] <bot-url>/jawce/api/session
 ```
 
-to get all user session data pass `session-key` as asterik `*`
-
-# Save To Session
-You can optionally add data to the user session via the endpoint
-
-The request body is as below
-
-```json
-{
-    "user": "user-mobile",
-    "key": "data-key",
-    "prop": false,
-    "data": "dynamic-data-to-save"
+Request payload
+```kotlin
+enum class SessionAction {
+    CLEAR,
+    ADD,
+    EVICT,
+    FETCH
 }
+
+data class SessionRequest(
+    val action: SessionAction,
+    val sessionId: String,      // user session id (phone number)
+    val key: String?,           // session key to save or fetch
+    val data: Any?              // session data to save
+)
 ```
 
-> If `prop` is `true`, data will be treated like template prop and saved under kProps
-
-```
-[POST request] http://localhost:8080/webhook/session
-```
+PS: You can provide `*` as key to fetch all user session data

@@ -3,64 +3,65 @@ title: Getting Started
 description: Get started with JAWCE.
 ---
 
-# Getting Started
+<Info>Although JAWCE aims to run as a standalone language-independent engine, some Java /  Kotlin knowledge is assumed</Info>
 
-> The engine comes with sample templates - you can set your credentials and if all goes well, start your chatbot with `start`
+> The example chatbot engine comes with a sample template (eHailing chatbot) -
+see my [LinkedIn post here](https://www.linkedin.com/posts/donchinhuru_whatsapp-chatbot-pickdrive-activity-7204897402921566210-Fab9?utm_source=share&utm_medium=member_desktop)
 
-The JAWCE engine reads your conversation flow (`templates`) directly from the project `resources\templates` and `resources\triggers` folder. To get started:
+> Checkout the Official getting started to [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started/).
 
-1. Create a `templates` directory in `..\resources\templates` if it does not exist.
-2. Create a `triggers` directory in `..\resources\triggers` if it does not exist.
-3. Add some templates files in the `.yaml` format to define your bot message flows.
-4. Add a `trigger.yaml` inside the `..\resources\triggers` to define your bot message global triggers.
+<Warning>I assume you have your WhatsApp account and credentials in place</Warning>
 
+Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural that chatbot templates (conversation flow) are saved in the project
+`resources/templates` folder.
 
-Before running, you must have WhatsApp credentials all set
+<Steps>
+    <Step title="Clone JAWCE" icon="git">
+        Clone or download the JAWCE chatbot sample project:
 
-> Checkout the getting started to [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started/).
+        ```bash
+        gh repo clone DonnC/jawce
+        ```
 
+        After successful clone, open the project in an IDE of your choice
+    </Step>
+    <Step title="Install dependencies" icon="cloud-arrow-down">
+        Install project maven dependencies
 
-## Running locally
-If running on different port, use your custom port in place of *8080*
+        From now on, we will focus on the `chatbot` folder with the sample chatbot
+    </Step>
+    <Step title="Setup Credentials" icon="user-lock">
+        Remember the WhatsApp Credentials we mentioned?
 
-The default engine uses file based **H2 database**. The file is saved under `./data/JavaWhatsappEngineDb` when the engine starts.
+        Navigate to the `/chatbot/src/main/resources/application.yml` properties file and replace secret keys with your
+        account credentials
+        ```yaml
+        chatbot:
+            configs:
+                # ...
+                hub-token: "replace-with-your-hub-token"
+                access-token: "replace-with-your-access-token"
+                phone-number-id: "replace-with-your-phone-number-id"
+        ```
+    </Step>
+    <Step title="Test Run" icon="whatsapp">
+        Start your development server
 
-You can access the H2 console by opening your browser at `http://localhost:8080/h2-console`. Use the config as below to connect.
+        Run the `chatbot` project, if all goes well. It should run on the port configured in the application properties file.
+    </Step>
+    <Step title="Webhook Config" icon="globe">
+        If the example chatbot run successfully. You can configure `NGROK` to tunnel your local setup to obtain an HTTPS webhook
+        to configure on Meta developer portal.
 
-<Image zoom src="/assets/h2-console.png" />
+        In a new terminal, do
+        ```bash
+        ngrok http 8080
+        ```
 
-After the project is up and running, set your credentials by making a post request or add the data in the database manually
+        The webhook url will be accessible on `https://ngrok-url/jawce/webhook` which you can use to configure on your meta developer application portal as below
+        <Image zoom src="/assets/ngrok.png" />
 
-POST: `http://localhost:port/webhook/config`
-
-Checkout the [Postman Collection](/assets/postman.json)
-
-```json
-{
-    "accessToken": "",
-    "hubToken": "jawce-hub-token-123",
-    "phoneNumberId": "",
-    "apiVersion": "v18.0"
-}
-```
-
-<Image zoom src="/assets/h2-data.png" />
-
-
-If all goes well, **RESTART** the service.
-
-## Meta Developer
-I assume you already set your meta / facebook / whatsapp account and have access to the developer portal of your application
-
-When the project is running successfully, you can use **NGROK** to tunnel the engine service to enable WhatsApp to send webhook request to the engine
-
-```bash
-$ ngrok http 8080
-```
-
-The webhook url will be accessible on `https://ngrok-url/webhook` which you can use to configure on your meta developer application portal as below
-<Image zoom src="/assets/ngrok.png" />
-
-Portal config
-<Image zoom src="/assets/webhook-config.png" />
-
+        Example dev console portal config
+        <Image zoom src="/assets/webhook-config.png" />
+    </Step>
+</Steps>

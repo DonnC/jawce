@@ -1,3 +1,6 @@
 spring:
   mustache:
     check-template-location: false
+
+  application:
+    name: JAWCE-CORE-ENGINE

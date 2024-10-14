@@ -21,9 +21,15 @@ public class RenderProcessor {
     public Map<String, Object> renderTemplate(Map rawMap, Map<String, Object> data) {
         try (Writer writer = new StringWriter()) {
             executeTemplate(new StringReader(CommonUtils.toJsonString(rawMap)), writer, data);
-            return CommonUtils.objectToMap(writer.toString());
+            var renderedMessage = writer.toString();
+
+            if(CommonUtils.hasUnrenderedPlaceholders(renderedMessage)) {
+                throw new RuntimeException("Template rendering failed, template contains unrendered placeholders");
+            }
+
+            return CommonUtils.objectToMap(renderedMessage);
         } catch (Exception e) {
-            logger.error("Failed to render template: {}", e.getMessage());
+            logger.error("TEMPLATE RENDERING: {}", e.getMessage());
             throw new EngineRenderException("Failed to render template");
         }
     }
