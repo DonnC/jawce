@@ -5,18 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/docs/templates/example-template.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/hooks/create/intro.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/hooks/create/reflection.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/hooks/create/rest.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/hooks/others/more-hooks.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/session/index.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/configuration.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/configuration.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/advanced/extend.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced/extend.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/advanced/reflective.mdx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/contributing.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/contributing.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/getting-started.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting-started.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/general-hooks.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/general-hooks.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/hooks/introduction.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/introduction.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/hooks/messages.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/messages.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/others.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/others.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/hooks/prop.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/prop.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/writing-templates.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/writing-templates.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/service/RequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine-java/src/main/java/zw/co/dcl/jawce/engine/service/RequestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hooks/templates.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hooks/templates.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine-java/src/main/resources/static/sample.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/engine-java/src/main/resources/static/sample.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +75,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/chatbot&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;docs&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -141,6 +147,8 @@
       <workItem from="1728647518588" duration="336000" />
       <workItem from="1728895448455" duration="1461000" />
       <workItem from="1728905049322" duration="11332000" />
+      <workItem from="1728924534251" duration="5866000" />
+      <workItem from="1728976749312" duration="10108000" />
     </task>
     <servers />
   </component>
