@@ -1,13 +1,11 @@
 ---
 title: Template Hook
-description: Dynamically use variables in a template
+description: Populate template message variables dynamically
 ---
+Template hook will likely be your best buddie on your conversation flows.
 
-# Template Hook
-Template hook is used to act as a template for the dynamic message body given. The engine uses the `{{ mustache }}` templating
-engine to populate the dynamic variables
-
-A defined template hook should return a `Map` of the template variables and their values to populate in the template.
+The engine uses the `{{ mustache }}` templating engine (like Python Jinja) to populate the dynamic variables.
+It is used to dynamically create a conversation message body
 
 ```yaml
 "PAYMENT_ORDER":
@@ -22,7 +20,7 @@ A defined template hook should return a `Map` of the template variables and thei
     "re:.*": "START_MENU"
 ```
 
-The tagged template should just return a Map with the dynamic variables to be populated.
+The tagged template hook should return a render-payload matching each variable in the defined template
 
 
 <CodeGroup title="Hook: template">
@@ -51,10 +49,12 @@ def order_details(args: HookArgs):
 
 ```java
 @RestController
-class OrderService {
+class OrderController {
     @PostMapping("/order")
-    public HookArgsRest orderDetailsTemplate(@RequestBody HookArgsRest args) {
-      // .. any other business logic ..
+    public Object orderDetailsTemplate(@RequestBody HookArgsRest args) {
+      // .. process business logic
+      // .. get order details from db or a service
+      // .. return a render-payload of Map matching template variables
 
       args.setTemplateDynamicBody(
         new TemplateDynamicBody(
@@ -62,7 +62,7 @@ class OrderService {
             null,
             Map.of(
                     "user", args.getChannelUser().name(),
-                    "reference", "avon-order-1234",
+                    "reference", "order-#1234",
                     "currency", "USD",
                     "amount", 20.50
             )
@@ -73,4 +73,3 @@ class OrderService {
 }
 ```
 </CodeGroup>
-

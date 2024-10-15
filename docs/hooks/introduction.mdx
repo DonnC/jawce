@@ -9,15 +9,12 @@ You want to send a Slack notification when user confirms their order? Add a hook
 How about to dynamically populate a message with some dynamic variables? Add a hook!
 
 # How hooks are processed
-Imagine user starts your chatbot for the first time.
-
-The engine checks for this in the session, and takes the first menu your configure in the `properties` file as the first template.
-
-It evaluates this current template hooks and processes all PRE-HOOKs defined if any.
-
-It processes & renders the template and send to user.
-
-When user respond to that message, the engine lookup that template as the current template and process its POST-HOOKS
+1. Imagine user starts your chatbot for the first time.
+2. The engine checks for this in the session (no stages found at this stage), and takes the first menu configured in the `properties` file as the first template.
+3. It evaluates this current template hooks and processes all `PRE-HOOK`s on it.
+4. It processes & renders the template and send to user. (a lot more happens under the hood)
+5. When user respond to that message via WhatsApp, the engine lookup the template in the session (it's likely our first template saved in session)
+6. The engine marks this as current template and processes all `POST-HOOKS` on it
 
 The process repeats on and on 😶‍🌫️
 
@@ -67,56 +64,4 @@ These hooks are processed **AFTER** the user responds to a message.
 ## Hooks processing
 Hooks supports both RESTful based hooks and Java classes (using Reflection API) (`more on this later`)
 
-All `REST API` based hooks should be a POST request that accepts and returns a `HookArgs` model
-
-<CodeGroup title="Hook Model: HookArgs">
-```java
-public record WaCurrentUser(
-        String name,        // display name
-        String waId,        // mobile number
-        String msgId,       // message id
-        Long timestamp      // message timestamp
-) {
-}
-
-public record TemplateDynamicBody(
-        WebhookResponseMessageType type,        // for dynamic template message type
-        Map<String, Object> payload,            // used for `flow` type - initial flow data
-        Map<String, Object> renderPayload       // dynamic template data
-) {
-}
-
-// main model
-public class HookArgs {
-    private WaCurrentUser channelUser;
-    private String userInput;                           // user input from whatsapp
-    private String flow;                                // flow name for flow template type
-    private Map<String, Object> additionalData;
-    private TemplateDynamicBody templateDynamicBody;
-    private Map<String, Object> methodArgs;             // params to pass to hook if defined in template
-}
-```
-
-```python
-class ChannelUser(BaseModel):
-    name: str
-    waId: str
-    msgId: str
-    timestamp: int
-
-class TemplateDynamicBody(BaseModel):
-    type: Union[str, None] = None
-    payload: Union[dict, None] = None
-    renderPayload: Union[dict, None] = None
-
-
-# main model
-class HookArgs(BaseModel):
-    channelUser: ChannelUser
-    userInput: Union[str, None] = None
-    flow: Union[str, None] = None
-    additionalData: Union[dict, None] = None
-    templateDynamicBody: Union[TemplateDynamicBody, None] = None
-    methodArgs: Union[dict, None] = None
-```
-</CodeGroup>
+Let's look into this more in the next section

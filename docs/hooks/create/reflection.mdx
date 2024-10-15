@@ -1,0 +1,55 @@
+---
+title: Reflective Hooks
+description: Java runtime class manipulation
+---
+Reflection allows dynamic inspection and manipulation of classes and objects on runtime.
+
+JAWCE makes use of reflection for all hooks by default if your logic is written in Java
+
+> Learn more about [Reflection Api](https://docs.oracle.com/javase/tutorial/reflect/)
+
+Each defined hook class should have a constructor that takes a `HookArgs` object as a single parameter.
+
+The business logic can be in any method defined in the Java class.
+
+Consider the example below
+
+## Template
+
+```yaml
+6005:
+  type: text
+  template: "com.example.ExampleReflectionHook:getOrderInfo"
+  message: "Provide reference for order: {{ type }}, {{ currency }} {{ amount }}"
+  routes:
+    "re:\\d+": 6006
+```
+
+## Java Code
+```java
+@Sl4j
+public class ExampleReflectionHook {
+  private final HookArgs args;
+
+  public ExampleReflectionHook(HookArgs args) {
+    this.args = args;
+  }
+
+  public Object getOrderInfo() {
+    log.info("Received hook args: {}", this.args);
+
+    // populate dynamic variables
+    args.setTemplateDynamicBody(
+        new TemplateDynamicBody(
+            null,
+            null,
+            Map.of(
+                "type", "FC Chair",
+                "currency", "USD",
+                "amount", 3.50
+            )
+        ));
+    return args;
+  }
+}
+```

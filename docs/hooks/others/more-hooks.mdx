@@ -1,0 +1,120 @@
+---
+title: More Hook
+description: A lot more on hooks
+---
+In this section, let's quickly go through more hooks
+- params
+- router
+- checkpoint
+
+# Params
+Ever wanted to pass custom static data to your hooks? Use params (like functions parameters / method arguments)
+
+<Info>
+    Params can be applied to any type of message
+</Info>
+
+Let's take a look at an example
+```yaml
+100:
+  type: button
+  on-receive: "com.example.jawce.service.AccountHook:processAccountRequest"
+  message:
+    body: "Confirm account type closure?"
+    buttons:
+      - Savings Account
+      - Loan Account
+  params:
+    account-type: Individual
+    currency: ZAR
+  routes:
+    "re:.*": "LOAN_PROCESSOR_STAGE"
+```
+
+In your business logic hook, you can get the passed params as below
+```java
+class AccountHook {
+    private final HookArgs args;
+
+    public AccountHook(HookArgs args) {
+        this.args = args;
+    }
+
+    public Object processAccountRequest() {
+        log.info("Process account args: {}", args);
+
+        // access params
+        var params = args.getMethodArgs();
+
+        if(params.get("currency").equals("ZAR")) {
+            // handle logic
+        }
+
+        return args;
+    }
+}
+```
+
+# Router
+The only job for this hook is to provide dynamic routing.
+
+Wondering how to dynamically redirect user to a certain stage? Use the router to act as a route decider switch.
+
+```yaml
+100:
+  type: button
+  router: "com.example.jawce.service.AccountHook:routeSwitcher"
+  message:
+    body: "Confirm account type closure?"
+    buttons:
+      - Savings Account
+      - Loan Account
+  params:
+    currency: USD
+  routes:
+    "re:.*": "LOAN_PROCESSOR_STAGE"
+```
+
+<Info>
+        `EngineConstants.REST_HOOK_DYNAMIC_ROUTE_KEY` is an internal engine constant used to set the next dynamic route
+</Info>
+
+
+In your business logic hook, you can redirect user to another route like below
+```java
+class AccountHook {
+    private final HookArgs args;
+
+    public AccountHook(HookArgs args) {
+        this.args = args;
+    }
+
+    public Object routeSwitcher() {
+        log.info("Route switcher args: {}", args);
+
+        // access params
+        var params = args.getMethodArgs();
+
+        if(params.get("currency").equals("ZAR")) {
+            args.setAdditionalData(
+                    Map.of(
+                            EngineConstants.REST_HOOK_DYNAMIC_ROUTE_KEY,
+                            "REQUEST_ZAR_ACC_DETAILS_STAGE"  // redirect to route
+                    )
+            );
+
+            return args;
+        }
+
+        return args;
+    }
+}
+```
+
+# Checkpoint
+Save a stage as a last access point: checkpoint.
+
+One use case is to take your users back to their latest previous menu instead of taking them back to the very start menu.
+
+# Ack (Bluetick ✅)
+As it says, it makes you acknowledge reception of a message (bluetick) on WhatsApp

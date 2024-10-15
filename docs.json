@@ -24,9 +24,22 @@
       "href": "https://www.linkedin.com/in/donchinhuru/"
     }
   ],
+  "tabs": [
+    {
+      "id": "root",
+      "title": "Documentation",
+      "href": "/"
+    },
+    {
+      "id": "session",
+      "title": "Session",
+      "href": "/session"
+    }
+  ],
   "sidebar": [
     {
       "group": "Getting Started",
+      "tab": "root",
       "pages": [
         {
           "title": "Overview",
@@ -66,6 +79,7 @@
     },
     {
       "group": "Hooks",
+      "tab": "root",
       "pages": [
         {
           "title": "Intro",
@@ -83,6 +97,27 @@
           "icon": "bolt"
         },
         {
+          "group": "Creating Hooks",
+          "icon": "file-circle-plus",
+          "pages": [
+            {
+              "title": "Intro",
+              "href": "/hooks/create/intro",
+              "icon": "anchor"
+            },
+            {
+              "title": "REST Hooks",
+              "href": "/hooks/create/rest",
+              "icon": "internet-explorer"
+            },
+            {
+              "title": "Reflective Hooks",
+              "href": "/hooks/create/reflection",
+              "icon": "java"
+            }
+          ]
+        },
+        {
           "title": "General Hook",
           "href": "/hooks/general-hooks",
           "icon": "atom"
@@ -93,29 +128,37 @@
           "icon": "anchor"
         },
         {
-          "title": "Other Hooks",
-          "href": "/hooks/others",
-          "icon": "anchor"
+          "group": "More Hooks",
+          "icon": "anchor",
+          "pages": [
+            {
+              "title": "Other Hooks",
+              "href": "/hooks/others",
+              "icon": "anchor"
+            },
+            {
+              "title": "Additional Hooks",
+              "href": "/hooks/others/more-hooks",
+              "icon": "anchor"
+            }
+          ]
         }
       ]
     },
     {
       "group": "Advanced",
+      "tab": "root",
       "pages": [
         {
           "title": "Extend",
           "href": "/advanced/extend",
           "icon": "code"
-        },
-        {
-          "title": "Reflection API",
-          "href": "/advanced/reflective",
-          "icon": "network-wired"
         }
       ]
     },
     {
       "group": "Miscellaneous",
+      "tab": "root",
       "pages": [
         {
           "title": "Contributing",

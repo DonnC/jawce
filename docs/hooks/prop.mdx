@@ -9,18 +9,18 @@ The engine keeps track of the user session props internally.
 
 ## Defining a prop
 
-To define a prop on a particular template, provide the `prop` attr with your defined variable name
+To define a prop on a particular template, provide the `prop` attribute with your defined variable name
 
 ```yaml
 1000:
   type: text
-  prop: userName
+  prop: username
   message: "What is your name?"
   routes:
     "re:\\w+": next-stage
 ```
 
-In the above, when user provides a response, it will be saved in the user session props under the key `userName`
+In the above, when user provides a response, it will be saved in the user session props under the key `username`
 
 PS: The default chatbot comes with `file-based session manager` implementation. So you can view this file anytime and see
 how the data is being used
@@ -45,6 +45,7 @@ enum class SessionAction {
     FETCH
 }
 
+// main request DTO
 data class SessionRequest(
     val action: SessionAction,
     val sessionId: String,      // user session id (phone number)
