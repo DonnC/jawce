@@ -12,4 +12,5 @@ data class CredentialConfigs(
     var phoneNumberId: String? = null,
     var sessionTtl: Int? = null,
     var initialStage: String? = null,
+    var cache: String = "file"
 )
