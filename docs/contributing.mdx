@@ -1,40 +1,27 @@
 ---
 title: Contributing
-description: Learn how to run JAWCE locally and help contribute to the project.
+description: Run locally and help contribute to the project.
 ---
-
-# Contributing
-
-Learn how to run JAWCE locally and help contribute to the project.
-
 ## Running locally
 
-Firstly, fork the [https://github.com/DonnC/jawce](https://github.com/DonnC/jawce) repository.
-Once forked, clone the repository locally:
+Firstly, fork or clone [https://github.com/DonnC/jawce](https://github.com/DonnC/jawce) repository.
 
 ```bash
 git clone git@github.com:DonnC/jawce.git
 ```
 
-Open the project with IntelliJ or any IDE or choice and install the dependencies.
+Open the project with IntelliJ or any IDE of choice and install all the dependencies of the 3 packages in the order
 
-It uses H2 embedded database for quick testing. Database name is `mem:JavaWhatsappEngineDb` but you can change this in the `application.yml`
+1. session module
+2. engine module
+3. chatbot project
 
-
-Before running, you must have WhatsApp credentials all set
-
-You can set the credentials for the engine by making a POST via REST API to
-
-`http://localhost:port/webhook/config`
-
-```json
-{
-    "accessToken": "",
-    "hubToken": "",
-    "phoneNumberId": "",
-    "apiVersion": "v18.0"
-}
-```
+<Warning>
+    Before running, you must have your WhatsApp test credentials all set
+</Warning>
 
 > Checkout the getting started to [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started/).
 
+A good starting point is the [ChatBot](https://github.com/DonnC/jawce/tree/main/chatbot) example chatbot, set your WhatsApp credentials in the `application.yml` properties file.
+
+Run the project.

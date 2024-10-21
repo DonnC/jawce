@@ -1,17 +1,21 @@
 ---
 title: Other Hook
-description: Other additional hooks
+description: More on hooks + a lot more
 ---
-
-# Other Hooks
 In this section, will quickly go through the following *fields. They are not necessarily hooks.
-- params
 - routes
+- params
+- router
+- checkpoint
 
 # Routes
 A **required** field on each template. It defines where to go after the user respond.
 
-You can define exact field mapping or regex using the prefix `re:` (*Java regex pattern*).
+<Info>
+    Prefix regex routes with `re:` followed by any Java regex pattern
+
+    Routes can either be regex pattern or exact words
+</Info>
 
 > Regex routes (with `re:`) are evaluated first before the non-regex mappings
 
@@ -23,14 +27,14 @@ If type is `button`, the response is always the button name you give under the b
   message:
     body: "Sample button message"
     buttons:
-      - btn1
+      - My button
       - Return
   routes:
-    "btn1": 1000
+    "my button": 1000
     "return": "MAIN_MENU"
 ```
 
-if type is `list`, the item id you give is the one matched under the routes field
+If type is `list`, the item id you give is the one matched under the routes field
 
 ```yaml
 1000:
@@ -38,7 +42,7 @@ if type is `list`, the item id you give is the one matched under the routes fiel
   message:
     title: "Title"
     body: "List template message"
-    button: "button"
+    button: "CTA"
     sections:
       "Section Title":
         0:

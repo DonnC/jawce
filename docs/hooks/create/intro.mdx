@@ -1,0 +1,81 @@
+---
+title: Creating Hooks
+description: Supercharge your template with hooks
+---
+Hooks are nothing more than regular Java classes or your normal REST API endpoints.
+
+<Info>
+    Java hooks takes advantage of JAVA Reflection API
+</Info>
+
+You can mix both approaches anyway you want. Java classes will only work if you extend the engine (more in the Advanced section).
+
+Since JAWCE attempts to run as a standalone engine, you can as well have all your hooks as REST endpoints to your system backend.
+
+All hooks should accept a child of `DefaultHookArg` model as a request body or as a constructor argument.
+
+`DefaultHookArg` has 2 subclasses which are `HookArgs` for Java classes hooks and `HookArgsRest` for REST based hooks.
+
+<Warning>
+    All `REST API` based hooks should be a POST request that accepts and returns a `HookArgsRest` model.
+</Warning>
+
+<Warning>
+    All `Java classes` based hooks should have a constructor which takes `HookArgs` model as a parameter.
+</Warning>
+
+## Hook model
+
+<CodeGroup title="Hook Model: HookArgs">
+    ```java
+    public record WaCurrentUser(
+        String name,        // default user display name
+        String waId,        // mobile number
+        String msgId,
+        ) {}
+
+    public record TemplateDynamicBody(
+        WebhookResponseMessageType type,        // for dynamic template message type
+        Map<String, Object> payload,            // used for `flow` type - initial flow data
+        Map<String, Object> renderPayload       // dynamic template data
+        ) {}
+
+    // main model
+    public class HookArgs {
+        private WaCurrentUser channelUser;
+        private String userInput;                           // user input from whatsapp
+        private String flow;                                // flow name for flow template type
+        private Map<String, Object> additionalData;         // mainly for dynamic routing
+        private TemplateDynamicBody templateDynamicBody;
+        private Map<String, Object> methodArgs;             // provided static params defined on template
+    }
+    ```
+
+    ```python
+    class ChannelUser(BaseModel):
+        name: str
+        waId: str
+        msgId: str
+        timestamp: int
+
+    class TemplateDynamicBody(BaseModel):
+        type: Union[str, None] = None
+        payload: Union[dict, None] = None
+        renderPayload: Union[dict, None] = None
+
+
+    # main model
+    class HookArgs(BaseModel):
+        channelUser: ChannelUser
+        userInput: Union[str, None] = None
+        flow: Union[str, None] = None
+        additionalData: Union[dict, None] = None
+        templateDynamicBody: Union[TemplateDynamicBody, None] = None
+        methodArgs: Union[dict, None] = None
+    ```
+</CodeGroup>
+
+
+<Info>
+    The Hook model contains all the necessary data you can use in your business logic
+</Info>

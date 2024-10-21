@@ -1,26 +1,22 @@
 ---
-title: Hooks
-description: Handle hooks logic
+title: General Hooks
+description: Common hooks implementation
 ---
-
-# General Hooks
 This section will show how the general hooks are processed, These hooks include:
 
-- on-receive
-- on-generate
-- template
-- middleware
-- validator
+- on-receive       - `[POST]` logic to process after user responds / sends a message
+- on-generate      - `[PRE]` logic to process before a template is processed for rendering to user
+- template         - `[PRE]` usually used to dynamically create a template message body
+- middleware       - `[POST]` middleware logic to process mid-flight
+- validator        - `[POST]` logic specifically for handling any user data validation
 
 
-> Any hook can have other business logic in it e.g A template hook can return the required dynamic data but it may also have logic to do other 
-> processes on it. E.g save some data to user session or call another service. A middleware hook might validate some input etc
-
-Consider the example for `on-receive` below
+Consider an example for `on-receive` below
 
 > The example below works for `on-receive`, `on-generate`, `middleware`, `validator` hooks
 
-## Example Hook: On-Receive
+## On-Receive
+Imagine you ask for user consent to receive an email or Slack notification. You can use this hook for just that.
 
 ```yaml
 1000:
@@ -33,10 +29,6 @@ Consider the example for `on-receive` below
 
 When user responds and `on-receive` is defined, the hook is processed.
 
-To define *REST API* based hooks, prefix them with `rest:`
-
-Each rest based hook must be a **POST** request which accepts a `HookArgs` object
-
 Consider a sample rest hook
 
 <CodeGroup title="on-receive hook: Notify">
@@ -44,21 +36,17 @@ Consider a sample rest hook
 # ...
 # using FAST API
 
-# constant prop key in engine session
-ENGINE_PROP_KEY = "kProps"
-
 @app.post("/notify")
 def slack_notify(args: HookArgs):
     print("Received args: {}".format(args))
 
-    user_props_data = get_data_from_session(
-        user=args.channelUser.waId,
-        data_key=ENGINE_PROP_KEY
-    )
+    # assume user once provided their slack email before
+    # & is stored in session as a prop
+    slack_id = get_slack_id_from_props(session_id=args.channelUser.waId)
 
-    # assume there was a template that asked user for
-    # their Slack Id and had a prop key of `slack_id`
-    slack_response = notify_via_slack(slack_id=user_props_data.get('"slack_id"'))
+    # check if user answered yes
+    if args.userInput.lower() == "yes":
+        send_slack_notification(id=slack_id)
 
     return args
 ```
@@ -66,13 +54,43 @@ def slack_notify(args: HookArgs):
  ```java
 @RestController
 @RequestMapping("/notify")
-class SlackService {
+class SlackHookController {
+    @Autowired
+    private NotificationService service;
+
+    @Autowired
+    private ISessionManager sessionManager;
+
+    //  handle business logic
     @PostMapping
-    public HookArgsRest notify(@RequestBody HookArgsRest args) {
-    //   ... handle send notification
-      return args;
+    public Object notify(@RequestBody HookArgsRest args) {
+        var sessionId =  args.getChannelUser().waId();
+
+        if(args.getUserInput().equalsIgnoreCase("yes")) {
+            String slackId = sessionManager.getFromProps(
+                                sessionId,
+                                "slackId",
+                                String.class
+                            );
+
+            service.pushNotify(slackId);
+        }
+
+        return args;
     }
 }
 ```
-</CodeGroup>
 
+```kotlin
+    @RestController
+    @RequestMapping("/notify")
+    class SlackControllerHook(private val service: SlackHookService) {
+
+        @PostMapping
+        fun pushNotification(@RequestBody args: HookArgsRest): HookArgsRest {
+            // ... business logic ...
+            return args;
+        }
+    }
+    ```
+</CodeGroup>

@@ -50,7 +50,7 @@
 <!--        session -->
         <dependency>
             <groupId>zw.co.dcl.jawce</groupId>
-            <artifactId>session</artifactId>
+            <artifactId>jawce-session</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

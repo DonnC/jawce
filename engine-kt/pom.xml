@@ -47,6 +47,13 @@
         </dependency>
 
         <dependency>
+            <groupId>zw.co.dcl.jawce</groupId>
+            <artifactId>jawce-session</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>

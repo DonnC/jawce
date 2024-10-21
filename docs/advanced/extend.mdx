@@ -1,11 +1,13 @@
 ---
-title: Extend JAWCE
+title: Extend Engine
 description: Learn how to add the engine as a custom dependency.
 ---
 
-# Add JAWCE as a dependency
-In case you dont want to run the engine as a standalone service. You can add the engine as a dependency to your existing project to couple it together with your business logic.
+# Add as a dependency
+In case you don't want to run the engine as a standalone service or want to do things your own way.
+You can add the engine as a dependency to your existing project to couple it together with your business logic.
 
+First, fork or clone the repository and build the engine.
 
 In your `pom.xml` dependencies add the following
 
@@ -13,9 +15,9 @@ In your `pom.xml` dependencies add the following
 <!-- your other dependencies -->
 
 <dependency>
-    <groupId>zw.co.dcl.engine</groupId>
-    <artifactId>whatsapp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>zw.co.dcl.jawce</groupId>
+    <artifactId>jawce-java-engine</artifactId>
+    <version>1.0.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -24,11 +26,4 @@ Make sure you create a rest controller which handles 2 of the important logic
 - webhook verification
 - webhook payload
 
-
-You can look at the logic for the default [webhook verification](https://github.com/DonnC/jawce/blob/2882dbd73a29657cc33785f95171070ad4e4f90f/src/main/java/zw/co/dcl/engine/whatsapp/controller/WebhookController.java#L21)
-and [webhook payload](https://github.com/DonnC/jawce/blob/2882dbd73a29657cc33785f95171070ad4e4f90f/src/main/java/zw/co/dcl/engine/whatsapp/controller/WebhookController.java#L30) here.
-
-
-> Take note to create an instance of `WhatsappEngineProcessor` which handles all necessary methods
-
-Its advisable that you also implement your own Session Service from the [ISessionManager  interface.](https://github.com/DonnC/jawce/blob/main/src/main/java/zw/co/dcl/engine/whatsapp/service/iface/ISessionManager.java)
+Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/chatbot) for a quick getting started template

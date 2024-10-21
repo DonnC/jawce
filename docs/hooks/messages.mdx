@@ -1,10 +1,8 @@
 ---
 title: Messages
-description: Render different message bodies
+description: Render different message types to the user
 ---
-
-# Message
-The message field is a required field in the template. The message depends on the template `type`
+The message field is a required field in a template. The rendered message on WhatsApp depends on the template `type`
 
 The engine supports the following types
 - text
@@ -12,6 +10,10 @@ The engine supports the following types
 - list
 - flow
 - dynamic
+- location
+and more
+
+Let's look at the most common ones
 
 ## TEXT
 The general message type, this shows a generic text message.
@@ -39,7 +41,7 @@ or
 
 
 ## BUTTON
-Shows a button to the user. The buttons should be not more that 3 button options. The button name will be
+Shows a button to the user. The buttons should be **NOT** more that 3 button options. The button name will be
 the button id. You can use the button name in the `routes` field to match the clicked button id
 
 ```yaml
@@ -61,7 +63,7 @@ the button id. You can use the button name in the `routes` field to match the cl
 
 ## LIST
 This gives a user a list of options to select from. The list can have section titles to divide your list items. Note that a list 
-should have at most 10 items. Each list item will be matched by its item id in the `routes` field. The `description` is optional.
+should have at most **10 items**. Each list item will be matched by its item id in the `routes` field. The `description` is optional.
 
 ```yaml
 1000:

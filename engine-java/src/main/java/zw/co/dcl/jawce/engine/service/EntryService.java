@@ -3,7 +3,6 @@ package zw.co.dcl.jawce.engine.service;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.exceptions.*;
@@ -14,17 +13,38 @@ import zw.co.dcl.jawce.session.ISessionManager;
 
 import java.util.*;
 
-@Service
-public class WhatsappEngineProcessor {
-    private final Logger logger = LoggerFactory.getLogger(WhatsappEngineProcessor.class);
+public class EntryService {
+    private static volatile EntryService instance;
+    private final Logger logger = LoggerFactory.getLogger(EntryService.class);
+
     private final WaEngineConfig config;
-    private final EngineRequestService service;
+    private final RequestService service;
     private final ChannelOriginConfig channelOriginConfig;
 
-    public WhatsappEngineProcessor(WaEngineConfig config, ChannelOriginConfig channelOriginConfig) {
+    private EntryService(WaEngineConfig config, ChannelOriginConfig channelOriginConfig) {
         this.config = config;
         this.channelOriginConfig = channelOriginConfig;
-        this.service = new EngineRequestService(config);
+        this.service = RequestService.getInstance(config);
+    }
+
+    public static EntryService getInstance(WaEngineConfig config, ChannelOriginConfig channelOriginConfig) {
+        if(instance == null) {
+            synchronized (EntryService.class) {
+                if(instance == null) {
+                    instance = new EntryService(config, channelOriginConfig);
+                }
+            }
+        }
+        return instance;
+    }
+
+    private Set<String> getMessageQueue(String sessionId, ISessionManager sessionManager) {
+        Set<String> queue = new HashSet<>();
+        if(sessionManager.get(sessionId, SessionConstants.SESSION_MESSAGE_HISTORY_KEY) != null) {
+            var qHistory = sessionManager.get(sessionId, SessionConstants.SESSION_MESSAGE_HISTORY_KEY, Set.class);
+            queue = new HashSet<String>(qHistory);
+        }
+        return queue;
     }
 
     public Object sendQuickBtnMsg(QuickBtnPayload payload) {
@@ -131,15 +151,6 @@ public class WhatsappEngineProcessor {
         return null;
     }
 
-    private Set<String> getMessageQueue(String sessionId, ISessionManager sessionManager) {
-        Set<String> queue = new HashSet<>();
-        if(sessionManager.get(sessionId, SessionConstants.SESSION_MESSAGE_HISTORY_KEY) != null) {
-            var qHistory = sessionManager.get(sessionId, SessionConstants.SESSION_MESSAGE_HISTORY_KEY, Set.class);
-            queue = new HashSet<String>(qHistory);
-        }
-        return queue;
-    }
-
     void addToMessageQueue(String sessionId, ISessionManager sessionManager, String messageId) {
         Set<String> queue = getMessageQueue(sessionId, sessionManager);
         queue.add(messageId);
@@ -155,7 +166,6 @@ public class WhatsappEngineProcessor {
         }
         sessionManager.save(sessionId, SessionConstants.SESSION_MESSAGE_HISTORY_KEY, queue);
     }
-
 
     /**
      * pass the request payload from your webhook processor
@@ -181,7 +191,6 @@ public class WhatsappEngineProcessor {
         Map<String, Object> msgData = CommonUtils.extractWaMessage(map);
         var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
 
-//        initialize session
         var session = config.sessionManager().session(sessionId);
 
         if(config.sessionSettings().isHandleSessionQueue()) {
@@ -201,21 +210,18 @@ public class WhatsappEngineProcessor {
             return;
         }
 
-        if(config.sessionSettings().isHandleSessionQueue())
+        if(config.sessionSettings().isHandleSessionQueue()) {
             addToMessageQueue(sessionId, session, waCurrentUser.msgId());
+        }
 
         try {
             MessageProcessor msgProcessor = new MessageProcessor(
                     new MsgProcessorDTO(
-                            config.templateContext(),
-                            config.triggerContext(),
-                            session,
                             waCurrentUser,
                             supportedMsgType,
-                            msgData,
-                            config.sessionSettings()
+                            msgData
                     ),
-                    this.service
+                    this.config
             );
 
             var channelPayload = msgProcessor.process();
@@ -234,7 +240,7 @@ public class WhatsappEngineProcessor {
                             "Failed to process your message",
                             null,
                             "Message",
-                            List.of("Retry"),
+                            List.of("Retry", "Report"),
                             null
                     )
             );
@@ -246,9 +252,9 @@ public class WhatsappEngineProcessor {
                     new QuickBtnPayload(
                             sessionId,
                             "%s.\n\n%s".formatted(errBody.other(), "You may click the button to return to Menu"),
-                            "Tip: type / for shortcuts",
+                            null,
                             "Message",
-                            List.of("Menu"),
+                            List.of("Menu", "Report"),
                             null
                     )
             );

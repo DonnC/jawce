@@ -10,7 +10,7 @@ import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.exceptions.EngineResponseException;
 import zw.co.dcl.jawce.engine.model.dto.*;
-import zw.co.dcl.jawce.engine.service.EngineRequestService;
+import zw.co.dcl.jawce.engine.service.RequestService;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
 import zw.co.dcl.jawce.session.ISessionManager;
 
@@ -22,6 +22,7 @@ public abstract class ChannelMessageProcessor {
     protected final MsgProcessorDTO dto;
     protected final ISessionManager session;
     protected final String sessionId;
+    protected final WaEngineConfig config;
     private final Logger logger = LoggerFactory.getLogger(ChannelMessageProcessor.class);
     protected Map<String, Object> currentStageTpl;
     protected ChannelUserInput currentStageUserInput = null;
@@ -30,16 +31,17 @@ public abstract class ChannelMessageProcessor {
     @Setter
     protected boolean isFromTrigger = false;
     protected HookArgs hookArgs = null;
-    protected EngineRequestService engineService;
+    protected RequestService engineService;
     private String stage;
     private Map<String, Object> triggerParams;
 
-    protected ChannelMessageProcessor(MsgProcessorDTO dto, EngineRequestService engineService) {
+    protected ChannelMessageProcessor(MsgProcessorDTO dto, WaEngineConfig config) {
         this.triggerParams = new HashMap<>();
-        this.engineService = engineService;
+        this.config = config;
+        this.engineService = RequestService.getInstance(config);
         this.dto = dto;
         this.sessionId = dto.waCurrentUser().waId();
-        this.session = dto.sessionManager();
+        this.session = config.sessionManager().session(sessionId);
         this.getCurrentStageTemplate();
         this.getMessageBody();
         this.processStageTrigger();
@@ -55,7 +57,7 @@ public abstract class ChannelMessageProcessor {
 
     private void saveCheckpoint() {
         if(this.currentStageTpl.containsKey(EngineConstants.TPL_CHECKPOINT_KEY)) {
-            if(this.dto.tplContextMap().containsKey(stage))
+            if(this.config.templateContext().containsKey(stage))
                 this.session.save(sessionId, SessionConstants.SESSION_LATEST_CHECKPOINT_KEY, stage);
         }
     }
@@ -71,14 +73,14 @@ public abstract class ChannelMessageProcessor {
 
         if(currentStage == null) {
 //            assume user is new or session has been cleared
-            if(!templateHasKey(this.dto.tplContextMap(), dto.sessionSettings().getStartMenuStageKey()))
-                throw new EngineInternalException("start menu with stage: " + dto.sessionSettings().getStartMenuStageKey() + ", not defined in template context map");
+            if(!templateHasKey(this.config.templateContext(), config.sessionSettings().getStartMenuStageKey()))
+                throw new EngineInternalException("start menu with stage: " + config.sessionSettings().getStartMenuStageKey() + ", not defined in template context map");
 
-            this.currentStageTpl = (Map<String, Object>) this.dto.tplContextMap().get(dto.sessionSettings().getStartMenuStageKey());
-            this.session.save(sessionId, SessionConstants.CURRENT_STAGE, dto.sessionSettings().getStartMenuStageKey());
-            this.session.save(sessionId, SessionConstants.PREV_STAGE, dto.sessionSettings().getStartMenuStageKey());
+            this.currentStageTpl = (Map<String, Object>) this.config.templateContext().get(config.sessionSettings().getStartMenuStageKey());
+            this.session.save(sessionId, SessionConstants.CURRENT_STAGE, config.sessionSettings().getStartMenuStageKey());
+            this.session.save(sessionId, SessionConstants.PREV_STAGE, config.sessionSettings().getStartMenuStageKey());
             this.isFirstTime = true;
-            this.stage = dto.sessionSettings().getStartMenuStageKey();
+            this.stage = config.sessionSettings().getStartMenuStageKey();
             return;
         }
 
@@ -109,11 +111,11 @@ public abstract class ChannelMessageProcessor {
             }
         }
 
-        if(!templateHasKey(this.dto.tplContextMap(), currentStage))
+        if(!templateHasKey(this.config.templateContext(), currentStage))
             throw new EngineInternalException("route: " + currentStage + " not defined in template context map");
 
         this.stage = currentStage;
-        this.currentStageTpl = (Map<String, Object>) this.dto.tplContextMap().get(currentStage);
+        this.currentStageTpl = (Map<String, Object>) this.config.templateContext().get(currentStage);
     }
 
     protected void getMessageBody() {
@@ -167,7 +169,7 @@ public abstract class ChannelMessageProcessor {
     }
 
     private void processStageTrigger() {
-        for (Map.Entry<String, Object> trigger : dto.triggersContextMap().entrySet()) {
+        for (Map.Entry<String, Object> trigger : config.triggerContext().entrySet()) {
             if(trigger.getValue() instanceof LinkedHashMap<?, ?> triggerMap) {
                 if(CommonUtils.isRegexPatternMatch(CommonUtils.getRegexPattern(triggerMap.get("trigger").toString()), this.currentStageUserInput.input().trim())) {
                     triggerStageProcessor(trigger);
@@ -191,10 +193,10 @@ public abstract class ChannelMessageProcessor {
     }
 
     private void triggerStageProcessor(Map.Entry<String, Object> trigger) {
-        if(!templateHasKey(this.dto.tplContextMap(), trigger.getKey()))
+        if(!templateHasKey(this.config.templateContext(), trigger.getKey()))
             throw new EngineInternalException("route: " + trigger.getKey() + " not defined in template context map");
 
-        this.currentStageTpl = (Map<String, Object>) this.dto.tplContextMap().get(trigger.getKey());
+        this.currentStageTpl = (Map<String, Object>) this.config.templateContext().get(trigger.getKey());
         logger.info("[{}] Triggered template change: {}", sessionId, trigger.getKey());
         this.setFromTrigger(true);
         this.stage = trigger.getKey();

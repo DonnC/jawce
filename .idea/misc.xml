@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/engine-java/pom.xml" />
         <option value="$PROJECT_DIR$/session/pom.xml" />
         <option value="$PROJECT_DIR$/engine-kt/pom.xml" />
+        <option value="$PROJECT_DIR$/chatbot/pom.xml" />
       </list>
     </option>
   </component>

@@ -33,6 +33,7 @@ build/
 .vscode/
 
 /session
+*.session
 /lmdb
 /file-session
 /lmdb-session

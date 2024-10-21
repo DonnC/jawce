@@ -27,3 +27,9 @@ target
 
 # db folder
 data
+
+/session
+*.session
+/lmdb
+/file-session
+/lmdb-session
