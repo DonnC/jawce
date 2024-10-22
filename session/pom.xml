@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>zw.co.dcl.jawce</groupId>
-    <artifactId>jawce-session</artifactId>
+    <artifactId>jsession</artifactId>
     <version>1.0.0</version>
-    <name>session</name>
-    <description>JAWCE session manager and default implementations</description>
+    <name>jsession</name>
+    <description>JAWCE Java session manager and default implementations</description>
 
     <url/>
     <licenses>

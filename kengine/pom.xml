@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>zw.co.dcl.jawce</groupId>
-    <artifactId>jawce-kt-engine</artifactId>
+    <artifactId>kengine</artifactId>
     <version>1.0.0</version>
-    <name>kt-engine</name>
+    <name>kengine</name>
     <description>JAWCE core engine in Kt</description>
 
     <url/>
@@ -48,7 +48,7 @@
 
         <dependency>
             <groupId>zw.co.dcl.jawce</groupId>
-            <artifactId>jawce-session</artifactId>
+            <artifactId>jsession</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

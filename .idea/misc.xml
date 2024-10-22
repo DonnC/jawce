@@ -11,6 +11,11 @@
         <option value="$PROJECT_DIR$/session/pom.xml" />
         <option value="$PROJECT_DIR$/engine-kt/pom.xml" />
         <option value="$PROJECT_DIR$/chatbot/pom.xml" />
+        <option value="$PROJECT_DIR$/jengine/pom.xml" />
+        <option value="$PROJECT_DIR$/kengine/pom.xml" />
+        <option value="$PROJECT_DIR$/example/kchatbot/pom.xml" />
+        <option value="$PROJECT_DIR$/jchatbot/pom.xml" />
+        <option value="$PROJECT_DIR$/example/jchatbot/pom.xml" />
       </list>
     </option>
   </component>

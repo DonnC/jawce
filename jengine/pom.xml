@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>zw.co.dcl.jawce</groupId>
-    <artifactId>jawce-java-engine</artifactId>
+    <artifactId>jengine</artifactId>
     <version>1.0.0</version>
-    <name>java-engine</name>
+    <name>jengine</name>
     <packaging>jar</packaging>
-    <description>JAWCE Core Engine in JAVA</description>
+    <description>JAWCE Java Core Engine</description>
 
     <properties>
         <java.version>17</java.version>
@@ -50,7 +50,7 @@
 <!--        session -->
         <dependency>
             <groupId>zw.co.dcl.jawce</groupId>
-            <artifactId>jawce-session</artifactId>
+            <artifactId>jsession</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
