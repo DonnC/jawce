@@ -12,14 +12,25 @@
     <artifactId>jchatbot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>jchatbot</name>
-    <description>Example chatbot using JAWCE engine</description>
+    <description>JAWCE example WhatsApp ChatBot</description>
 
     <url/>
     <licenses>
         <license/>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>dcl</id>
+            <name>DonnC</name>
+            <email>donnclab@gmail.com</email>
+            <url>https://github.com/DonnC</url>
+            <organization>DonnC Lab</organization>
+            <organizationUrl>https://github.com/DonnC</organizationUrl>
+            <roles>
+                <role>Engineer</role>
+            </roles>
+            <timezone>Africa/Harare</timezone>
+        </developer>
     </developers>
     <scm>
         <connection/>
@@ -35,11 +46,15 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
 
         <dependency>
@@ -59,7 +74,6 @@
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>
