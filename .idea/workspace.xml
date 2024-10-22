@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/chatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/CredentialConfigs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/CredentialConfigs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/SessionConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/SessionConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chatbot/src/main/resources/application.yml" afterDir="false" />
-    </list>
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +22,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
   </component>
@@ -50,6 +50,9 @@
     "Maven.java-engine [clean,install].executor": "Run",
     "Maven.jawce-java-engine [clean,install].executor": "Run",
     "Maven.jawce-session [clean,install].executor": "Run",
+    "Maven.jengine [clean,install].executor": "Run",
+    "Maven.jsession [clean,install].executor": "Run",
+    "Maven.kengine [clean,install].executor": "Run",
     "Maven.kt-engine [clean,install].executor": "Run",
     "Maven.session [clean,install].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
@@ -60,7 +63,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.ChatbotApplication.executor": "Run",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "docs",
+    "git-widget-placeholder": "feat/example",
     "jdk.selected.JAVA_MODULE": "corretto-17",
     "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot",
     "node.js.detected.package.eslint": "true",
@@ -71,6 +74,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
     "settings.editor.selected.configurable": "settings.sync",
     "show.migrate.to.gradle.popup": "false",
     "vue.rearranger.settings.migration": "true"
@@ -78,21 +82,29 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\example" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources\templates" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.ChatbotApplication">
     <configuration name="ChatbotApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="chatbot" />
+      <module name="kchatbot" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.chatbot.ChatbotApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="JawceEngineKtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="engine-kt" />
+      <module name="kengine" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.JawceEngineKtApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JchatbotApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="jchatbot" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jchatbot.JchatbotApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -135,6 +147,10 @@
       <workItem from="1728924534251" duration="5866000" />
       <workItem from="1728976749312" duration="10108000" />
       <workItem from="1729530360908" duration="690000" />
+      <workItem from="1729531567723" duration="19000" />
+      <workItem from="1729600172966" duration="1107000" />
+      <workItem from="1729601322756" duration="642000" />
+      <workItem from="1729619913176" duration="1503000" />
     </task>
     <servers />
   </component>

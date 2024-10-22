@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>zw.co.dcl.jawce</groupId>
-	<artifactId>chatbot</artifactId>
+	<artifactId>kchatbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>chatbot</name>
+	<name>kchatbot</name>
 	<description>JAWCE default demo chatbot</description>
 
 	<url/>
@@ -35,12 +35,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-kotlin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
@@ -69,7 +69,7 @@
 
 		<dependency>
 			<groupId>zw.co.dcl.jawce</groupId>
-			<artifactId>jawce-java-engine</artifactId>
+			<artifactId>jengine</artifactId>
 			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>

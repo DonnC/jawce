@@ -1,0 +1,8 @@
+Package: [[app.name]]
+Version: [[project.version]]
+Section: misc
+Priority: low
+Architecture: all
+Description: [[app.long.name]]
+Maintainer: DonnC
+Depends: default-jre | java6-runtime
