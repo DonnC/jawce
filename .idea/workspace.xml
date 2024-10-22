@@ -4,37 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/JchatbotApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/JchatbotApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/kchatbot/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/mvnw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/ISessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/ISessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/impl/CaffeineSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/impl/CaffeineSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/impl/FileBasedSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/impl/FileBasedSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/impl/HazelcastSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/impl/HazelcastSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/impl/LmdbSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/impl/LmdbSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/main/java/zw/co/dcl/jawce/session/utils/SessionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/main/java/zw/co/dcl/jawce/session/utils/SessionUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/test/java/zw/co/dcl/jawce/session/CaffeineSessionManagerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/test/java/zw/co/dcl/jawce/session/CaffeineSessionManagerTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/test/java/zw/co/dcl/jawce/session/DclWhatsappSessionApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/test/java/zw/co/dcl/jawce/session/DclWhatsappSessionApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/test/java/zw/co/dcl/jawce/session/FileBasedSessionManagerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/test/java/zw/co/dcl/jawce/session/FileBasedSessionManagerTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session/src/test/java/zw/co/dcl/jawce/session/LmdbSessionManagerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/jsession/src/test/java/zw/co/dcl/jawce/session/LmdbSessionManagerTests.java" afterDir="false" />
-    </list>
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -180,7 +150,7 @@
       <workItem from="1729531567723" duration="19000" />
       <workItem from="1729600172966" duration="1107000" />
       <workItem from="1729601322756" duration="642000" />
-      <workItem from="1729619913176" duration="1157000" />
+      <workItem from="1729619913176" duration="1503000" />
     </task>
     <servers />
   </component>
