@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="engine-kt" />
-        <module name="chatbot" />
-        <module name="session" />
+        <module name="jsession" />
+        <module name="kchatbot" />
+        <module name="jchatbot" />
+        <module name="kengine" />
       </profile>
-      <profile name="Annotation profile for java-engine" enabled="true">
+      <profile name="Annotation profile for jengine" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -21,19 +22,22 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
         </processorPath>
-        <module name="engine" />
+        <module name="jengine" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jawce-engine-kt" target="17" />
+      <module name="session" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="chatbot" options="-parameters" />
-      <module name="engine" options="-parameters" />
-      <module name="engine-kt" options="-parameters" />
       <module name="jawce-engine-kt" options="-parameters" />
+      <module name="jchatbot" options="-parameters" />
+      <module name="jengine" options="-parameters" />
+      <module name="jsession" options="-parameters" />
+      <module name="kchatbot" options="-parameters" />
+      <module name="kengine" options="-parameters" />
       <module name="session" options="-parameters" />
     </option>
   </component>
