@@ -37,7 +37,7 @@ public class RequestService {
     private RequestService(WaEngineConfig config) {
         this.config = config;
         this.dtoMapper = Mappers.getMapper(EngineDtoMapper.class);
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = config.client();
     }
 
     public static RequestService getInstance(WaEngineConfig config) {

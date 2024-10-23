@@ -87,7 +87,7 @@ RIDE-COMMENT:
 
 CONFIRM-OFFER:
   type: button
-  on-receive: "rest:/users/capture"
+  on-receive: "rest:https://example.com/api/capture"
   message:
     title: PickDrive Ride
     body: "Driver: Donald\nVehicle Color: Silver\nReg Number: QZW 4q5C\n\nConfirm to notify the driver to come pick you up now"

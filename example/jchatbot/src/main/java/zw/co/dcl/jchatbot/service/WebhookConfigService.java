@@ -65,7 +65,8 @@ public class WebhookConfigService {
                         templateConfig.getBotEngineHookUrlToken()
                 ),
                 whatsappChannelSettings(),
-                sessionSettings()
+                sessionSettings(),
+                restTemplate
         );
     }
 
