@@ -23,6 +23,7 @@ public class GreetingHook {
     }
 
     public Object getDefaultUsername() {
+        log.info("[getDefaultUsername] args: {}", args);
 
         args.setTemplateDynamicBody(
                 new TemplateDynamicBody(

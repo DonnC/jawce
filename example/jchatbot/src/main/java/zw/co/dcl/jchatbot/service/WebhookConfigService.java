@@ -35,8 +35,8 @@ public class WebhookConfigService {
             TemplateConfig templateConfig,
             RestTemplate restTemplate
     ) {
-        this.templatesContextMap = templatesMap;
-        this.triggersContextMap = triggersMap;
+        this.templatesContextMap = (Map) templatesMap.get("botTemplates");
+        this.triggersContextMap = (Map) triggersMap.get("botTriggers");
         this.sessionManager = sessionManager;
         this.config = config;
         this.templateConfig = templateConfig;

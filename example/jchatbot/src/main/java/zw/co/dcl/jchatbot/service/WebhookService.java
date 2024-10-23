@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import zw.co.dcl.jchatbot.Util;
 import zw.co.dcl.jchatbot.WebhookEvent;
 
 import java.util.Map;
@@ -24,7 +25,8 @@ public class WebhookService {
     }
 
     public ResponseEntity<String> processRequest(Map<String, Object> payload, HttpServletRequest request) {
-        eventPublisher.publishEvent(new WebhookEvent(this, payload, request));
+        var headers = Util.requestHeadersToMap(request);
+        eventPublisher.publishEvent(new WebhookEvent(this, payload, headers));
         return ResponseEntity.ok("SUCCESS");
     }
 }
