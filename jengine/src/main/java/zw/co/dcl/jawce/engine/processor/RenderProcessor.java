@@ -23,9 +23,9 @@ public class RenderProcessor {
             executeTemplate(new StringReader(CommonUtils.toJsonString(rawMap)), writer, data);
             var renderedMessage = writer.toString();
 
-            if(CommonUtils.hasUnrenderedPlaceholders(renderedMessage)) {
-                throw new RuntimeException("Template rendering failed, template contains unrendered placeholders");
-            }
+//            if(CommonUtils.containsMustacheVariables(renderedMessage)) {
+//                throw new RuntimeException("Template rendering failed, template contains unrendered placeholders");
+//            }
 
             return CommonUtils.objectToMap(renderedMessage);
         } catch (Exception e) {

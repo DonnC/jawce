@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ShortcutVar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/WebhookEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/WebhookEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookEventProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookEventProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/advanced/extend.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced/extend.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/contributing.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/contributing.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/getting-started.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting-started.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/templates/example-template.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/templates/example-template.mdx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelPayloadProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelPayloadProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +28,25 @@
         <option value="Kotlin Object" />
         <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;DonnC&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/DonnC/jawce.git&quot;,
+    &quot;accountId&quot;: &quot;258281c8-c5e8-4e50-add9-934562b8369a&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -125,8 +138,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +180,8 @@
       <workItem from="1729668168703" duration="2436000" />
       <workItem from="1729675016207" duration="308000" />
       <workItem from="1729678963738" duration="457000" />
+      <workItem from="1729848642770" duration="1171000" />
+      <workItem from="1729854026968" duration="5533000" />
     </task>
     <servers />
   </component>

@@ -102,7 +102,7 @@
   type: button
   message:
     title: PickDrive
-    body: "Driver is coming to your location now"
+    body: "Driver for ride: {{ p.RideType }} is coming to your location now"
     buttons:
       - Rate
   routes:
