@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ShortcutVar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/templates/flow-template.mdx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/AbstractHook.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/AbstractHookService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/iface/IHookService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/advanced/extend.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced/extend.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/contributing.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/contributing.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/getting-started.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting-started.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/templates/example-template.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/templates/example-template.mdx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelPayloadProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelPayloadProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,6 +177,9 @@
       <workItem from="1729678963738" duration="457000" />
       <workItem from="1729848642770" duration="1171000" />
       <workItem from="1729854026968" duration="5533000" />
+      <workItem from="1730017096714" duration="407000" />
+      <workItem from="1730020394957" duration="1635000" />
+      <workItem from="1730029862249" duration="869000" />
     </task>
     <servers />
   </component>

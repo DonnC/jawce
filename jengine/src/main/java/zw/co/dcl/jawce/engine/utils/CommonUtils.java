@@ -49,7 +49,6 @@ public class CommonUtils {
         return payload;
     }
 
-
     public static boolean containsMustacheVariables(String text) {
         return isRegexPatternMatch(MUSTACHE_PATTERN, text);
     }
