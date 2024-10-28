@@ -28,7 +28,7 @@ public class CommonUtils {
     private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-    private static final String MUSTACHE_PATTERN = "\\{\\{\\s*(\\w+)\\s*}}";
+    private static final String MUSTACHE_PATTERN = "\\{\\{\\s*([^}]*)\\s*\\}\\}";
 
     public static Map<String, Object> getStaticPayload(
             String recipient,

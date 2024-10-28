@@ -1,0 +1,24 @@
+.start-up-container .iphone-logo-start-up {
+  transition-timing-function: ease-in;
+  transition: 0.5s;
+  opacity: 0;
+}
+.start-up-container.logo-is-shown .iphone-logo-start-up {
+  transition: 1s;
+  transition-timing-function: ease-out;
+  opacity: 1;
+}
+
+.start-up-container {
+  margin: 0 auto;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+}
+
+.iphone-logo-start-up {
+  opacity: 0;
+  box-shadow: 0 5px 15px rgba(black, 0.2);
+  position: absolute;
+  z-index: 10;
+}

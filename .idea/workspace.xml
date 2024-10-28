@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/docs/templates/flow-template.mdx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/AbstractHook.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/AbstractHookService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/iface/IHookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/RenderProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/CommonUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,6 +69,7 @@
     &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
@@ -180,6 +180,7 @@
       <workItem from="1730017096714" duration="407000" />
       <workItem from="1730020394957" duration="1635000" />
       <workItem from="1730029862249" duration="869000" />
+      <workItem from="1730099921221" duration="7636000" />
     </task>
     <servers />
   </component>
