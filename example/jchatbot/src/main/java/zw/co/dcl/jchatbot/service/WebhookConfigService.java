@@ -10,6 +10,7 @@ import zw.co.dcl.jawce.engine.model.dto.EngineRequestSettings;
 import zw.co.dcl.jawce.engine.model.dto.WaEngineConfig;
 import zw.co.dcl.jawce.engine.service.EntryService;
 import zw.co.dcl.jawce.session.ISessionManager;
+import zw.co.dcl.jchatbot.configs.ChannelConfig;
 import zw.co.dcl.jchatbot.configs.ChatbotConfig;
 import zw.co.dcl.jchatbot.configs.TemplateConfig;
 
@@ -23,6 +24,7 @@ public class WebhookConfigService {
     private final ChatbotConfig config;
     private final TemplateConfig templateConfig;
     private final RestTemplate restTemplate;
+    private final ChannelConfig externalConfig;
 
     private final Map<String, Object> templatesContextMap;
     private final Map<String, Object> triggersContextMap;
@@ -33,7 +35,7 @@ public class WebhookConfigService {
             ISessionManager sessionManager,
             ChatbotConfig config,
             TemplateConfig templateConfig,
-            RestTemplate restTemplate
+            RestTemplate restTemplate, ChannelConfig externalConfig
     ) {
         this.templatesContextMap = (Map) templatesMap.get("botTemplates");
         this.triggersContextMap = (Map) triggersMap.get("botTriggers");
@@ -41,9 +43,11 @@ public class WebhookConfigService {
         this.config = config;
         this.templateConfig = templateConfig;
         this.restTemplate = restTemplate;
+        this.externalConfig = externalConfig;
     }
 
     public EntryService getEntryInstance() {
+
         var channelOrigin = new ChannelOriginConfig(
                 false,
                 new ArrayList<>(),
@@ -76,6 +80,8 @@ public class WebhookConfigService {
         settings.setHubToken(config.getHubToken());
         settings.setAccessToken(config.getAccessToken());
         settings.setPhoneNumberId(config.getPhoneNumberId());
+        settings.setLocalTesting(externalConfig.getTestLocal().booleanValue());
+        settings.setLocalTestingRequestUrl(externalConfig.getLocalUrl());
         settings.setApiVersion("v21.0");
 
         return settings;

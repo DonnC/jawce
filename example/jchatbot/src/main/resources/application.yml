@@ -14,6 +14,10 @@ chatbot:
     phone-number-id: "your-phone-id"
     access-token: "bot-access-token"
 
+channel-config:
+  test-local: false
+  local-url: "http://localhost:3000/api/hook-response"
+
 server:
   servlet:
     context-path: "/jawce"

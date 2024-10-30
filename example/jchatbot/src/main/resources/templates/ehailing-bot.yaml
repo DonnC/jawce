@@ -87,10 +87,16 @@
 
 "CONFIRM-OFFER":
   type: button
-  on-receive: "rest:https://example.com/api/capture"
+  on-receive: "rest:/ride/capture"
   message:
     title: PickDrive Ride
-    body: "Driver: Donald\nVehicle Color: Silver\nReg Number: QZW 4q5C\n\nConfirm to notify the driver to come pick you up now"
+    body: |
+      Ride: {{ p.RideType }}
+      Driver: Donald
+      Vehicle Color: Silver
+      Reg Number: QZW 4q5C
+      
+      Confirm to notify the driver to come pick you up now"
     buttons:
       - Confirm
       - Abort
@@ -102,7 +108,7 @@
   type: button
   message:
     title: PickDrive
-    body: "Driver for ride: {{ p.RideType }} is coming to your location now"
+    body: "Driver is coming to your location now"
     buttons:
       - Rate
   routes:
