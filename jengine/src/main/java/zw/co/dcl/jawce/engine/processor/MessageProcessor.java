@@ -14,9 +14,7 @@ import zw.co.dcl.jawce.engine.processor.abstracts.ChannelMessageProcessor;
 import zw.co.dcl.jawce.engine.processor.iface.IMessageProcessor;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MessageProcessor extends ChannelMessageProcessor implements IMessageProcessor {
     private final Logger logger = LoggerFactory.getLogger(MessageProcessor.class);
@@ -24,6 +22,57 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     public MessageProcessor(MsgProcessorDTO messageProcessorDTO, WaEngineConfig config) {
         super(messageProcessorDTO, config);
+    }
+
+    /**
+     * Check if template have shortcut variables, if available
+     * <p>
+     * process these first and update the template
+     * <p>
+     * Shortcut variables are as defined below
+     * <p>
+     * {{p.varName}} for data saved on user prop
+     * <p>
+     * {{s.varName}} for data saved in common user session
+     * <p>
+     * {{ p.varName:dataType }} -> {{ p.username:String }}
+     * <p>
+     * Support datatypes are the Derived Java classes
+     * Map, String, Long, Integer, Boolean, Double
+     */
+    protected Map<String, Object> processShortcutTemplateVariables(Map<String, Object> currentTemplate) {
+        try {
+            var shortcutVars = CommonUtils.extractShortcutMustacheVariables(CommonUtils.toJsonString(currentTemplate));
+
+            if(!shortcutVars.isEmpty()) {
+                var renderer = new RenderProcessor();
+                Map<String, Object> filledVars = new HashMap<>();
+
+                shortcutVars.forEach(sv -> {
+                    var sc = CommonUtils.parseShortcutVar(sv);
+                    if(sv.startsWith("p.")) {
+                        if(sc.classz() != null) {
+                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.getFromProps(this.sessionId, sc.name(), sc.classz()), String::new));
+                        } else {
+                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.getFromProps(this.sessionId, sc.name()), String::new));
+                        }
+                    } else if(sv.startsWith("s.")) {
+                        if(sc.classz() != null) {
+                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.get(this.sessionId, sc.name(), sc.classz()), String::new));
+                        } else {
+                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.get(this.sessionId, sc.name()), String::new));
+                        }
+                    }
+                });
+
+                return renderer.renderTemplate(currentTemplate, filledVars);
+            }
+
+            return currentTemplate;
+        } catch (Exception e) {
+            logger.error("Failed to process shortcut tpl vars: {}", e.getMessage());
+            return currentTemplate;
+        }
     }
 
     @Override
@@ -203,6 +252,8 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             default ->
                     throw new EngineInternalException("specified template type not supported for stage: " + nextStage);
         };
+
+        payload = processShortcutTemplateVariables(payload);
 
         this.setFromTrigger(false);
         this.session.evict(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY);
