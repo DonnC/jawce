@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/ChannelConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/RideHookController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/RideHookService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/RequestClientConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/watch/watch.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/JchatbotApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/JchatbotApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/configuration.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/configuration.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/getting-started.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting-started.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/jchatbot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/TemplateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/TemplateConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,6 +190,7 @@
       <workItem from="1730120673665" duration="37000" />
       <workItem from="1730121328862" duration="711000" />
       <workItem from="1730208565680" duration="116000" />
+      <workItem from="1730379992428" duration="2800000" />
     </task>
     <servers />
   </component>

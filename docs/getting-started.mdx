@@ -52,6 +52,25 @@ Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural th
         ```
     </Step>
     <Step title="Test Run" icon="whatsapp">
+        Before you run the project, setup the full path to the project resources folder
+
+        ```yaml
+        resources:
+            templates: ..full/path/to/templates/dir
+            triggers: ..full/path/to/triggers/dir
+            watcher: ..full/path/to/watch/dir
+        ```
+
+        E.g If you cloned the project in
+
+        `C:\Users\usr\projects\jawce`
+
+        Your path folders will be as
+
+        `C:\Users\usr\projects\jawce\example\jchatbot\src\main\resources\templates`
+
+        If all goes well,
+
         Start your development server
 
         Run the `chatbot` project, if all goes well. It should run on the port configured in the application properties file.

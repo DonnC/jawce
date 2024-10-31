@@ -1,6 +1,6 @@
 package zw.co.dcl.jchatbot.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import zw.co.dcl.jawce.engine.model.SessionSettings;
@@ -15,7 +15,6 @@ import zw.co.dcl.jchatbot.configs.ChatbotConfig;
 import zw.co.dcl.jchatbot.configs.TemplateConfig;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @Service
 public class WebhookConfigService {
@@ -26,19 +25,18 @@ public class WebhookConfigService {
     private final RestTemplate restTemplate;
     private final ChannelConfig externalConfig;
 
-    private final Map<String, Object> templatesContextMap;
-    private final Map<String, Object> triggersContextMap;
+    @Value("${resources.hooks.base-url}")
+    private String botEngineHookBaseUrl;
+    @Value("${resources.hooks.security-token}")
+    private String botEngineHookUrlToken;
 
     public WebhookConfigService(
-            @Qualifier("botTemplates") Map<String, Object> templatesMap,
-            @Qualifier("botTriggers") Map<String, Object> triggersMap,
             ISessionManager sessionManager,
             ChatbotConfig config,
             TemplateConfig templateConfig,
-            RestTemplate restTemplate, ChannelConfig externalConfig
+            RestTemplate restTemplate,
+            ChannelConfig externalConfig
     ) {
-        this.templatesContextMap = (Map) templatesMap.get("botTemplates");
-        this.triggersContextMap = (Map) triggersMap.get("botTriggers");
         this.sessionManager = sessionManager;
         this.config = config;
         this.templateConfig = templateConfig;
@@ -47,7 +45,6 @@ public class WebhookConfigService {
     }
 
     public EntryService getEntryInstance() {
-
         var channelOrigin = new ChannelOriginConfig(
                 false,
                 new ArrayList<>(),
@@ -62,11 +59,11 @@ public class WebhookConfigService {
     private WaEngineConfig engineConfig() {
         return new WaEngineConfig(
                 sessionManager,
-                templatesContextMap,
-                triggersContextMap,
+                templateConfig.getBotTemplates(),
+                templateConfig.getBotTriggers(),
                 new EngineRequestSettings(
-                        templateConfig.getBotEngineHookBaseUrl(),
-                        templateConfig.getBotEngineHookUrlToken()
+                        botEngineHookBaseUrl,
+                        botEngineHookUrlToken
                 ),
                 whatsappChannelSettings(),
                 sessionSettings(),
