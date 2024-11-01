@@ -125,11 +125,24 @@ public class RequestService {
      * @throws Exception: reflective api exceptions
      */
     Object processReflectiveHook(String hook, HookArgs hookArgs) throws Exception {
+        var clsLoader = Thread.currentThread().getContextClassLoader();
+
         DataDatumDTO args = CommonUtils.getDataDatumArgs(EngineConstants.REFL_CLS_METHOD_SPLITTER, hook);
-        Class<?> hookClass = Class.forName(args.data());
-        Object hookObj = hookClass.getDeclaredConstructor(HookArgs.class).newInstance(hookArgs);
-        Method hookMethod = hookClass.getDeclaredMethod(args.datum());
-        return hookMethod.invoke(hookObj);
+        var classNamePath = args.data();
+        var classMethodName = args.datum();
+
+        try {
+            Class<?> hookClass = clsLoader.loadClass(classNamePath);
+            Object hookObj = hookClass.getDeclaredConstructor(HookArgs.class).newInstance(hookArgs);
+            Method hookMethod = hookClass.getDeclaredMethod(classMethodName);
+            return hookMethod.invoke(hookObj);
+        } catch (ClassNotFoundException e) {
+            logger.error("Failed to load class with context class loader, attempting default class loader");
+            Class<?> hookClass = Class.forName(classNamePath);
+            Object hookObj = hookClass.getDeclaredConstructor(HookArgs.class).newInstance(hookArgs);
+            Method hookMethod = hookClass.getDeclaredMethod(classMethodName);
+            return hookMethod.invoke(hookObj);
+        }
     }
 
     /**
