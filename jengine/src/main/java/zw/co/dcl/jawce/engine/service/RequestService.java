@@ -253,12 +253,13 @@ public class RequestService {
                         session.save(recipient, SessionConstants.CURRENT_STAGE, requestDto.response().nextRoute());
                         logger.info("[{}] - Current route set to: {}", recipient, requestDto.response().nextRoute());
                     }
-                    if(config.sessionSettings().isHandleSessionInactivity())
+                    if(config.sessionSettings().isHandleSessionInactivity()) {
                         session.save(
                                 recipient,
                                 SessionConstants.LAST_ACTIVITY_KEY,
                                 CommonUtils.formatZonedDateTime(CommonUtils.currentSystemDate())
                         );
+                    }
                 }
                 return response.getBody();
             } else {

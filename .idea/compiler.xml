@@ -26,6 +26,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="jawce" target="17" />
       <module name="jawce-engine-kt" target="17" />
       <module name="session" target="17" />
     </bytecodeTargetLevel>

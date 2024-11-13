@@ -11,6 +11,10 @@ public class EngineConstants {
 //    if present, acknowledge the message (blue-tick)
     public final static String TPL_READ_RECEIPT_KEY = "ack";
 
+    // if present & false - dont handle any session logic
+    // consider it like a quick message
+    public final static String TPL_SESSION_KEY = "session";
+
     public final static String TPL_PROP_KEY = "prop";
     public final static String REST_HOOK_DYNAMIC_ROUTE_KEY = "route";
     public final static String TPL_REGEX_PLACEHOLDER_KEY = "re:";

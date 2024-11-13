@@ -30,6 +30,7 @@ public abstract class ChannelMessageProcessor {
     @Getter
     @Setter
     protected boolean isFromTrigger = false;
+    protected boolean byPassSession = false;
     protected HookArgs hookArgs = null;
     protected RequestService engineService;
     private String stage;
@@ -45,6 +46,7 @@ public abstract class ChannelMessageProcessor {
         this.getCurrentStageTemplate();
         this.getMessageBody();
         this.processStageTrigger();
+        this.checkSessionByPass();
         this.saveCheckpoint();
 
         HookArgs args = new HookArgs();
@@ -57,8 +59,19 @@ public abstract class ChannelMessageProcessor {
 
     private void saveCheckpoint() {
         if(this.currentStageTpl.containsKey(EngineConstants.TPL_CHECKPOINT_KEY)) {
-            if(this.config.templateContext().containsKey(stage))
+            if(this.config.templateContext().containsKey(stage)) {
                 this.session.save(sessionId, SessionConstants.SESSION_LATEST_CHECKPOINT_KEY, stage);
+            }
+        }
+    }
+
+    private void checkSessionByPass() {
+        if(this.currentStageTpl.containsKey(EngineConstants.TPL_SESSION_KEY)) {
+            this.byPassSession = !Boolean.parseBoolean(this.currentStageTpl.get(EngineConstants.TPL_SESSION_KEY).toString());
+            if(this.byPassSession) {
+                this.isFromTrigger = false;
+                this.session.save(sessionId, SessionConstants.CURRENT_STAGE, this.stage);
+            }
         }
     }
 
@@ -298,12 +311,12 @@ public abstract class ChannelMessageProcessor {
      * from channel webhook
      */
     protected void processPostHooks() throws Exception {
+        this.bluetick();
         processHookParams(null);
         this.validator();
         this.onReceive();
         this.middleware();
         this.saveProp();
-        this.bluetick();
     }
 
     /**

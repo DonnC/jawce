@@ -455,7 +455,8 @@ public class CommonUtils {
 
     public static String parseHtmlEncodedContent(String message) {
         try {
-            return URLDecoder.decode(message, StandardCharsets.UTF_8);
+//            return URLDecoder.decode(message, StandardCharsets.UTF_8);
+            return  message;
         } catch (Exception e) {
             return message;
         }

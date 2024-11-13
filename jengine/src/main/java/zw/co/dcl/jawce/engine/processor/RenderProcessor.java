@@ -24,7 +24,7 @@ public class RenderProcessor {
             var renderedMessage = writer.toString();
 
             if(CommonUtils.containsMustacheVariables(renderedMessage)) {
-                throw new RuntimeException("Template rendering failed, template contains unrendered placeholders");
+                throw new RuntimeException("Template rendering failed, template contains non-rendered placeholders");
             }
 
             return CommonUtils.objectToMap(renderedMessage);

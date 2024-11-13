@@ -27,7 +27,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
     /**
      * Check if template have shortcut variables, if available
      * <p>
-     * process these first and update the template
+     * process these at last and update the template
      * <p>
      * Shortcut variables are as defined below
      * <p>
@@ -35,7 +35,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
      * <p>
      * {{s.varName}} for data saved in common user session
      * <p>
-     * {{ p.varName:dataType }} -> {{ p.username:String }}
+     * {{ s.varName:dataType }} -> {{ s.username:String }}
      * <p>
      * Support datatypes are the Derived Java classes
      * Map, String, Long, Integer, Boolean, Double
@@ -45,17 +45,14 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             var shortcutVars = CommonUtils.extractShortcutMustacheVariables(CommonUtils.toJsonString(currentTemplate));
 
             if(!shortcutVars.isEmpty()) {
+                var userProps = this.session.getUserProps(this.sessionId);
                 var renderer = new RenderProcessor();
                 Map<String, Object> filledVars = new HashMap<>();
 
                 shortcutVars.forEach(sv -> {
                     var sc = CommonUtils.parseShortcutVar(sv);
                     if(sv.startsWith("p.")) {
-                        if(sc.classz() != null) {
-                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.getFromProps(this.sessionId, sc.name(), sc.classz()), String::new));
-                        } else {
-                            filledVars.put(sv, Objects.requireNonNullElseGet(this.session.getFromProps(this.sessionId, sc.name()), String::new));
-                        }
+                        filledVars.put(sv, userProps.getOrDefault(sc.name(), ""));
                     } else if(sv.startsWith("s.")) {
                         if(sc.classz() != null) {
                             filledVars.put(sv, Objects.requireNonNullElseGet(this.session.get(this.sessionId, sc.name(), sc.classz()), String::new));
@@ -81,8 +78,6 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         if(hasInteractionActivityExpired()) {
             throw new EngineSessionInactivityException("You have been inactive for a while, to secure your account, kindly login again");
         }
-
-//        TODO: if session expired while outside - reroute to general start menu
 
         String currentStage = (String) this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE);
         var currentStageRoutes = (Map<String, Object>) this.currentStageTpl.get(EngineConstants.TPL_ROUTES_KEY);
@@ -116,8 +111,9 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             }
         }
 
-        if(this.templateHasKey(currentStageRoutes, this.currentStageUserInput.input().trim()))
+        if(this.templateHasKey(currentStageRoutes, this.currentStageUserInput.input().trim())) {
             return currentStageRoutes.get(this.currentStageUserInput.input().trim()).toString();
+        }
 
         throw new EngineResponseException(CommonUtils.createEngineErrorMsg(
                 currentStage,
@@ -128,7 +124,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     @Override
     public boolean hasInteractionActivityExpired() {
-        if(!this.config.sessionSettings().isHandleSessionInactivity()) return false;
+        if(!this.config.sessionSettings().isHandleSessionInactivity() || this.byPassSession) return false;
 
         var authKey = this.session.get(this.sessionId, SessionConstants.ENGINE_AUTH_VALID_KEY, Boolean.class);
         var lastActive = this.session.get(this.sessionId, SessionConstants.LAST_ACTIVITY_KEY, String.class);
@@ -142,7 +138,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     @Override
     public Map<String, Object> authenticate(Map<String, Object> template) {
-        if(this.templateHasKey(template, EngineConstants.TPL_AUTHENTICATED_KEY)) {
+        if(this.templateHasKey(template, EngineConstants.TPL_AUTHENTICATED_KEY) && !this.byPassSession) {
             var hasAuth = this.session.get(this.sessionId, SessionConstants.ENGINE_AUTH_VALID_KEY);
             String loggedInTime = this.session.get(this.sessionId, SessionConstants.SESSION_EXPIRY, String.class);
             String sessionUid = this.session.get(this.sessionId, SessionConstants.SERVICE_PROFILE_MSISDN_KEY, String.class);
@@ -157,8 +153,9 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     @Override
     public EnginePreProcessor preProcessor() throws Exception {
-        if(this.session.get(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY) == null)
+        if(this.session.get(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY) == null) {
             this.processPostHooks();
+        }
 
         Map<String, Object> nTemplate;
         String nStage;
@@ -169,8 +166,9 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         } else {
             nStage = this.getNextRoute();
 
-            if(!this.templateHasKey(this.config.templateContext(), nStage))
+            if(!this.templateHasKey(this.config.templateContext(), nStage)) {
                 throw new EngineInternalException("route: " + nStage + " not found");
+            }
 
             nTemplate = (Map) this.config.templateContext().get(nStage);
 
