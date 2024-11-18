@@ -94,8 +94,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         var hasDynamicRoute = dynamicRouter();
         if(hasDynamicRoute != null) return hasDynamicRoute;
 
-        logger.info("[{}] Current - stage: [{}], template: {}",
-                this.sessionId,
+        logger.info("Current - stage: [{}], template: {}",
                 currentStage,
                 this.currentStageTpl
         );
@@ -176,7 +175,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
                     && this.templateHasKey(nTemplate, EngineConstants.TPL_ROUTE_TRANSIENT_KEY)
             ) {
                 this.currentStageTpl = nTemplate;
-                logger.warn("[{}] Found transient flow dynamic router -> {}, re-processing..", this.sessionId, nStage);
+                logger.warn("Found transient flow dynamic router -> {}, re-processing..",  nStage);
                 nestedPreProcessorResults.add(this.preProcessor());
             }
 
@@ -189,7 +188,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             nTemplate = latest.template();
         }
 
-        logger.info("[{}] Next stage: {} ", this.sessionId, nStage);
+        logger.info("Next stage: {} ",  nStage);
         return new EnginePreProcessor(nStage, nTemplate);
     }
 

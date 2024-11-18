@@ -48,7 +48,7 @@ public abstract class ChannelPayloadProcessor {
             } catch (EngineRenderException e) {
                 throw e;
             } catch (Exception e) {
-                logger.error("[{}] Stage: {},  failed to process template : {}", hookArgs.getChannelUser().waId(), stage, e.getMessage(), e);
+                logger.error("Stage: {},  failed to process template : {}", stage, e.getMessage(), e);
                 throw new EngineInternalException("failed to process template call for stage: " + stage);
             }
         }

@@ -3,6 +3,7 @@ package zw.co.dcl.jawce.engine.service;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -95,7 +96,7 @@ public class RequestService {
 
     public DefaultHookArgs processHook(String hook, HookArgs args) throws Exception {
         var sessionId = args.getChannelUser().waId();
-        logger.warn("[{}] PROCESSING HOOK: {}", sessionId, hook);
+        logger.warn("PROCESSING HOOK: {}", hook);
 
         if(hook.startsWith(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY)) {
             String endpoint = CommonUtils.getDataDatumArgs(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY, hook).datum();
@@ -164,6 +165,7 @@ public class RequestService {
 
             HttpHeaders fwdHeaders = new HttpHeaders();
             fwdHeaders.setContentType(MediaType.APPLICATION_JSON);
+            fwdHeaders.set(EngineConstants.JAWCE_RHOOK_SESSION_HEADER_KEY, sessionId);
 
             if(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class) != null) {
                 fwdHeaders.setBearerAuth(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class));
@@ -210,12 +212,12 @@ public class RequestService {
             logger.error("Request exception: {}", e.getMessage());
 
             if(e.getRawStatusCode() == 401) {
-                logger.error("[{}] WA.OF AUTHORIZATION error: {}", requestDto.getRecipient(), e.getResponseBodyAsString());
+                logger.error("WA.OF AUTHORIZATION error: {}", e.getResponseBodyAsString());
                 throw new EngineWhatsappException("Unauthorized access to WhatsApp server. Check credentials");
             }
 
             if(e.getRawStatusCode() == 400) {
-                logger.error("[{}] WA.OF BAD REQUEST: {}", requestDto.getRecipient(), e.getResponseBodyAsString());
+                logger.error("WA.OF BAD REQUEST: {}", e.getResponseBodyAsString());
                 throw new EngineWhatsappException("Bad request to WhatsApp Cloud server. Check request data");
             }
 
@@ -223,8 +225,10 @@ public class RequestService {
         } catch (EngineResponseException e) {
             throw e;
         } catch (Exception err) {
-            logger.error("[{}] WA.OF REQUEST EXCEPTION: {} | msg: {}", requestDto.getRecipient(), err.getClass().getSimpleName(), err.getMessage());
+            logger.error("WA.OF REQUEST EXCEPTION: {} | msg: {}", err.getClass().getSimpleName(), err.getMessage());
             throw new EngineInternalException("Failed to process Whatsapp Cloud request", err);
+        } finally {
+            MDC.remove(EngineConstants.MDC_ID_KEY);
         }
     }
 
@@ -251,7 +255,7 @@ public class RequestService {
                         var stageCode = session.get(recipient, SessionConstants.CURRENT_STAGE);
                         session.save(recipient, SessionConstants.PREV_STAGE, stageCode);
                         session.save(recipient, SessionConstants.CURRENT_STAGE, requestDto.response().nextRoute());
-                        logger.info("[{}] - Current route set to: {}", recipient, requestDto.response().nextRoute());
+                        logger.info("Current route set to: {}", requestDto.response().nextRoute());
                     }
                     if(config.sessionSettings().isHandleSessionInactivity()) {
                         session.save(
@@ -270,12 +274,12 @@ public class RequestService {
             logger.error("Request exception: {}", e.getMessage());
 
             if(e.getRawStatusCode() == 401) {
-                logger.error("[{}] WA AUTHENTICATION error: {}", recipient, e.getResponseBodyAsString());
+                logger.error("WA AUTHENTICATION error: {}", e.getResponseBodyAsString());
                 throw new EngineWhatsappException("Unauthorized access to WhatsApp server. Check credentials");
             }
 
             if(e.getRawStatusCode() == 400) {
-                logger.error("[{}] WA Bad Request: {}", recipient, e.getResponseBodyAsString());
+                logger.error("WA Bad Request: {}", e.getResponseBodyAsString());
                 throw new EngineWhatsappException("Bad request to WhatsApp Cloud server. Check request data");
             }
 
@@ -287,7 +291,7 @@ public class RequestService {
                 if(e.getMessage() != null && e.getMessage().contains("timed out")) {
                     if(shouldRetryRequest(session, recipient, handleSession)) {
                         return this.sendWhatsappRequest(requestDto, true, channelOriginConfig);
-                    } else logger.warn("[{}] Whatsapp cloud request retries exceeded!", recipient);
+                    } else logger.warn("Whatsapp cloud request retries exceeded!");
                 }
             }
 
@@ -296,9 +300,11 @@ public class RequestService {
         } catch (EngineResponseException e) {
             throw e;
         } catch (Exception err) {
-            logger.error("[{}] WA Request Error: {} | msg: {}", recipient, err.getClass().getSimpleName(), err.getMessage());
+            logger.error("WA Request Error: {} | msg: {}", err.getClass().getSimpleName(), err.getMessage());
             handleSessionOnRequestExc(session, recipient, handleSession);
             throw new EngineInternalException("Failed to process Whatsapp Cloud request", err);
+        } finally {
+            MDC.remove(EngineConstants.MDC_ID_KEY);
         }
     }
 
@@ -315,7 +321,7 @@ public class RequestService {
                             .toString()
                             .equalsIgnoreCase(config.sessionSettings().getStartMenuStageKey())
             ) {
-                logger.warn("[{}] WA request exception - clearing session", recipient);
+                logger.warn("WA request exception - clearing session");
                 session.clear(recipient);
             } else {
                 session.save(recipient, SessionConstants.CURRENT_STAGE, session.get(recipient, SessionConstants.PREV_STAGE));
