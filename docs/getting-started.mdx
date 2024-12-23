@@ -4,9 +4,7 @@ description: Get started with JAWCE.
 ---
 
 <Info>
-    Although JAWCE aims to run as a standalone language-independent engine..
-
-    Some Java /  Kotlin knowledge is assumed
+    Java knowledge is assumed
 </Info>
 
 > The example chatbot comes with a sample template (eHailing chatbot) -
@@ -20,7 +18,7 @@ see my [LinkedIn post here](https://www.linkedin.com/posts/donchinhuru_whatsapp-
 </Warning>
 
 Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural that chatbot templates (conversation flow) are saved in the project
-`resources/templates` folder.
+`src/main/resources/templates` folder.
 
 <Steps>
     <Step title="Clone JAWCE" icon="git">
@@ -56,18 +54,18 @@ Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural th
 
         ```yaml
         resources:
-            templates: ..full/path/to/templates/dir
-            triggers: ..full/path/to/triggers/dir
-            watcher: ..full/path/to/watch/dir
+            templates: ..full/path/to/templates
+            triggers: ..full/path/to/triggers
+            watcher: ..full/path/to/watch
         ```
 
         E.g If you cloned the project in
 
-        `C:\Users\usr\projects\jawce`
+        `C:\Users\me\projects\jawce`
 
         Your path folders will be as
 
-        `C:\Users\usr\projects\jawce\example\jchatbot\src\main\resources\templates`
+        `C:\\Users\\me\\projects\\jawce\\example\\jchatbot\\src\\main\\resources\\templates`
 
         If all goes well,
 

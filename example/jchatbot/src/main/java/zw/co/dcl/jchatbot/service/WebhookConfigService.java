@@ -91,8 +91,4 @@ public class WebhookConfigService {
         settings.setStartMenuStageKey(config.getInitialStage());
         return settings;
     }
-
-    public void clearSession(String userSessionId) {
-        sessionManager.clear(userSessionId);
-    }
 }

@@ -1,14 +1,13 @@
 resources:
-  templates: ..full/path/to/templates/dir
-  triggers: ..full/path/to/triggers/dir
-  watcher: ..full/path/to/watch/dir
+  templates:
+  triggers:
+  watcher:
   hooks:
     base-url: "http://localhost:${server.port}${server.servlet.context-path}"
     security-token: "hook-url-auth-token"
 
 chatbot:
   configs:
-    cache: "file"
     initial-stage: "START-MENU"
     session-ttl: 30
     hub-token: "your-hub-token"
@@ -16,7 +15,7 @@ chatbot:
     access-token: "bot-access-token"
 
 channel-config:
-  test-local: false
+  test-local: true
   local-url: "http://localhost:3000/api/hook-response"
 
 server:

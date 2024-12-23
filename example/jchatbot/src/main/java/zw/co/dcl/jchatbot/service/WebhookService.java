@@ -27,6 +27,6 @@ public class WebhookService {
     public ResponseEntity<String> processRequest(Map<String, Object> payload, HttpServletRequest request) {
         var headers = Util.requestHeadersToMap(request);
         eventPublisher.publishEvent(new WebhookEvent(this, payload, headers));
-        return ResponseEntity.ok("SUCCESS");
+        return ResponseEntity.ok("ACK");
     }
 }

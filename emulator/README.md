@@ -1,5 +1,5 @@
 # WhatsApp Local Emulator
-This emulator was initially initiated by [@Donald C](https://www.linkedin.com/in/donchinhuru/) 
+This emulator was initially initiated by [@DonnC](https://www.linkedin.com/in/donchinhuru/) 
 and a big shout-out to [@Danai Munjemu](https://www.linkedin.com/in/danai-munjemu/) 
 for much of the emulator server and mobile preview work.
 

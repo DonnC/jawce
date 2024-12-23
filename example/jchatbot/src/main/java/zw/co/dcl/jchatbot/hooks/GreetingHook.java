@@ -16,7 +16,7 @@ public class GreetingHook extends AbstractHook {
     }
 
     public Object getDefaultUsername() {
-        log.info("[getDefaultUsername] args: {}", args);
+        log.info("[getDefaultUsername] args: {}", this.args);
 
         args.setTemplateDynamicBody(
                 new TemplateDynamicBody(

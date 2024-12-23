@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -45,6 +46,9 @@ public class TemplateConfig {
     }
 
     private Map<String, Object> getResourceAsMap(String pathDir) {
+        Assert.notNull(pathDir, "Template directory is null. Check README for config help");
+        Assert.hasLength(pathDir, "Template directory is empty. Check README for config help");
+
         Map<String, Object> map = new ConcurrentHashMap<>();
         try {
             Path folderDir = Paths.get(pathDir);

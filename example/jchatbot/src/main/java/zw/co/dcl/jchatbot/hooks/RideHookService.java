@@ -23,7 +23,10 @@ public class RideHookService extends AbstractHookService {
 
     public Object processRide() {
         // get data from session
-        var rideType = props.get("RideType");
+        var rideType = this.props.get("RideType");
+
+        log.info("Processing ride of type {}", rideType);
+        log.info("User answer choice: {}", this.args.getUserInput());
 
         // process ride logic
 

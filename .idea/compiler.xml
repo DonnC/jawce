@@ -8,9 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="jsession" />
-        <module name="kchatbot" />
         <module name="jchatbot" />
-        <module name="kengine" />
       </profile>
       <profile name="Annotation profile for jengine" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -28,6 +26,8 @@
     <bytecodeTargetLevel>
       <module name="jawce" target="17" />
       <module name="jawce-engine-kt" target="17" />
+      <module name="kchatbot" target="17" />
+      <module name="kengine" target="17" />
       <module name="session" target="17" />
     </bytecodeTargetLevel>
   </component>
