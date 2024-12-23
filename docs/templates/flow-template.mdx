@@ -1,0 +1,26 @@
+---
+title: WhatsApp Flow
+description: Handling & Processing flow templates
+---
+
+WhatsApp introduced flows, mobile-app screen like message types.
+
+This type makes collecting user information a breeze and greatly improves your chatbot UX
+
+JAWCE already comes out with support for flows. An example flow template will be as below
+```yaml
+"EXAMPLE_LOGIN_FLOW":
+  type: flow
+  message:
+    id: flow-id
+    draft: true
+    name: flow-name
+    title: "My Flow Title"
+    body: "Flow message body"
+    button: CTA
+  routes:
+    "re:.*": "NEXT_STAGE"
+```
+
+As you can see, JAWCE tries to keep template signature similar, a flow template can have a `title`, `body` and or `footer`
+like any other interactive messages.

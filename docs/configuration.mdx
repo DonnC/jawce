@@ -7,8 +7,9 @@ A lot of configurations can be overridden too but for simplicity only these are 
 
 ```yaml
 resources:
-  templates: "classpath*:templates/**/*.{yaml,yml}"
-  triggers: "classpath*:triggers/**/*.{yaml,yml}"
+  templates: ..full/path/to/templates/dir
+  triggers: ..full/path/to/triggers/dir
+  watcher: ..full/path/to/watch/dir
   hooks:
     base-url: "http://localhost:${server.port}${server.servlet.context-path}"
     security-token: "hook-url-auth-token"
@@ -28,9 +29,20 @@ server:
 ```
 
 ### Resources
-The resources section defines where to find the templates and triggers, you wont probably change this part.
+The resources section defines where to find the templates and triggers.
 
-The `hooks` is a powerful feature which enables the engine to make request calls to external service where your chatbot logic sits.
+Configure the full path to where the resources are, for example. If you clone the project in `C:\\Projects` folder, it will be like below
+
+```yaml
+resources:
+  templates: C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\templates
+  triggers:  C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\triggers
+  watcher:   C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\watch
+```
+
+The `watcher` is used to listen to file changes in the `watch` dir which will trigger all templates to reload without restarting the service.
+
+The `hooks` is a powerful feature which enables the engine to make request calls to external service where your chatbot logic sits (usually your local running server).
 
 The `security-token` is a security credential to send in your hook requests. This can be for a secured hook endpoint using JWT, Bearer Token or any security
 token you implement.

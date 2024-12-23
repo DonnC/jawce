@@ -1,0 +1,38 @@
+{
+  "name": "channel-server",
+  "version": "0.0.1",
+  "description": "Mock server to help translate messages to a mobile emulator for channel development purposes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "serve": "nodemon index.js"
+  },
+  "author": "Danai Munjemu",
+  "contributors": [
+    "Donald Chinhuru"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@admin-bro/express": "^3.1.0",
+    "@admin-bro/mongoose": "^1.1.0",
+    "admin-bro": "^4.0.1",
+    "axios": "^1.6.8",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "chalk": "^5.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-formidable": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.2",
+    "node-cache": "^5.1.2",
+    "nodemon": "^3.1.0",
+    "pino": "^9.0.0",
+    "socket.io": "^4.7.5",
+    "tslib": "^2.6.2",
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0"
+  }
+}

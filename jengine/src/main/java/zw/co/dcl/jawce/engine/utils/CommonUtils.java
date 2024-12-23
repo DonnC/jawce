@@ -14,26 +14,21 @@ import zw.co.dcl.jawce.engine.enums.WebhookIntrMsgType;
 import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
-import zw.co.dcl.jawce.engine.model.dto.ChannelUserInput;
-import zw.co.dcl.jawce.engine.model.dto.DataDatumDTO;
-import zw.co.dcl.jawce.engine.model.dto.SupportedMessageType;
-import zw.co.dcl.jawce.engine.model.dto.WaCurrentUser;
+import zw.co.dcl.jawce.engine.model.dto.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommonUtils {
     private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
-    static final private ObjectMapper objectMapper = new ObjectMapper();
-    final static private DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+    private static final String MUSTACHE_PATTERN = "\\{\\{\\s*([^}]*)\\s*\\}\\}";
 
     public static Map<String, Object> getStaticPayload(
             String recipient,
@@ -54,10 +49,70 @@ public class CommonUtils {
         return payload;
     }
 
-    // Check for unrendered mustache placeholders (i.e., {{ ... }})
-    public static boolean hasUnrenderedPlaceholders(String message) {
-        String mustachePattern = "\\{\\{\\s*\\w+\\s*\\}\\}";
-        return isRegexPatternMatch(mustachePattern, message);
+    public static boolean containsMustacheVariables(String text) {
+        return isRegexPatternMatch(MUSTACHE_PATTERN, text);
+    }
+
+    public static List<String> extractMustacheVariables(String text) {
+        List<String> variables = new ArrayList<>();
+        Matcher matcher = Pattern.compile(MUSTACHE_PATTERN).matcher(text);
+
+        while (matcher.find()) {
+            variables.add(matcher.group(1).trim());
+        }
+        return variables;
+    }
+
+    /**
+     * shortcuts starts with
+     * <p>
+     * p.varName for prop data
+     * <p>
+     * s.varName for general session data
+     */
+    public static List<String> extractShortcutMustacheVariables(String text) {
+        List<String> shortcutVar = new ArrayList<>();
+
+        if(containsMustacheVariables(text)) {
+            List<String> variables = extractMustacheVariables(text);
+
+            variables.forEach(shortVar -> {
+                if(shortVar.startsWith("p.") || shortVar.startsWith("s.")) {
+                    shortcutVar.add(shortVar);
+                }
+            });
+        }
+
+        return shortcutVar;
+    }
+
+    public static ShortcutVar parseShortcutVar(String input) {
+        // Split the input on the colon (:) to determine if a class type is provided
+        String[] parts = input.split(":");
+
+        String name = extractName(parts[0]);
+
+        Class<?> classz = parts.length > 1 ? mapToClass(parts[1]) : null;
+
+        return new ShortcutVar(name, classz);
+    }
+
+    private static String extractName(String fullName) {
+        int lastDotIndex = fullName.lastIndexOf('.');
+        return lastDotIndex != -1 ? fullName.substring(lastDotIndex + 1) : fullName;
+    }
+
+    private static Class<?> mapToClass(String className) {
+        return switch (className.trim()) {
+            case "String" -> String.class;
+            case "Integer" -> Integer.class;
+            case "Long" -> Long.class;
+            case "Double" -> Double.class;
+            case "Boolean" -> Boolean.class;
+            case "List" -> List.class;
+            case "Map" -> Map.class;
+            default -> null;
+        };
     }
 
     public static String formatZonedDateTime(ZonedDateTime dateTime) {
@@ -130,9 +185,7 @@ public class CommonUtils {
     }
 
     public static boolean isRegexPatternMatch(String regexPattern, String text) {
-        Pattern pattern = Pattern.compile(regexPattern);
-        Matcher matcher = pattern.matcher(text);
-        return matcher.find();
+        return Pattern.compile(regexPattern).matcher(text).find();
     }
 
     public static ListSectionType detectListSectionType(LinkedHashMap<String, Object> sectionData) {
@@ -402,7 +455,8 @@ public class CommonUtils {
 
     public static String parseHtmlEncodedContent(String message) {
         try {
-            return URLDecoder.decode(message, StandardCharsets.UTF_8);
+//            return URLDecoder.decode(message, StandardCharsets.UTF_8);
+            return  message;
         } catch (Exception e) {
             return message;
         }

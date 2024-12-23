@@ -1,6 +1,9 @@
 package zw.co.dcl.jawce.engine.constants;
 
 public class EngineConstants {
+    public static final String JAWCE_RHOOK_SESSION_HEADER_KEY = "X-JAWCE-SESSION-ID";
+    public static final String MDC_ID_KEY = "waId";
+
     public final static int MESSAGE_QUEUE_COUNT = 10;
     public final static String ENGINE_EXC_MSG_SPLITTER = "#qx#";  // 5000 | 263778000999 | failed to understand option
     public final static String REFL_CLS_METHOD_SPLITTER = ":";  // ..clsName:methodName
@@ -10,6 +13,10 @@ public class EngineConstants {
 
 //    if present, acknowledge the message (blue-tick)
     public final static String TPL_READ_RECEIPT_KEY = "ack";
+
+    // if present & false - dont handle any session logic
+    // consider it like a quick message
+    public final static String TPL_SESSION_KEY = "session";
 
     public final static String TPL_PROP_KEY = "prop";
     public final static String REST_HOOK_DYNAMIC_ROUTE_KEY = "route";

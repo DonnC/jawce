@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @ConfigurationProperties(prefix = "chatbot.configs")
 public class ChatbotConfig {
-    private String cache;
     private String initialStage;
     private int sessionTtl;
     private String hubToken;

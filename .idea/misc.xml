@@ -17,7 +17,14 @@
         <option value="$PROJECT_DIR$/jchatbot/pom.xml" />
         <option value="$PROJECT_DIR$/example/jchatbot/pom.xml" />
         <option value="$PROJECT_DIR$/jsession/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/example/kchatbot/pom.xml" />
+        <option value="$PROJECT_DIR$/kengine/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">

@@ -1,18 +1,22 @@
 resources:
-  templates: "classpath*:templates/**/*.{yaml,yml}"
-  triggers: "classpath*:triggers/**/*.{yaml,yml}"
+  templates:
+  triggers:
+  watcher:
   hooks:
     base-url: "http://localhost:${server.port}${server.servlet.context-path}"
     security-token: "hook-url-auth-token"
 
 chatbot:
   configs:
-    cache: "file"
     initial-stage: "START-MENU"
     session-ttl: 30
     hub-token: "your-hub-token"
     phone-number-id: "your-phone-id"
     access-token: "bot-access-token"
+
+channel-config:
+  test-local: true
+  local-url: "http://localhost:3000/api/hook-response"
 
 server:
   servlet:

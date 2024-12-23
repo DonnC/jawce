@@ -3,6 +3,7 @@ package zw.co.dcl.jawce.engine.service;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.exceptions.*;
@@ -106,10 +107,12 @@ public class EntryService {
             WaCurrentUser waCurrentUser = CommonUtils.extractWaCurrentUserObj(map);
             String sessionId = waCurrentUser.waId();
 
+            MDC.put(EngineConstants.MDC_ID_KEY, sessionId);
+
             if(channelOriginConfig.restrictOrigin()) {
                 if(!CommonUtils.isAllowedChannelOrigin(channelOriginConfig.patterns(), sessionId)) {
                     if(channelOriginConfig.alertOnMismatch()) {
-                        logger.warn("blocked mobile origin: {}", sessionId);
+                        logger.warn("Blocked waId origin");
                         sendQuickMessage(
                                 sessionId,
                                 channelOriginConfig.alertMessage() == null ?
@@ -126,7 +129,7 @@ public class EntryService {
 
             if(channelOriginConfig.whitelistedNumbers() instanceof List allowedNumbers) {
                 if(!allowedNumbers.contains(sessionId)) {
-                    logger.warn("PROCESS MSG: {} is not whitelisted", sessionId);
+                    logger.warn("PROCESS MSG: waId not whitelisted");
                     return null;
                 }
             }
@@ -288,6 +291,10 @@ public class EntryService {
                             null
                     )
             );
+        }
+
+        finally {
+            MDC.remove(EngineConstants.MDC_ID_KEY);
         }
     }
 

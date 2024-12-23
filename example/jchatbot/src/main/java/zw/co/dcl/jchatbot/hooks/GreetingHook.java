@@ -4,25 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.model.dto.HookArgs;
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
-import zw.co.dcl.jawce.session.ISessionManager;
+import zw.co.dcl.jawce.engine.processor.abstracts.AbstractHook;
 import zw.co.dcl.jchatbot.configs.SessionLocator;
 
 import java.util.Map;
 
 @Slf4j
-public class GreetingHook {
-    private final HookArgs args;
-    private final ISessionManager session;
-    private final String sessionId;
-
-
+public class GreetingHook extends AbstractHook {
     public GreetingHook(HookArgs args) {
-        this.args = args;
-        this.sessionId = args.getChannelUser().waId();
-        this.session = SessionLocator.getSessionManager().session(sessionId);
+        super(args, SessionLocator.getSessionManager());
     }
 
     public Object getDefaultUsername() {
+        log.info("[getDefaultUsername] args: {}", this.args);
 
         args.setTemplateDynamicBody(
                 new TemplateDynamicBody(

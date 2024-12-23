@@ -4,12 +4,10 @@ description: Get started with JAWCE.
 ---
 
 <Info>
-    Although JAWCE aims to run as a standalone language-independent engine..
-
-    Some Java /  Kotlin knowledge is assumed
+    Java knowledge is assumed
 </Info>
 
-> The example chatbot engine comes with a sample template (eHailing chatbot) -
+> The example chatbot comes with a sample template (eHailing chatbot) -
 \
 see my [LinkedIn post here](https://www.linkedin.com/posts/donchinhuru_whatsapp-chatbot-pickdrive-activity-7204897402921566210-Fab9?utm_source=share&utm_medium=member_desktop)
 
@@ -20,7 +18,7 @@ see my [LinkedIn post here](https://www.linkedin.com/posts/donchinhuru_whatsapp-
 </Warning>
 
 Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural that chatbot templates (conversation flow) are saved in the project
-`resources/templates` folder.
+`src/main/resources/templates` folder.
 
 <Steps>
     <Step title="Clone JAWCE" icon="git">
@@ -35,12 +33,12 @@ Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural th
     <Step title="Install dependencies" icon="cloud-arrow-down">
         Install project maven dependencies
 
-        From now on, we will focus on the `chatbot` folder with the sample chatbot
+        From now on, we will focus on the `example` folder with the sample chatbot
     </Step>
     <Step title="Setup Credentials" icon="user-lock">
         Remember the WhatsApp Credentials we mentioned?
 
-        Navigate to the `/chatbot/src/main/resources/application.yml` properties file and replace secret keys with your
+        Navigate to the `/jchatbot/src/main/resources/application.yml` properties file and replace secret keys with your
         account credentials
         ```yaml
         chatbot:
@@ -52,6 +50,25 @@ Since JAWCE is developed with Java (porting to Kotlin WIP 🚧) it is natural th
         ```
     </Step>
     <Step title="Test Run" icon="whatsapp">
+        Before you run the project, setup the full path to the project resources folder
+
+        ```yaml
+        resources:
+            templates: ..full/path/to/templates
+            triggers: ..full/path/to/triggers
+            watcher: ..full/path/to/watch
+        ```
+
+        E.g If you cloned the project in
+
+        `C:\Users\me\projects\jawce`
+
+        Your path folders will be as
+
+        `C:\\Users\\me\\projects\\jawce\\example\\jchatbot\\src\\main\\resources\\templates`
+
+        If all goes well,
+
         Start your development server
 
         Run the `chatbot` project, if all goes well. It should run on the port configured in the application properties file.

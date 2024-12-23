@@ -4,10 +4,11 @@
 
 "START-MENU":
   type: button
-  template: "zw.co.dcl.jchatbot.hooks.GreetHook.getDefaultUsername"
+  template: "zw.co.dcl.jchatbot.hooks.GreetHook:getDefaultUsername"
   message:
     title: PickDrive
     body: "Hi {{ user }}, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
+    footer: JAWCE
     buttons:
       - Proceed
   routes:
@@ -19,6 +20,7 @@
   message:
     title: PickDrive
     body: "To offer you with exclusive riding experience, select your preferred ride type"
+    footer: JAWCE
     buttons:
       - Ride
       - Standard
@@ -26,23 +28,24 @@
   routes:
     "re:.*": "PICKUP-LOCATION"
 
-PICKUP-LOCATION:
+"PICKUP-LOCATION":
   type: request-location
   message: "Where would you like to be picked from?"
   routes:
     "location_request": "DESTINATION-LOCATION"
 
-DESTINATION-LOCATION:
+"DESTINATION-LOCATION":
   type: request-location
   message: "Where would you like to go?"
   routes:
     "location_request": "RIDE-OFFER"
 
-RIDE-OFFER:
+"RIDE-OFFER":
   type: button
   message:
     title: Ride Fee
     body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 8mins"
+    footer: JAWCE
     buttons:
       - Accept
       - Counter Offer
@@ -50,7 +53,7 @@ RIDE-OFFER:
     "accept": "RIDE-COMMENT"
     "counter offer": "RIDE-COUNTER-OFFER"
 
-RIDE-COMMENT:
+"RIDE-COMMENT":
   type: text
   prop: rideComment
   message: "Provide additional info to the driver"
@@ -63,7 +66,7 @@ RIDE-COMMENT:
   message:
     title: Available Drivers
     body: "I found rides matching your choice. Select one you like and they will be ready to pick you up"
-    footer: PickDrive
+    footer: JAWCE
     button: Rides
     sections:
       "Available Rides":
@@ -85,12 +88,19 @@ RIDE-COMMENT:
   routes:
     "re:.*": "CONFIRM-OFFER"
 
-CONFIRM-OFFER:
+"CONFIRM-OFFER":
   type: button
-  on-receive: "rest:https://example.com/api/capture"
+  on-receive: "rest:/ride/capture"
   message:
     title: PickDrive Ride
-    body: "Driver: Donald\nVehicle Color: Silver\nReg Number: QZW 4q5C\n\nConfirm to notify the driver to come pick you up now"
+    body: |
+      Ride: {{ p.RideType }}
+      Driver: Donald
+      Vehicle Color: Silver
+      Reg Number: QZW 0123
+      
+      Confirm to notify the driver to come pick you up now
+    footer: JAWCE
     buttons:
       - Confirm
       - Abort
@@ -98,12 +108,13 @@ CONFIRM-OFFER:
     "confirm": "DRIVER-COMMAND-COME"
     "abort": "PICKUP-DRIVE"
 
-DRIVER-COMMAND-COME:
+"DRIVER-COMMAND-COME":
   type: button
   message:
     title: PickDrive
-    body: "Driver is coming to your location now"
+    body: "Driver is coming to your location now!"
+    footer: JAWCE
     buttons:
       - Rate
   routes:
-    "rate": "RATE-REVIEW-STAGE"
+    "rate": "REPORT"
