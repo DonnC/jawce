@@ -162,7 +162,10 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         if(hasEngineFullDynamicTemplateBody(SessionConstants.DYNAMIC_NEXT_TEMPLATE_BODY_KEY)) {
             nStage = EngineConstants.DYNAMIC_BODY_STAGE_KEY;
             nTemplate = this.session.get(this.sessionId, SessionConstants.DYNAMIC_NEXT_TEMPLATE_BODY_KEY, Map.class);
-        } else {
+        }
+
+
+        else {
             nStage = this.getNextRoute();
 
             if(!this.templateHasKey(this.config.templateContext(), nStage)) {
