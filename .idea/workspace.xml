@@ -4,53 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/ChatbotConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/ChatbotConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/SessionConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/SessionConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/TemplateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/TemplateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/GreetingHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/RideHookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/RideHookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookConfigService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/watch/watch.txt" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/watch/watch.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/BotConstants.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/ChatbotApplication.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/Utils.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/BotConfigs.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/CredentialConfigs.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/SessionConfig.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/configs/SessionLocator.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/controller/WebhookController.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/hooks/ReflUserHook.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/hooks/UserControllerHook.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/hooks/UserHookService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/service/WebhookConfigService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/service/WebhookEventProcessor.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/kotlin/zw/co/dcl/jawce/chatbot/service/WebhookService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/resources/banner.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/main/resources/triggers/triggers.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/kchatbot/src/test/kotlin/zw/co/dcl/jawce/chatbot/ChatbotApplicationTests.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/src/main/kotlin/zw/co/dcl/jawce/engine/JawceEngineKtApplication.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kengine/src/test/kotlin/zw/co/dcl/jawce/engine/JawceEngineKtApplicationTests.kt" beforeDir="false" />
-    </list>
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -100,54 +54,54 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.chatbot [clean,install].executor": "Run",
-    "Maven.chatbot [clean].executor": "Run",
-    "Maven.engine [clean,install].executor": "Run",
-    "Maven.engine [clean].executor": "Run",
-    "Maven.engine [install].executor": "Run",
-    "Maven.java-engine [clean,install].executor": "Run",
-    "Maven.jawce [clean,install].executor": "Run",
-    "Maven.jawce-java-engine [clean,install].executor": "Run",
-    "Maven.jawce-session [clean,install].executor": "Run",
-    "Maven.jchatbot [clean,install].executor": "Run",
-    "Maven.jchatbot [clean].executor": "Run",
-    "Maven.jengine [clean,install].executor": "Run",
-    "Maven.jengine [clean].executor": "Run",
-    "Maven.jengine [install].executor": "Run",
-    "Maven.jsession [clean,install].executor": "Run",
-    "Maven.kengine [clean,install].executor": "Run",
-    "Maven.kt-engine [clean,install].executor": "Run",
-    "Maven.session [clean,install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ChatbotApplication.executor": "Run",
-    "Spring Boot.JawceEngine.executor": "Run",
-    "Spring Boot.JchatbotApplication.executor": "Run",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "dev",
-    "jdk.selected.JAVA_MODULE": "corretto-17",
-    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "settings.sync",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kt-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JawceEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JchatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\example" />
@@ -199,8 +153,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
       </set>
     </attachedChunks>
   </component>
@@ -284,7 +238,21 @@
       <workItem from="1732105530385" duration="1144000" />
       <workItem from="1732108195101" duration="445000" />
       <workItem from="1732692920722" duration="991000" />
-      <workItem from="1734977944407" duration="2660000" />
+      <workItem from="1734977944407" duration="3837000" />
+      <workItem from="1736010552473" duration="2256000" />
+      <workItem from="1736020735357" duration="839000" />
+      <workItem from="1736093553400" duration="663000" />
+      <workItem from="1736154723893" duration="6583000" />
+      <workItem from="1736182454896" duration="1465000" />
+      <workItem from="1736244931576" duration="13893000" />
+      <workItem from="1736265517440" duration="4660000" />
+      <workItem from="1736328963071" duration="14201000" />
+      <workItem from="1736410705324" duration="11088000" />
+      <workItem from="1736439525430" duration="710000" />
+      <workItem from="1736493549995" duration="1248000" />
+      <workItem from="1736509171120" duration="638000" />
+      <workItem from="1736516267728" duration="227000" />
+      <workItem from="1736699618192" duration="1578000" />
     </task>
     <servers />
   </component>

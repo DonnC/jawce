@@ -43,6 +43,7 @@ public abstract class ChannelMessageProcessor {
         this.dto = dto;
         this.sessionId = dto.waCurrentUser().waId();
         this.session = config.sessionManager().session(sessionId);
+
         this.getCurrentStageTemplate();
         this.getMessageBody();
         this.processStageTrigger();
