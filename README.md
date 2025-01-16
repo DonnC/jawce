@@ -1,36 +1,90 @@
-# WhatsApp ChatBot Engine
+# Java WhatsApp ChatBot Engine
+A dependency for creating WhatsApp chatbots using a template-driven approach.
 
-Check out the [documentation available here](https://docs.page/donnc/jawce)
+Templates use YAML allowing you to define conversation flows and business logic in a clean and modular
+way.
 
-A Template based ChatBot engine using the official WhatsApp Cloud API
+## Features
 
-## About
-JAWCE came out as a means to avoid repetitive WhatsApp chatbot developments. 
-Every bot i had to create i had to start to define the stages and battle session management on these bot flows or stages and relook at the WhatsApp API spec.
+- **Template-Driven Design**: Use YAML templates for conversational flows.
+- **Hooks for Business Logic**: Attach Java classes / RESTful endpoints to process messages or actions.
+- Abstracts the API for WhatsApp Cloud.
+- Supports dynamic messages with placeholders.
 
-With this in mind, i started creating some sort of "engine" to abstract the repetitive tasks away from the core business logic of my chatbots.
+## Setup
+For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
 
-## Architecture
-JAWCE has decoupled the core engine from the session. 
+> Developed using Java 17
 
-This is because session management is a crucial component and anyone can have their own  implementations.
+1. Clone repository
+```bash
+git clone git@github.com:DonnC/jawce.git
+```
+2. Install all project maven dependencies
+- Start by installing dependencies in the `jsession` folder
+- Next, install `jengine` folder dependencies
+- Finally install dependencies for the `example/jchabot` folder
+3. Navigate to the example chatbot >`example/jchatbot/src/main/resources/application.yml` properties file 
+and replace configs with your WhatsApp account configs
 
-`JAWCE` comes with some default SessionManager implementations to provide a head-start for an out-of-the-box experience
+```yaml
+chatbot:
+  configs:
+    # ~ snippet ~
+    hub-token: "your-webhook-hub-challenge-token"
+    phone-number-id: "your-phone-number-id"
+    access-token: "your-access-token"
+```
+4. Configure chatbot resources under the `resources` section
+```yaml
+resources:
+  templates: "path-to-templates-dir"
+  triggers: "path-to-triggers-dir"
+  watcher: "path-to-watcher-dir"
+```
 
-## Demo
-<table>
-   <tr>
-      <td> Engine Template</td>
-      <td> In Action: WhatsApp</td>
-   </tr>
-   <tr>
-      <td><img width="320" src="/docs/assets/templates.png"></td>
-      <td><video width="320" height="640" src="https://github.com/DonnC/jawce/assets/47761288/f1c9754e-5f29-455e-ba57-54cf7338286b"></td>
-   </tr>
-</table>
+Configure the full path to where the resources are, for example. 
 
-You can use any other language / framework of choice for your chatbot logic. The engine supports REST API based hooks so you can run this engine entirely separate from your logic.
+If you clone the project in `C:\\Projects` folder, it will be like below
+```yaml
+resources:
+    templates: C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\templates
+    triggers:  C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\triggers
+    watcher:   C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\watch
+```
 
+> The watcher is used to listen to file changes in the watch dir which will trigger all templates to reload without restarting the service.
 
-## Example Bot
-Check out the [Python ChatBot](https://github.com/DonnC/py-jawce-chatbot) template developed and running using this engine.
+### Engine dependency
+> Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/example/jchatbot) for a quick getting started template
+
+To include the jengine in your own project.
+
+In your `pom.xml` dependencies add the following
+
+```xml
+<!-- your other dependencies -->
+
+<dependency>
+    <groupId>zw.co.dcl.jawce</groupId>
+    <artifactId>jengine</artifactId>
+    <version>1.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+Make sure you create a rest controller which handles 2 of the important logic
+- webhook verification
+- webhook payload
+
+## Documentation
+
+Visit the [official documentation](https://docs.page/donnc/wce) for a detailed guide.
+
+## Contributing
+
+We welcome contributions! Please check out the [Contributing Guide](https://github.com/DonnC/jawce/blob/master/CONTRIBUTING.md) for details.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/DonnC/jawce/blob/master/LICENCE) file for details.

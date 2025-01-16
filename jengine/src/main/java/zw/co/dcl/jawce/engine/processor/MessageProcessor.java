@@ -225,6 +225,11 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
                 var btn = new ButtonMessage(messageDto);
                 yield btn.generatePayload();
             }
+            case TemplateTypes.CTA_BUTTON -> {
+                var btn = new CtaButtonMessage(messageDto);
+                yield btn.generatePayload();
+            }
+
             case TemplateTypes.LIST -> {
                 var intrMessage = new InteractiveListMessage(messageDto);
                 yield intrMessage.generatePayload();

@@ -31,7 +31,7 @@ public class ChannelPayloadGenerator {
     public Map<String, Object> text() {
         Map<String, Object> textPayload = new HashMap<>(Map.of("preview_url", true));
 
-        if (this.body.get("message") instanceof ArrayList messages)
+        if(this.body.get("message") instanceof ArrayList messages)
             textPayload.put("body", CommonUtils.parseHtmlEncodedContent(String.join(System.lineSeparator(), messages)));
         else
             textPayload.put("body", CommonUtils.parseHtmlEncodedContent((String) this.body.get("message")));
@@ -77,9 +77,9 @@ public class ChannelPayloadGenerator {
                         )
         );
 
-        if (this.body.containsKey("caption"))
+        if(this.body.containsKey("caption"))
             baseBody.put("caption", CommonUtils.parseHtmlEncodedContent(this.body.get("caption").toString()));
-        if (this.body.containsKey("filename")) baseBody.put("filename", this.body.get("filename"));
+        if(this.body.containsKey("filename")) baseBody.put("filename", this.body.get("filename"));
 
         return baseBody;
     }
@@ -94,8 +94,8 @@ public class ChannelPayloadGenerator {
                 )
         );
 
-        if (body.containsKey("title")) {
-            if (body.containsKey("id") || body.containsKey("url")) {
+        if(body.containsKey("title")) {
+            if(body.containsKey("id") || body.containsKey("url")) {
                 String mediaFormat = body.containsKey("id") ? "id" : "url";
                 var mediaLocation = body.containsKey("id") ? body.get("id") : body.get("url");
 
@@ -110,7 +110,7 @@ public class ChannelPayloadGenerator {
                 buttonIntrPayload.put("header", Map.of("type", "text", "text", body.get("title")));
         }
 
-        if (body.containsKey("footer")) {
+        if(body.containsKey("footer")) {
             buttonIntrPayload.put("footer", Map.of("text", body.get("footer")));
         }
 
@@ -131,6 +131,37 @@ public class ChannelPayloadGenerator {
         return buttonIntrPayload;
     }
 
+
+    public Map<String, Object> ctaButton() {
+        var ctaPayload = new HashMap<>(
+                Map.of(
+                        "type", InteractivePayloadType.CTA_URL.name().toLowerCase(),
+                        "body", Map.of("text", CommonUtils.parseHtmlEncodedContent(body.get("body").toString()))
+                )
+        );
+
+        if(body.containsKey("title")) {
+            ctaPayload.put("header", Map.of("type", "text", "text", body.get("title")));
+        }
+
+        if(body.containsKey("footer")) {
+            ctaPayload.put("footer", Map.of("text", body.get("footer")));
+        }
+
+        ctaPayload.put(
+                "action", Map.of(
+                        "name", InteractivePayloadType.CTA_URL.name().toLowerCase(),
+                        "parameters", Map.of(
+                                "display_text", body.get("button"),
+                                "url", body.get("url")
+                        )
+                )
+        );
+
+        return ctaPayload;
+    }
+
+
     public Map<String, Object> interactiveList() {
         var sections = (LinkedHashMap<String, Object>) body.get("sections");
 
@@ -145,11 +176,11 @@ public class ChannelPayloadGenerator {
 
         var listType = CommonUtils.detectListSectionType(sections);
 
-        if (body.containsKey("title")) {
+        if(body.containsKey("title")) {
             listIntrPayload.put("header", Map.of("type", "text", "text", body.get("title")));
         }
 
-        if (body.containsKey("footer")) {
+        if(body.containsKey("footer")) {
             listIntrPayload.put("footer", Map.of("text", body.get("footer")));
         }
 
@@ -196,11 +227,11 @@ public class ChannelPayloadGenerator {
                 )
         );
 
-        if (body.containsKey("title")) {
+        if(body.containsKey("title")) {
             flowIntrPayload.put("header", Map.of("type", "text", "text", body.get("title")));
         }
 
-        if (body.containsKey("footer")) {
+        if(body.containsKey("footer")) {
             flowIntrPayload.put("footer", Map.of("text", body.get("footer")));
         }
 
@@ -209,7 +240,7 @@ public class ChannelPayloadGenerator {
 
         Map<String, Object> params = new HashMap<>();
 
-        if (body.containsKey("draft")) params.put("mode", "draft");
+        if(body.containsKey("draft")) params.put("mode", "draft");
 
         params.put("flow_message_version", EngineConstants.CHANNEL_FLOW_VERSION);
         params.put("flow_token", this.generateFlowToken(user, body.get("name").toString()));
@@ -219,7 +250,7 @@ public class ChannelPayloadGenerator {
 
         Map<String, Object> flowPayload = new HashMap<>();
         flowPayload.put("screen", body.get("name"));
-        if (flowData != null) flowPayload.put("data", flowData);
+        if(flowData != null) flowPayload.put("data", flowData);
 
         params.put("flow_action_payload", flowPayload);
 
