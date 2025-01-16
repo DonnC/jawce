@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CONTRIBUTING.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/CtaButtonMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/TemplateTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/TemplateTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/ChannelPayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/utils/ChannelPayloadGenerator.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -253,6 +263,10 @@
       <workItem from="1736509171120" duration="638000" />
       <workItem from="1736516267728" duration="227000" />
       <workItem from="1736699618192" duration="1578000" />
+      <workItem from="1736843085373" duration="632000" />
+      <workItem from="1736871574431" duration="831000" />
+      <workItem from="1737030890788" duration="2392000" />
+      <workItem from="1737045899714" duration="1328000" />
     </task>
     <servers />
   </component>

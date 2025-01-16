@@ -12,4 +12,5 @@ public class TemplateTypes {
     public final static String DYNAMIC = "dynamic";
     public final static String LOCATION = "location";
     public final static String REQUEST_LOCATION = "request-location";
+    public final static String CTA_BUTTON = "cta"; // cta_url
 }
