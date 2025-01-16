@@ -10,6 +10,7 @@
   message:
     title: "JawceMedic"
     body: "Next available scan dates are available on our calendar"
+    url: "https://my.long.url.com/calendar?event=scan"
     button: "See Dates"
   routes:
     "re:.*": "NEXT-STAGE"
