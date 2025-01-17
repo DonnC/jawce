@@ -7,6 +7,7 @@ public enum WebhookResponseMessageType {
     DOCUMENT,
     TEXT,
     UNKNOWN, // for currently unsupported msgs
+    CTA_BUTTON,
     BUTTON,
     TEMPLATE,
     INTERACTIVE,
