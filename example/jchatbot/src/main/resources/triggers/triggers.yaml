@@ -5,5 +5,9 @@
 # defined in the /templates directory
 "START-MENU": "re:(?i)(start)|(hi)|(hie)"
 
-# for reporting
+# for reporting, default trigger needed by engine
 "REPORT": "re:^report$"
+
+# my example custom trigger
+# type `president` in the chat to invoke this trigger
+"CUSTOM-STAGE-TRIGGER": "re:(?i)^president$"

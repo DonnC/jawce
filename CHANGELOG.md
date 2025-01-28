@@ -8,10 +8,14 @@
 "MY-CTA-MESSAGE":
   type: cta
   message:
-    title: "JawceMedic"
     body: "Next available scan dates are available on our calendar"
     url: "https://my.long.url.com/calendar?event=scan"
     button: "See Dates"
   routes:
     "re:.*": "NEXT-STAGE"
 ```
+
+## Jan 2025
+* Added example custom triggers
+* Fixed triggers not working (@)
+* Fixed CTA button correct payload creation
