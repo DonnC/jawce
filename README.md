@@ -14,7 +14,7 @@ way.
 ## Setup
 For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
 
-> Developed using Java 17
+> Developed with Java 17
 
 1. Clone repository
 ```bash
@@ -76,6 +76,8 @@ In your `pom.xml` dependencies add the following
 Make sure you create a rest controller which handles 2 of the important logic
 - webhook verification
 - webhook payload
+
+Checkout the `example` project for a starting point
 
 ## Documentation
 

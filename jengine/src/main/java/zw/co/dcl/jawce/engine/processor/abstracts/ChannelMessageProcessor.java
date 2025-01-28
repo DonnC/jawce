@@ -210,10 +210,11 @@ public abstract class ChannelMessageProcessor {
         if(!templateHasKey(this.config.templateContext(), trigger.getKey()))
             throw new EngineInternalException("route: " + trigger.getKey() + " not defined in template context map");
 
-        this.currentStageTpl = (Map<String, Object>) this.config.templateContext().get(trigger.getKey());
-        logger.info("Triggered template change: {}", trigger.getKey());
-        this.setFromTrigger(true);
         this.stage = trigger.getKey();
+        this.currentStageTpl = (Map<String, Object>) this.config.templateContext().get(this.stage);
+        logger.info("Triggered template change: {}", this.stage);
+        this.setFromTrigger(true);
+        this.session.save(this.sessionId, SessionConstants.CURRENT_STAGE, this.stage);
     }
 
     private void saveProp() {

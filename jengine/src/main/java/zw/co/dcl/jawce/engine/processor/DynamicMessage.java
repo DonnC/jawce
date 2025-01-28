@@ -3,11 +3,11 @@ package zw.co.dcl.jawce.engine.processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
+import zw.co.dcl.jawce.engine.enums.PayloadType;
+import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
 import zw.co.dcl.jawce.engine.model.dto.MessageDto;
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
-import zw.co.dcl.jawce.engine.enums.PayloadType;
-import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.processor.abstracts.ChannelPayloadProcessor;
 import zw.co.dcl.jawce.engine.processor.iface.IPayloadProcessor;
 import zw.co.dcl.jawce.engine.utils.ChannelPayloadGenerator;
@@ -47,6 +47,7 @@ public class DynamicMessage extends ChannelPayloadProcessor implements IPayloadP
                     payload.put("text", payloadGenerator.text());
                 }
                 case BUTTON -> payload.put("interactive", payloadGenerator.button());
+                case CTA_BUTTON -> payload.put("interactive", payloadGenerator.ctaButton());
                 case INTERACTIVE -> payload.put("interactive", payloadGenerator.interactiveList());
                 default ->
                         throw new EngineInternalException("failed to process dynamic template body type for stage: " + stage);
@@ -60,13 +61,13 @@ public class DynamicMessage extends ChannelPayloadProcessor implements IPayloadP
 
     @Override
     public void validator() {
-        if (!this.template.get("type").equals("dynamic")) {
+        if(!this.template.get("type").equals("dynamic")) {
             throw new EngineInternalException("template type is not set to dynamic");
         }
-        if (!this.template.containsKey("template")) {
+        if(!this.template.containsKey("template")) {
             throw new EngineInternalException("template is required for dynamic tpl message");
         }
-        if (!this.template.containsKey("routes")) {
+        if(!this.template.containsKey("routes")) {
             throw new EngineInternalException("routes map is required for dynamic tpl message");
         }
     }

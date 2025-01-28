@@ -80,6 +80,9 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         }
 
         String currentStage = (String) this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE);
+
+        if(this.isFromTrigger) return currentStage;
+
         var currentStageRoutes = (Map<String, Object>) this.currentStageTpl.get(EngineConstants.TPL_ROUTES_KEY);
         var checkpoint = this.session.get(this.sessionId, SessionConstants.SESSION_LATEST_CHECKPOINT_KEY);
 
@@ -152,7 +155,8 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
     @Override
     public EnginePreProcessor preProcessor() throws Exception {
-        if(this.session.get(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY) == null) {
+        var shouldProcessPostHooks = !this.isFromTrigger || this.session.get(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY) == null;
+        if(shouldProcessPostHooks) {
             this.processPostHooks();
         }
 
@@ -162,10 +166,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         if(hasEngineFullDynamicTemplateBody(SessionConstants.DYNAMIC_NEXT_TEMPLATE_BODY_KEY)) {
             nStage = EngineConstants.DYNAMIC_BODY_STAGE_KEY;
             nTemplate = this.session.get(this.sessionId, SessionConstants.DYNAMIC_NEXT_TEMPLATE_BODY_KEY, Map.class);
-        }
-
-
-        else {
+        } else {
             nStage = this.getNextRoute();
 
             if(!this.templateHasKey(this.config.templateContext(), nStage)) {
@@ -178,7 +179,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
                     && this.templateHasKey(nTemplate, EngineConstants.TPL_ROUTE_TRANSIENT_KEY)
             ) {
                 this.currentStageTpl = nTemplate;
-                logger.warn("Found transient flow dynamic router -> {}, re-processing..",  nStage);
+                logger.warn("Found transient flow dynamic router -> {}, re-processing..", nStage);
                 nestedPreProcessorResults.add(this.preProcessor());
             }
 
@@ -191,7 +192,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             nTemplate = latest.template();
         }
 
-        logger.info("Next stage: {} ",  nStage);
+        logger.info("Next stage: {} ", nStage);
         return new EnginePreProcessor(nStage, nTemplate);
     }
 

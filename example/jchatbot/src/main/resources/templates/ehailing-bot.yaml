@@ -11,8 +11,20 @@
     footer: JAWCE
     buttons:
       - Proceed
+      - GitHub
   routes:
     "proceed": "PICKUP-DRIVE-MAIN-MENU"
+    "github": "JAWCE-GITHUB-DOCS"
+
+"JAWCE-GITHUB-DOCS":
+  type: cta
+  message:
+    title: "WCE"
+    body: "See Engine docs and star, fork, share, donate or contribute 😀"
+    url: "https://github.com/DonnC"
+    button: "Github"
+  routes:
+    "re:.*": "START-MENU"
 
 "PICKUP-DRIVE-MAIN-MENU":
   type: button
