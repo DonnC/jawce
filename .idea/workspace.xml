@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application-local.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/trigger-custom-stage.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelMessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelMessageProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,55 +57,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.JCHATBOT LOCAL.executor": "Run",
-    "Maven.chatbot [clean,install].executor": "Run",
-    "Maven.chatbot [clean].executor": "Run",
-    "Maven.engine [clean,install].executor": "Run",
-    "Maven.engine [clean].executor": "Run",
-    "Maven.engine [install].executor": "Run",
-    "Maven.java-engine [clean,install].executor": "Run",
-    "Maven.jawce [clean,install].executor": "Run",
-    "Maven.jawce-java-engine [clean,install].executor": "Run",
-    "Maven.jawce-session [clean,install].executor": "Run",
-    "Maven.jchatbot [clean,install].executor": "Run",
-    "Maven.jchatbot [clean].executor": "Run",
-    "Maven.jengine [clean,install].executor": "Run",
-    "Maven.jengine [clean].executor": "Run",
-    "Maven.jengine [install].executor": "Run",
-    "Maven.jsession [clean,install].executor": "Run",
-    "Maven.kengine [clean,install].executor": "Run",
-    "Maven.kt-engine [clean,install].executor": "Run",
-    "Maven.session [clean,install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ChatbotApplication.executor": "Run",
-    "Spring Boot.JawceEngine.executor": "Run",
-    "Spring Boot.JchatbotApplication.executor": "Run",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "dev",
-    "jdk.selected.JAVA_MODULE": "corretto-17",
-    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "settings.sync",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kt-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JawceEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JchatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\example" />
@@ -313,7 +304,9 @@
       <workItem from="1737120098918" duration="197000" />
       <workItem from="1737303964082" duration="72000" />
       <workItem from="1737988063136" duration="183000" />
-      <workItem from="1738046499512" duration="5566000" />
+      <workItem from="1738046499512" duration="5928000" />
+      <workItem from="1738073170323" duration="454000" />
+      <workItem from="1738155756211" duration="886000" />
     </task>
     <servers />
   </component>

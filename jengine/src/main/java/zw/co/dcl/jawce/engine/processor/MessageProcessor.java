@@ -81,8 +81,6 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         String currentStage = (String) this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE);
 
-        if(this.isFromTrigger) return currentStage;
-
         var currentStageRoutes = (Map<String, Object>) this.currentStageTpl.get(EngineConstants.TPL_ROUTES_KEY);
         var checkpoint = this.session.get(this.sessionId, SessionConstants.SESSION_LATEST_CHECKPOINT_KEY);
 
@@ -96,6 +94,8 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         var hasDynamicRoute = dynamicRouter();
         if(hasDynamicRoute != null) return hasDynamicRoute;
+
+        if(this.isFromTrigger) return currentStage;
 
         logger.info("Current - stage: [{}], template: {}",
                 currentStage,
