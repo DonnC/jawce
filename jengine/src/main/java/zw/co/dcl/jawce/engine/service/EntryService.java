@@ -410,6 +410,6 @@ public class EntryService {
      * @return WhatsApp upstream response
      */
     public String sendOnceOffMessage(OnceOffRequestDto dto) {
-        return this.service.sendOnceOffWhatsappRequest(dto, dto.getValidateOrigin() ? this.channelOriginConfig : null);
+        return this.service.sendOnceOffWhatsappRequest(dto, null);
     }
 }
