@@ -15,7 +15,7 @@ public class SessionConfig {
     @Bean
     public ISessionManager sessionManager() {
         // TODO: ISessionManager implement or use your own choice
-        // return FileBasedSessionManager.getInstance();
+        // return FileSessionManager.getInstance();
         return CaffeineSessionManager.getInstance(30L, TimeUnit.MINUTES);
     }
 }

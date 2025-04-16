@@ -25,7 +25,7 @@ public class InteractiveListMessage extends ChannelPayloadProcessor implements I
     public Map<String, Object> generatePayload() {
         var messageBody = (Map<String, Object>) this.template.get("message");
 
-        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getChannelUser().waId(), PayloadType.INTERACTIVE, replyMessageId));
+        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getWaUser().waId(), PayloadType.INTERACTIVE, replyMessageId));
         ChannelPayloadGenerator payloadGenerator = new ChannelPayloadGenerator(messageBody);
 
         payload.put(PayloadType.INTERACTIVE.name().toLowerCase(), payloadGenerator.interactiveList());

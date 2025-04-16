@@ -20,7 +20,7 @@ public class LocationRequestMessage extends ChannelPayloadProcessor implements I
 
     @Override
     public Map<String, Object> generatePayload() {
-        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getChannelUser().waId(), PayloadType.INTERACTIVE, replyMessageId));
+        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getWaUser().waId(), PayloadType.INTERACTIVE, replyMessageId));
         ChannelPayloadGenerator payloadGenerator = new ChannelPayloadGenerator(this.template);
         payload.put(PayloadType.INTERACTIVE.name().toLowerCase(), payloadGenerator.locationRequest());
         return payload;

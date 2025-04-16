@@ -3,7 +3,7 @@ package zw.co.dcl.jawce.engine.processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
 import zw.co.dcl.jawce.engine.model.dto.MessageDto;
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
 import zw.co.dcl.jawce.engine.enums.PayloadType;
@@ -32,7 +32,7 @@ public class FlowMessage extends ChannelPayloadProcessor implements IPayloadProc
         var messageBody = (Map<String, Object>) this.template.get("message");
 
         Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(
-                this.hookArgs.getChannelUser().waId(),
+                this.hookArgs.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
         ));
@@ -43,7 +43,7 @@ public class FlowMessage extends ChannelPayloadProcessor implements IPayloadProc
             if (this.template.containsKey("template")) {
                 hookArgs.setFlow(messageBody.get("name").toString());
 
-                DefaultHookArgs response = engineService.processHook(
+                AbsHookArg response = engineService.processHook(
                         this.template.get(EngineConstants.TPL_TEMPLATE_KEY).toString(),
                         this.hookArgs
                 );
@@ -57,7 +57,7 @@ public class FlowMessage extends ChannelPayloadProcessor implements IPayloadProc
             }
 
             ChannelPayloadGenerator payloadGenerator = new ChannelPayloadGenerator(messageBody);
-            payload.put("interactive", payloadGenerator.flow(hookArgs.getChannelUser().waId(), flowData));
+            payload.put("interactive", payloadGenerator.flow(hookArgs.getWaUser().waId(), flowData));
         } catch (EngineRenderException e) {
             throw e;
         } catch (Exception err) {

@@ -7,6 +7,8 @@ import org.slf4j.MDC;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.exceptions.*;
+import zw.co.dcl.jawce.engine.model.core.HookArg;
+import zw.co.dcl.jawce.engine.model.core.WaUser;
 import zw.co.dcl.jawce.engine.model.dto.*;
 import zw.co.dcl.jawce.engine.processor.*;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
@@ -51,10 +53,10 @@ public class EntryService {
     public Object sendQuickBtnMsg(QuickBtnPayload payload) {
         assert payload.buttons().size() <= 3;
 
-        HookArgs args = new HookArgs();
+        HookArg args = new HookArg();
         var userSession = this.config.sessionManager().session(payload.recipient());
         args.setSession(userSession);
-        args.setChannelUser(new WaCurrentUser(null, payload.recipient(), null, null));
+        args.setWaUser(new WaUser(null, payload.recipient(), null, null));
 
         Map<String, Object> btnTemplate = new java.util.HashMap<>(Map.of(
                 "body", payload.message(),
@@ -88,7 +90,7 @@ public class EntryService {
         else return "Invalid request";
     }
 
-    public WaCurrentUser verifyWebhookPayload(Object payload, Map<String, Object> requestHeaders) {
+    public WaUser verifyWebhookPayload(Object payload, Map<String, Object> requestHeaders) {
         var map = CommonUtils.linkedHashToMap((LinkedHashMap) payload);
 
         if(CommonUtils.isChannelErrorMessage(map)) throw new EngineWhatsappException(map.toString());
@@ -104,8 +106,8 @@ public class EntryService {
             var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
             if(!supportedMsgType.isSupported()) throw new EngineInternalException("unsupported message type");
 
-            WaCurrentUser waCurrentUser = CommonUtils.extractWaCurrentUserObj(map);
-            String sessionId = waCurrentUser.waId();
+            WaUser waUser = CommonUtils.extractWaCurrentUserObj(map);
+            String sessionId = waUser.waId();
 
             MDC.put(EngineConstants.MDC_ID_KEY, sessionId);
 
@@ -118,7 +120,7 @@ public class EntryService {
                                 channelOriginConfig.alertMessage() == null ?
                                         "Kindly note that I have not been configured to process messages matching your network provider" :
                                         channelOriginConfig.alertMessage(),
-                                waCurrentUser.msgId()
+                                waUser.msgId()
                         );
                         return null;
                     }
@@ -142,12 +144,12 @@ public class EntryService {
             }
 
 //            check timestamp timeout
-            if(CommonUtils.isOldWebhook(waCurrentUser.timestamp(), config.sessionSettings().getWebhookSecTimestampThreshold())) {
-                logger.warn("OLD WEBHOOK REQ RECEIVED: {}. DISCARDED", CommonUtils.convertTimestamp(waCurrentUser.timestamp()));
+            if(CommonUtils.isOldWebhook(waUser.timestamp(), config.sessionSettings().getWebhookSecTimestampThreshold())) {
+                logger.warn("OLD WEBHOOK REQ RECEIVED: {}. DISCARDED", CommonUtils.convertTimestamp(waUser.timestamp()));
                 return null;
             }
 
-            return waCurrentUser;
+            return waUser;
         }
 
         logger.warn("No message obj, ignoring..");
@@ -179,17 +181,17 @@ public class EntryService {
      * <p>
      * If you need to send back an alert to user, flag the variable in the config.
      *
-     * @param payload        WhatsApp json webhook payload
+     * @param payload        WhatsAppConfig json webhook payload
      * @param requestHeaders webhook request to verify webhook data authenticity
      */
     @SneakyThrows
     public void processWebhook(Object payload, Map<String, Object> requestHeaders) {
         var map = CommonUtils.linkedHashToMap((LinkedHashMap) payload);
-        WaCurrentUser waCurrentUser = verifyWebhookPayload(payload, requestHeaders);
+        WaUser waUser = verifyWebhookPayload(payload, requestHeaders);
 
-        if(waCurrentUser == null) return;
+        if(waUser == null) return;
 
-        String sessionId = waCurrentUser.waId();
+        String sessionId = waUser.waId();
 
         Map<String, Object> msgData = CommonUtils.extractWaMessage(map);
         var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
@@ -197,7 +199,7 @@ public class EntryService {
         var session = config.sessionManager().session(sessionId);
 
         if(config.sessionSettings().isHandleSessionQueue()) {
-            if(getMessageQueue(sessionId, session).contains(waCurrentUser.msgId())) {
+            if(getMessageQueue(sessionId, session).contains(waUser.msgId())) {
                 logger.warn("Duplicate message found: {}. Skipping..", msgData);
                 return;
             }
@@ -214,13 +216,13 @@ public class EntryService {
         }
 
         if(config.sessionSettings().isHandleSessionQueue()) {
-            addToMessageQueue(sessionId, session, waCurrentUser.msgId());
+            addToMessageQueue(sessionId, session, waUser.msgId());
         }
 
         try {
             MessageProcessor msgProcessor = new MessageProcessor(
                     new MsgProcessorDTO(
-                            waCurrentUser,
+                            waUser,
                             supportedMsgType,
                             msgData
                     ),
@@ -235,7 +237,7 @@ public class EntryService {
                     channelOriginConfig
             );
 
-            session.save(sessionId, SessionConstants.CURRENT_MSG_ID_KEY, waCurrentUser.msgId());
+            session.save(sessionId, SessionConstants.CURRENT_MSG_ID_KEY, waUser.msgId());
         } catch (EngineRenderException e) {
             sendQuickBtnMsg(
                     new QuickBtnPayload(
@@ -249,7 +251,7 @@ public class EntryService {
             );
         } catch (EngineResponseException e) {
             var errBody = CommonUtils.getDataDatumArgs(EngineConstants.ENGINE_EXC_MSG_SPLITTER, e.getMessage());
-            logger.warn("[{}] Stage: {} | {} Invalid response err", waCurrentUser.msgId(), errBody.data(), errBody.datum());
+            logger.warn("[{}] Stage: {} | {} Invalid response err", waUser.msgId(), errBody.data(), errBody.datum());
 
             sendQuickBtnMsg(
                     new QuickBtnPayload(
@@ -263,7 +265,7 @@ public class EntryService {
             );
         } catch (UserSessionValidationException e) {
             logger.warn("Ambiguous session mismatch, Dialing user: {} | Session user: {}",
-                    waCurrentUser.msgId(),
+                    waUser.msgId(),
                     session.get(sessionId, SessionConstants.SERVICE_PROFILE_MSISDN_KEY, String.class)
             );
             logger.warn(e.getMessage());
@@ -280,7 +282,7 @@ public class EntryService {
             );
         } catch (EngineSessionInactivityException | EngineSessionExpiredException e) {
             session.clear(sessionId);
-            logger.error("[{}] Session expired / inactive - cleared", waCurrentUser.msgId());
+            logger.error("[{}] Session expired / inactive - cleared", waUser.msgId());
             sendQuickBtnMsg(
                     new QuickBtnPayload(
                             sessionId,
@@ -300,10 +302,10 @@ public class EntryService {
 
     // helper methods to send quick messages without handling session
     public String sendQuickMessage(String recipient, String message, String replyMsgId) {
-        HookArgs args = new HookArgs();
+        HookArg args = new HookArg();
         var userSession = this.config.sessionManager().session(recipient);
         args.setSession(userSession);
-        args.setChannelUser(new WaCurrentUser(null, recipient, replyMsgId, null));
+        args.setWaUser(new WaUser(null, recipient, replyMsgId, null));
 
         final MessageDto messageDto = new MessageDto(
                 this.service,
@@ -348,10 +350,10 @@ public class EntryService {
     }
 
     public void reactToMessage(String recipient, String messageId, String emoji) {
-        HookArgs args = new HookArgs();
+        HookArg args = new HookArg();
         var userSession = this.config.sessionManager().session(recipient);
         args.setSession(userSession);
-        args.setChannelUser(new WaCurrentUser(null, recipient, messageId, null));
+        args.setWaUser(new WaUser(null, recipient, messageId, null));
 
         if(emoji == null || emoji.isEmpty()) {
             emoji = EngineConstants.CHANNEL_LOADING_REACTION;
@@ -380,10 +382,10 @@ public class EntryService {
     }
 
     public String sendQuickTemplateMessage(WhatsappTemplateBody dto) {
-        HookArgs args = new HookArgs();
+        HookArg args = new HookArg();
         var userSession = this.config.sessionManager().session(dto.recipient());
         args.setSession(userSession);
-        args.setChannelUser(new WaCurrentUser(null, dto.recipient(), dto.replyMessageId(), null));
+        args.setWaUser(new WaUser(null, dto.recipient(), dto.replyMessageId(), null));
 
         TemplateMessage tm = new TemplateMessage(dto);
 
@@ -407,7 +409,7 @@ public class EntryService {
      * helpful when other services tries to send message via this engine
      *
      * @param dto payload type
-     * @return WhatsApp upstream response
+     * @return WhatsAppConfig upstream response
      */
     public String sendOnceOffMessage(OnceOffRequestDto dto) {
         return this.service.sendOnceOffWhatsappRequest(dto, null);

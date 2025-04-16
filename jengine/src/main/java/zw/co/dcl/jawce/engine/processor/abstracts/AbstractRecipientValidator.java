@@ -1,7 +1,7 @@
 package zw.co.dcl.jawce.engine.processor.abstracts;
 
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
 import zw.co.dcl.jawce.engine.exceptions.EngineSessionExpiredException;
 import zw.co.dcl.jawce.engine.exceptions.UserSessionValidationException;
 import zw.co.dcl.jawce.session.ISessionManager;
@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 public abstract class AbstractRecipientValidator {
     private static final Logger log = Logger.getLogger(AbstractRecipientValidator.class.getName());
 
-    protected void validate(DefaultHookArgs args, ISessionManager session) {
+    protected void validate(AbsHookArg args, ISessionManager session) {
         if(session == null || args == null) return;
 
-        var currentWaId = args.getChannelUser().waId();
+        var currentWaId = args.getWaUser().waId();
         var hasAuth = session.get(currentWaId, SessionConstants.ENGINE_AUTH_VALID_KEY, Boolean.class);
         String loggedInTime = session.get(currentWaId, SessionConstants.SESSION_EXPIRY, String.class);
         String sessionUid = session.get(currentWaId, SessionConstants.SERVICE_PROFILE_MSISDN_KEY, String.class);
@@ -34,7 +34,7 @@ public abstract class AbstractRecipientValidator {
         if(hasAuth != null && hasAuth) {
             if(loggedInTime == null || sessionUid == null || CommonUtils.hasSessionExpired(loggedInTime)) {
                 log.severe("Session expired during session mismatch check for WA id: " + currentWaId);
-                throw new EngineSessionExpiredException("Your session has expired. Kindly login again to access our WhatsApp Services");
+                throw new EngineSessionExpiredException("Your session has expired. Kindly login again to access our WhatsAppConfig Services");
             }
 
             if(!sessionUid.equals(currentWaId)) {

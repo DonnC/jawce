@@ -45,7 +45,7 @@ public class TemplateConfig {
         startFileWatcher();
     }
 
-    private Map<String, Object> getResourceAsMap(String pathDir) {
+    private Map<String, Object> getResourceAsMap(String pathDir) c{
         Assert.notNull(pathDir, "Template directory is null. Check README for config help");
         Assert.hasLength(pathDir, "Template directory is empty. Check README for config help");
 

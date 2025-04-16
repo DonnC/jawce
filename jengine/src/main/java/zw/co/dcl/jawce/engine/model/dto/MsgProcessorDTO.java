@@ -1,12 +1,11 @@
 package zw.co.dcl.jawce.engine.model.dto;
 
-import zw.co.dcl.jawce.engine.model.SessionSettings;
-import zw.co.dcl.jawce.session.ISessionManager;
+import zw.co.dcl.jawce.engine.model.core.WaUser;
 
 import java.util.Map;
 
 public record MsgProcessorDTO(
-        WaCurrentUser waCurrentUser,
+        WaUser waUser,
         SupportedMessageType messageType,
         Map<String, Object> message
 ) {

@@ -22,7 +22,7 @@ public class GeneralText extends ChannelPayloadProcessor implements IPayloadProc
     public Map<String, Object> generatePayload() {
         Map<String, Object> payload = new HashMap<>(
                 CommonUtils.getStaticPayload(
-                        this.hookArgs.getChannelUser().waId(),
+                        this.hookArgs.getWaUser().waId(),
                         PayloadType.TEXT,
                         replyMessageId
                 )

@@ -3,8 +3,8 @@ package zw.co.dcl.jchatbot.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.model.SessionSettings;
-import zw.co.dcl.jawce.engine.model.WhatsappSettings;
 import zw.co.dcl.jawce.engine.model.dto.ChannelOriginConfig;
 import zw.co.dcl.jawce.engine.model.dto.EngineRequestSettings;
 import zw.co.dcl.jawce.engine.model.dto.WaEngineConfig;
@@ -71,8 +71,8 @@ public class WebhookConfigService {
         );
     }
 
-    private WhatsappSettings whatsappChannelSettings() {
-        var settings = new WhatsappSettings();
+    private WhatsAppConfig whatsappChannelSettings() {
+        var settings = new WhatsAppConfig();
 
         settings.setHubToken(config.getHubToken());
         settings.setAccessToken(config.getAccessToken());

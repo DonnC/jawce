@@ -3,7 +3,7 @@ package zw.co.dcl.jchatbot.hooks;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import zw.co.dcl.jawce.engine.model.dto.HookArgsRest;
+import zw.co.dcl.jawce.engine.model.core.HookArgRest;
 import zw.co.dcl.jawce.engine.processor.abstracts.AbstractHookService;
 import zw.co.dcl.jawce.session.ISessionManager;
 import zw.co.dcl.jchatbot.service.WebhookConfigService;
@@ -16,7 +16,7 @@ public class RideHookService extends AbstractHookService {
     @Autowired
     private ISessionManager sessionManager;
 
-    public RideHookService setup(HookArgsRest args) {
+    public RideHookService setup(HookArgRest args) {
         super.setup(args, sessionManager, configService.getEntryInstance());
         return this;
     }

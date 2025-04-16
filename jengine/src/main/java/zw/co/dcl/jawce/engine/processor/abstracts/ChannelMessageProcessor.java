@@ -9,6 +9,7 @@ import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.exceptions.EngineResponseException;
+import zw.co.dcl.jawce.engine.model.core.HookArg;
 import zw.co.dcl.jawce.engine.model.dto.*;
 import zw.co.dcl.jawce.engine.service.RequestService;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
@@ -31,7 +32,7 @@ public abstract class ChannelMessageProcessor {
     @Setter
     protected boolean isFromTrigger = false;
     protected boolean byPassSession = false;
-    protected HookArgs hookArgs = null;
+    protected HookArg hookArgs = null;
     protected RequestService engineService;
     private String stage;
     private Map<String, Object> triggerParams;
@@ -41,7 +42,7 @@ public abstract class ChannelMessageProcessor {
         this.config = config;
         this.engineService = RequestService.getInstance(config);
         this.dto = dto;
-        this.sessionId = dto.waCurrentUser().waId();
+        this.sessionId = dto.waUser().waId();
         this.session = config.sessionManager().session(sessionId);
 
         this.getCurrentStageTemplate();
@@ -50,9 +51,9 @@ public abstract class ChannelMessageProcessor {
         this.checkSessionByPass();
         this.saveCheckpoint();
 
-        HookArgs args = new HookArgs();
+        HookArg args = new HookArg();
         args.setSession(this.session);
-        args.setChannelUser(dto.waCurrentUser());
+        args.setWaUser(dto.waUser());
         args.setUserInput(this.currentStageUserInput.input());
         args.setAdditionalData(this.currentStageUserInput.additionalData());
         this.hookArgs = args;
@@ -237,7 +238,7 @@ public abstract class ChannelMessageProcessor {
                 Map<String, Object> payload = Map.of(
                         "product_id", "whatsapp",
                         "status", "read",
-                        "message_id", dto.waCurrentUser().msgId()
+                        "message_id", dto.waUser().msgId()
                 );
 
                 this.engineService.sendWhatsappRequest(
@@ -264,9 +265,9 @@ public abstract class ChannelMessageProcessor {
         if(templateHasKey(tpl, EngineConstants.TPL_METHOD_PARAMS_KEY)) {
             Map<String, Object> tplParams = new HashMap<>((Map) tpl.get(EngineConstants.TPL_METHOD_PARAMS_KEY));
             tplParams.putAll(this.triggerParams);
-            this.hookArgs.setMethodArgs(tplParams);
+            this.hookArgs.setParams(tplParams);
         } else if(!this.triggerParams.isEmpty()) {
-            this.hookArgs.setMethodArgs(this.triggerParams);
+            this.hookArgs.setParams(this.triggerParams);
         }
     }
 

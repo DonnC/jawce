@@ -16,7 +16,9 @@ import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.exceptions.EngineResponseException;
 import zw.co.dcl.jawce.engine.exceptions.EngineWhatsappException;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
+import zw.co.dcl.jawce.engine.model.core.HookArg;
+import zw.co.dcl.jawce.engine.model.core.HookArgRest;
 import zw.co.dcl.jawce.engine.model.dto.*;
 import zw.co.dcl.jawce.engine.model.mappers.EngineDtoMapper;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
@@ -94,8 +96,8 @@ public class RequestService {
         );
     }
 
-    public DefaultHookArgs processHook(String hook, HookArgs args) throws Exception {
-        var sessionId = args.getChannelUser().waId();
+    public AbsHookArg processHook(String hook, HookArg args) throws Exception {
+        var sessionId = args.getWaUser().waId();
         logger.warn("PROCESSING HOOK: {}", hook);
 
         if(hook.startsWith(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY)) {
@@ -105,7 +107,7 @@ public class RequestService {
             if(hookResult == null) throw new EngineInternalException("hook rest request returned null");
             var responseArg = CommonUtils.convertResponseToHookObj(hookResult);
             if(responseArg instanceof String result) throw new EngineInternalException(result);
-            return (DefaultHookArgs) responseArg;
+            return (AbsHookArg) responseArg;
         }
 
         var response = processReflectiveHook(hook, args);
@@ -113,7 +115,7 @@ public class RequestService {
         if(response == null) throw new EngineInternalException("reflection hook returned null");
         if(response instanceof String result) throw new EngineInternalException(result);
 
-        return dtoMapper.map((HookArgs) response);
+        return dtoMapper.map((HookArg) response);
     }
 
     /**
@@ -122,10 +124,10 @@ public class RequestService {
      *
      * @param hook:     full path to cls method
      * @param hookArgs: engine Hook to pass downstream
-     * @return HookArgs: return the same passed HookArg
+     * @return HookArg: return the same passed HookArg
      * @throws Exception: reflective api exceptions
      */
-    Object processReflectiveHook(String hook, HookArgs hookArgs) throws Exception {
+    Object processReflectiveHook(String hook, HookArg hookArgs) throws Exception {
         var clsLoader = Thread.currentThread().getContextClassLoader();
 
         DataDatumDTO args = CommonUtils.getDataDatumArgs(EngineConstants.REFL_CLS_METHOD_SPLITTER, hook);
@@ -134,13 +136,13 @@ public class RequestService {
 
         try {
             Class<?> hookClass = clsLoader.loadClass(classNamePath);
-            Object hookObj = hookClass.getDeclaredConstructor(HookArgs.class).newInstance(hookArgs);
+            Object hookObj = hookClass.getDeclaredConstructor(HookArg.class).newInstance(hookArgs);
             Method hookMethod = hookClass.getDeclaredMethod(classMethodName);
             return hookMethod.invoke(hookObj);
         } catch (ClassNotFoundException e) {
             logger.error("Failed to load class with context class loader, attempting default class loader");
             Class<?> hookClass = Class.forName(classNamePath);
-            Object hookObj = hookClass.getDeclaredConstructor(HookArgs.class).newInstance(hookArgs);
+            Object hookObj = hookClass.getDeclaredConstructor(HookArg.class).newInstance(hookArgs);
             Method hookMethod = hookClass.getDeclaredMethod(classMethodName);
             return hookMethod.invoke(hookObj);
         }
@@ -149,10 +151,10 @@ public class RequestService {
     /**
      * @param endpoint:  rest api hook endpoint
      * @param argsParam: engine Hook to pass downstream
-     * @return String: <str>HookArgsRest
+     * @return String: <str>HookArgRest
      */
-    String processRestHook(String sessionId, String endpoint, HookArgs argsParam) {
-        HookArgsRest args = dtoMapper.map(argsParam);
+    String processRestHook(String sessionId, String endpoint, HookArg argsParam) {
+        HookArgRest args = dtoMapper.map(argsParam);
         var userSession = argsParam.getSession();
 
         if(config.requestSettings().baseUrl() == null || restTemplate == null)
@@ -213,12 +215,12 @@ public class RequestService {
 
             if(e.getRawStatusCode() == 401) {
                 logger.error("WA.OF AUTHORIZATION error: {}", e.getResponseBodyAsString());
-                throw new EngineWhatsappException("Unauthorized access to WhatsApp server. Check credentials");
+                throw new EngineWhatsappException("Unauthorized access to WhatsAppConfig server. Check credentials");
             }
 
             if(e.getRawStatusCode() == 400) {
                 logger.error("WA.OF BAD REQUEST: {}", e.getResponseBodyAsString());
-                throw new EngineWhatsappException("Bad request to WhatsApp Cloud server. Check request data");
+                throw new EngineWhatsappException("Bad request to WhatsAppConfig Cloud server. Check request data");
             }
 
             throw new EngineInternalException("failed to process w.cloud request", e);
@@ -275,12 +277,12 @@ public class RequestService {
 
             if(e.getRawStatusCode() == 401) {
                 logger.error("WA AUTHENTICATION error: {}", e.getResponseBodyAsString());
-                throw new EngineWhatsappException("Unauthorized access to WhatsApp server. Check credentials");
+                throw new EngineWhatsappException("Unauthorized access to WhatsAppConfig server. Check credentials");
             }
 
             if(e.getRawStatusCode() == 400) {
                 logger.error("WA Bad Request: {}", e.getResponseBodyAsString());
-                throw new EngineWhatsappException("Bad request to WhatsApp Cloud server. Check request data");
+                throw new EngineWhatsappException("Bad request to WhatsAppConfig Cloud server. Check request data");
             }
 
             handleSessionOnRequestExc(session, recipient, handleSession);

@@ -4,7 +4,7 @@ package zw.co.dcl.jawce.engine.exceptions;
  * Channel high alert exception
  *
  * <p>
- * Global WhatsApp exception received
+ * Global WhatsAppConfig exception received
  * when something wrong is received
  * like billable errors or channel exception
  * with detailed error code message

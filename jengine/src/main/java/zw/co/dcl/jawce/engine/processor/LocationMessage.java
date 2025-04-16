@@ -23,7 +23,7 @@ public class LocationMessage extends ChannelPayloadProcessor implements IPayload
     public Map<String, Object> generatePayload() {
         var messageBody = (Map<String, Object>) this.template.get("message");
 
-        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getChannelUser().waId(), PayloadType.LOCATION, replyMessageId));
+        Map<String, Object> payload = new HashMap<>(CommonUtils.getStaticPayload(this.hookArgs.getWaUser().waId(), PayloadType.LOCATION, replyMessageId));
         ChannelPayloadGenerator payloadGenerator = new ChannelPayloadGenerator(messageBody);
 
         payload.put(PayloadType.LOCATION.name().toLowerCase(), payloadGenerator.location());

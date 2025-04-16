@@ -41,7 +41,7 @@ public class TemplateMessage implements IPayloadProcessor {
     }
 
     public TemplateMessage(MessageDto dto) {
-        this.recipient = dto.hookArgs().getChannelUser().waId();
+        this.recipient = dto.hookArgs().getWaUser().waId();
         this.template = dto.template();
         this.replyMessage = dto.replyMessageId();
         this.validate();

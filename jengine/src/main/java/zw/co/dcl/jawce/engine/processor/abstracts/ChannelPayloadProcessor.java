@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
 import zw.co.dcl.jawce.engine.exceptions.EngineRenderException;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
-import zw.co.dcl.jawce.engine.model.dto.HookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
+import zw.co.dcl.jawce.engine.model.core.HookArg;
 import zw.co.dcl.jawce.engine.model.dto.MessageDto;
 import zw.co.dcl.jawce.engine.processor.RenderProcessor;
 import zw.co.dcl.jawce.engine.service.RequestService;
-import zw.co.dcl.jawce.engine.utils.CommonUtils;
 
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public abstract class ChannelPayloadProcessor {
     private final Logger logger = LoggerFactory.getLogger(ChannelPayloadProcessor.class);
     protected String stage;
     protected Map<String, Object> template;
-    protected HookArgs hookArgs;
+    protected HookArg hookArgs;
     protected RequestService engineService;
 
     public ChannelPayloadProcessor(MessageDto dto) {
@@ -39,7 +38,7 @@ public abstract class ChannelPayloadProcessor {
             String hookPath = this.template.get(EngineConstants.TPL_TEMPLATE_KEY).toString();
 
             try {
-                DefaultHookArgs result = this.engineService.processHook(hookPath, this.hookArgs);
+                AbsHookArg result = this.engineService.processHook(hookPath, this.hookArgs);
 
                 if(result.getTemplateDynamicBody() != null) {
                     if(result.getTemplateDynamicBody().renderPayload() != null)

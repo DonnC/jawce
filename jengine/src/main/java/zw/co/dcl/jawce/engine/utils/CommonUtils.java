@@ -1,10 +1,6 @@
 package zw.co.dcl.jawce.engine.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
@@ -13,11 +9,10 @@ import zw.co.dcl.jawce.engine.enums.PayloadType;
 import zw.co.dcl.jawce.engine.enums.WebhookIntrMsgType;
 import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
+import zw.co.dcl.jawce.engine.model.core.WaUser;
 import zw.co.dcl.jawce.engine.model.dto.*;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,7 +21,6 @@ import java.util.regex.Pattern;
 
 public class CommonUtils {
     private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
     private static final String MUSTACHE_PATTERN = "\\{\\{\\s*([^}]*)\\s*\\}\\}";
 
@@ -211,12 +205,12 @@ public class CommonUtils {
     }
 
     public static Object convertResponseToHookObj(String response) {
-        return fromJsonMap(objectToMap(response), DefaultHookArgs.class);
+        return SerializeUtils.castValue(SerializeUtils.toMap(response), AbsHookArg.class);
     }
 
     static public Map<String, Object> linkedHashToMap(LinkedHashMap lhm) {
         try {
-            return fromJsonMap(lhm, Map.class);
+            return SerializeUtils.castValue(lhm, Map.class);
         } catch (Exception e) {
             logger.error("Failed to convert linkedHashMap: {}", e.getMessage(), e);
             return lhm;
@@ -225,7 +219,7 @@ public class CommonUtils {
 
     public static boolean isValidChannelResponse(String payload) {
         try {
-            JsonNode rootNode = objectMapper.readTree(payload);
+            JsonNode rootNode = SerializeUtils.readStringAsTree(payload);
             String messagingProduct = rootNode.path("messaging_product").asText();
             if(!"whatsapp".equals(messagingProduct)) return false;
 
@@ -315,7 +309,7 @@ public class CommonUtils {
                     new ChannelUserInput(((Map) interactiveObj.get(lType.name().toLowerCase())).get("id").toString(), null);
             case NFM_REPLY -> {
                 var flowObj = (Map) interactiveObj.get(lType.name().toLowerCase());
-                var flowResponsePayload = objectToMap(flowObj.get("response_json"));
+                var flowResponsePayload = SerializeUtils.toMap(flowObj.get("response_json"));
                 yield new ChannelUserInput(flowResponsePayload.get("screen").toString(), flowResponsePayload);
             }
             default -> throw new EngineInternalException("unsupported interactive message type received");
@@ -334,7 +328,7 @@ public class CommonUtils {
         return errorMap.containsKey("type") && errorMap.containsKey("code");
     }
 
-    public static WaCurrentUser extractWaCurrentUserObj(Map<String, Object> map) {
+    public static WaUser extractWaCurrentUserObj(Map<String, Object> map) {
         String name = null;
         String waId = null;
         String msgId = null;
@@ -364,7 +358,7 @@ public class CommonUtils {
 
         assert waId != null;
 
-        return new WaCurrentUser(name, waId, msgId, timestamp);
+        return new WaUser(name, waId, msgId, timestamp);
     }
 
     public static boolean hasChannelMsgObject(Map<String, Object> map) {
@@ -427,36 +421,10 @@ public class CommonUtils {
         return false;  // Input does not match any pattern
     }
 
-    public static <T> T fromJsonMap(Map linkedHashMap, Class<T> type) {
-        return objectMapper.convertValue(linkedHashMap, type);
-    }
-
-    static public Map<String, Object> objectToMap(Object object) {
-        try {
-            objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-            if(object instanceof String content) {
-                return objectMapper.readValue(content, new TypeReference<Map<String, Object>>() {
-                });
-            }
-
-            String json = objectMapper.writeValueAsString(object);
-            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
-            });
-        } catch (Exception e) {
-            logger.warn("[ENGINE] failed to convert obj to map: {}", e.getMessage());
-            return new HashMap<>();
-        }
-    }
-
-    static public String toJsonString(Object object) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(object);
-    }
-
     public static String parseHtmlEncodedContent(String message) {
         try {
 //            return URLDecoder.decode(message, StandardCharsets.UTF_8);
-            return  message;
+            return message;
         } catch (Exception e) {
             return message;
         }

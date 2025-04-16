@@ -13,6 +13,7 @@ import zw.co.dcl.jawce.engine.model.dto.*;
 import zw.co.dcl.jawce.engine.processor.abstracts.ChannelMessageProcessor;
 import zw.co.dcl.jawce.engine.processor.iface.IMessageProcessor;
 import zw.co.dcl.jawce.engine.utils.CommonUtils;
+import zw.co.dcl.jawce.engine.utils.SerializeUtils;
 
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
      */
     protected Map<String, Object> processShortcutTemplateVariables(Map<String, Object> currentTemplate) {
         try {
-            var shortcutVars = CommonUtils.extractShortcutMustacheVariables(CommonUtils.toJsonString(currentTemplate));
+            var shortcutVars = CommonUtils.extractShortcutMustacheVariables(SerializeUtils.toJsonString(currentTemplate));
 
             if(!shortcutVars.isEmpty()) {
                 var userProps = this.session.getUserProps(this.sessionId);
@@ -146,7 +147,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             String sessionUid = this.session.get(this.sessionId, SessionConstants.SERVICE_PROFILE_MSISDN_KEY, String.class);
 
             if(loggedInTime == null || sessionUid == null || hasAuth == null || CommonUtils.hasSessionExpired(loggedInTime)) {
-                throw new EngineSessionExpiredException("Your session has expired. Kindly login again to access our WhatsApp Services");
+                throw new EngineSessionExpiredException("Your session has expired. Kindly login again to access our WhatsAppConfig Services");
             }
         }
 
@@ -263,6 +264,6 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         this.setFromTrigger(false);
         this.session.evict(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY);
-        return new MsgProcessorResponseDTO(payload, nextStage, dto.waCurrentUser().waId());
+        return new MsgProcessorResponseDTO(payload, nextStage, dto.waUser().waId());
     }
 }

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.enums.PayloadType;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
-import zw.co.dcl.jawce.engine.model.DefaultHookArgs;
+import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
 import zw.co.dcl.jawce.engine.model.dto.MessageDto;
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
 import zw.co.dcl.jawce.engine.processor.abstracts.ChannelPayloadProcessor;
@@ -30,20 +30,20 @@ public class DynamicMessage extends ChannelPayloadProcessor implements IPayloadP
     public Map<String, Object> generatePayload() {
         Map<String, Object> payload = new HashMap<>(
                 CommonUtils.getStaticPayload(
-                        this.hookArgs.getChannelUser().waId(),
+                        this.hookArgs.getWaUser().waId(),
                         PayloadType.INTERACTIVE,
                         replyMessageId
                 )
         );
 
         try {
-            DefaultHookArgs response = engineService.processHook(this.template.get(EngineConstants.TPL_TEMPLATE_KEY).toString(), this.hookArgs);
+            AbsHookArg response = engineService.processHook(this.template.get(EngineConstants.TPL_TEMPLATE_KEY).toString(), this.hookArgs);
             TemplateDynamicBody dynamicBody = response.getTemplateDynamicBody();
             ChannelPayloadGenerator payloadGenerator = new ChannelPayloadGenerator(dynamicBody.payload());
 
             switch (dynamicBody.type()) {
                 case TEXT -> {
-                    payload.putAll(CommonUtils.getStaticPayload(this.hookArgs.getChannelUser().waId(), PayloadType.TEXT, replyMessageId));
+                    payload.putAll(CommonUtils.getStaticPayload(this.hookArgs.getWaUser().waId(), PayloadType.TEXT, replyMessageId));
                     payload.put("text", payloadGenerator.text());
                 }
                 case BUTTON -> payload.put("interactive", payloadGenerator.button());
