@@ -46,14 +46,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--        session -->
-        <dependency>
-            <groupId>zw.co.dcl.jawce</groupId>
-            <artifactId>jsession</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

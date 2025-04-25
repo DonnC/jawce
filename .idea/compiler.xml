@@ -34,7 +34,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="jawce-engine-kt" options="-parameters" />
-      <module name="jchatbot" options="-parameters" />
+      <module name="jchatbot" options="" />
       <module name="jengine" options="-parameters" />
       <module name="jsession" options="-parameters" />
       <module name="kchatbot" options="-parameters" />

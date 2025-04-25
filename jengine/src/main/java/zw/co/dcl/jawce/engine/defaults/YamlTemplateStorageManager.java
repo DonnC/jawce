@@ -1,5 +1,7 @@
 package zw.co.dcl.jawce.engine.defaults;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.model.abs.AbsEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.service.iface.ITemplateStorageManager;
@@ -24,10 +26,12 @@ import java.util.stream.Stream;
 public class YamlTemplateStorageManager implements ITemplateStorageManager {
     private static Map<String, Object> templates = new ConcurrentHashMap<>();
     private static Map<String, Object> triggers = new ConcurrentHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(YamlTemplateStorageManager.class);
 
     public YamlTemplateStorageManager(Path templatesFolderPath, Path triggersFolderPath) {
         templates = getResourceAsMap(templatesFolderPath);
         triggers = getResourceAsMap(triggersFolderPath);
+        logger.debug("Template storage manager initialized");
     }
 
     private Map<String, Object> getResourceAsMap(Path folderDir) {

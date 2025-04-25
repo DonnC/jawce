@@ -6,7 +6,7 @@
   transient: true
   prop: propKey
   router: dynamic-route-hook
-  on-receive: on-receive-hook
+  on-receive: "/api/login"
   message-id: prev-msg-id
   on-generate: on-generate hook
   validator: validator-hook

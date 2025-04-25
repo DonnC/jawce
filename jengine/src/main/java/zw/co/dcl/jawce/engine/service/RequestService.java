@@ -100,8 +100,8 @@ public class RequestService {
         var sessionId = args.getWaUser().waId();
         logger.warn("PROCESSING HOOK: {}", hook);
 
-        if(hook.startsWith(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY)) {
-            String endpoint = CommonUtils.getDataDatumArgs(EngineConstants.TPL_REST_HOOK_PLACEHOLDER_KEY, hook).datum();
+        if(hook.startsWith(EngineConstants.REST_HOOK_TAG)) {
+            String endpoint = CommonUtils.getDataDatumArgs(EngineConstants.REST_HOOK_TAG, hook).datum();
             String hookResult = processRestHook(sessionId, endpoint, args);
 
             if(hookResult == null) throw new EngineInternalException("hook rest request returned null");
@@ -169,8 +169,8 @@ public class RequestService {
             fwdHeaders.setContentType(MediaType.APPLICATION_JSON);
             fwdHeaders.set(EngineConstants.JAWCE_RHOOK_SESSION_HEADER_KEY, sessionId);
 
-            if(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class) != null) {
-                fwdHeaders.setBearerAuth(userSession.get(sessionId, SessionConstants.HOOK_USER_SESSION_ACCESS_TOKEN, String.class));
+            if(userSession.get(sessionId, SessionConstants.REST_HOOK_USER_AUTH_KEY, String.class) != null) {
+                fwdHeaders.setBearerAuth(userSession.get(sessionId, SessionConstants.REST_HOOK_USER_AUTH_KEY, String.class));
             } else {
                 if(config.requestSettings().authorizationToken() != null) {
                     fwdHeaders.set("Authorization", config.requestSettings().authorizationToken());

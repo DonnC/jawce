@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import zw.co.dcl.jawce.engine.model.abs.AbsHookArg;
-import zw.co.dcl.jawce.session.ISessionManager;
+import zw.co.dcl.jawce.engine.service.iface.ISessionManager;
 
 
 @EqualsAndHashCode(callSuper = true)

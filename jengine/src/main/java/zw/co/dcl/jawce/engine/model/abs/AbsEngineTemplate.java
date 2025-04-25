@@ -9,6 +9,7 @@ import zw.co.dcl.jawce.engine.constants.TemplateTypes;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.template.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,5 +59,5 @@ public abstract class AbsEngineTemplate {
     private String router;
     private String middleware;
 
-    private Map params;
+    private Map params = new HashMap<>();
 }

@@ -2,6 +2,7 @@ package zw.co.dcl.jawce.engine.configs;
 
 import jakarta.annotation.Nonnull;
 import lombok.Data;
+import org.springframework.context.ApplicationContext;
 import zw.co.dcl.jawce.engine.defaults.FileSessionManager;
 import zw.co.dcl.jawce.engine.service.iface.IClientManager;
 import zw.co.dcl.jawce.engine.service.iface.ISessionManager;
@@ -16,6 +17,8 @@ public class EngineConfig {
     @Nonnull
     private IClientManager clientManager;
 
+    private ApplicationContext context;
+
     // defaults
     private ISessionManager sessionManager = FileSessionManager.getInstance();
     private boolean handleSessionQueue = true;
@@ -27,4 +30,6 @@ public class EngineConfig {
     private int sessionTtlMins = 30;
     private long debounceTimeoutMs = 6000;
     private int webhookTimestampThresholdSecs = 10;
+    private String restHookAuthToken;
+    private String restHookBaseUrl;
 }

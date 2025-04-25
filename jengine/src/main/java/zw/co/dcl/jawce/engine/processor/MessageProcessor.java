@@ -2,6 +2,7 @@ package zw.co.dcl.jawce.engine.processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import zw.co.dcl.jawce.engine.configs.EngineConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.constants.TemplateTypes;
@@ -21,7 +22,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
     private final Logger logger = LoggerFactory.getLogger(MessageProcessor.class);
     List<EnginePreProcessor> nestedPreProcessorResults;
 
-    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, WaEngineConfig config) {
+    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, EngineConfig config) {
         super(messageProcessorDTO, config);
     }
 
@@ -82,7 +83,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         String currentStage = (String) this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE);
 
-        var currentStageRoutes = (Map<String, Object>) this.currentStageTpl.get(EngineConstants.TPL_ROUTES_KEY);
+        var currentStageRoutes = (Map<String, Object>) this.currentTemplate.get(EngineConstants.TPL_ROUTES_KEY);
         var checkpoint = this.session.get(this.sessionId, SessionConstants.SESSION_LATEST_CHECKPOINT_KEY);
 
         boolean gotoCheckpoint = !this.templateHasKey(currentStageRoutes, EngineConstants.RETRY_NAME)
@@ -100,7 +101,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         logger.info("Current - stage: [{}], template: {}",
                 currentStage,
-                this.currentStageTpl
+                this.currentTemplate
         );
 
         for (Map.Entry<String, Object> route : currentStageRoutes.entrySet()) {
@@ -179,7 +180,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
             if(this.templateHasKey(nTemplate, EngineConstants.TPL_DYNAMIC_ROUTER_KEY)
                     && this.templateHasKey(nTemplate, EngineConstants.TPL_ROUTE_TRANSIENT_KEY)
             ) {
-                this.currentStageTpl = nTemplate;
+                this.currentTemplate = nTemplate;
                 logger.warn("Found transient flow dynamic router -> {}, re-processing..", nStage);
                 nestedPreProcessorResults.add(this.preProcessor());
             }
@@ -209,7 +210,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
         final MessageDto messageDto = new MessageDto(
                 engineService,
                 nextStageTpl,
-                hookArgs,
+                hookArg,
                 this.session.get(this.sessionId, SessionConstants.CURRENT_STAGE, String.class),
                 CommonUtils.getPreviousMessageId(nextStageTpl)
         );
@@ -264,6 +265,6 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
 
         this.setFromTrigger(false);
         this.session.evict(this.sessionId, SessionConstants.SESSION_DYNAMIC_RETRY_KEY);
-        return new MsgProcessorResponseDTO(payload, nextStage, dto.waUser().waId());
+        return new MsgProcessorResponseDTO(payload, nextStage, dto.user().waId());
     }
 }

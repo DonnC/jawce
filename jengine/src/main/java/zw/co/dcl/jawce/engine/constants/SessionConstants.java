@@ -3,7 +3,7 @@ package zw.co.dcl.jawce.engine.constants;
 public class SessionConstants {
     //    === global ===
     public final static String SESSION_EXPIRY = "kJawceSessionExpiry";
-    public final static String HOOK_USER_SESSION_ACCESS_TOKEN = "kJawceUAK";
+    public final static String REST_HOOK_USER_AUTH_KEY = "kJawceUAK";
     public final static String CURRENT_STAGE_RETRY_COUNT = "kJawceRetryCount";
 
     //    stages store

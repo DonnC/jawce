@@ -178,6 +178,7 @@ public class CommonUtils {
         throw new EngineInternalException("invalid format to parse");
     }
 
+
     public static boolean isRegexPatternMatch(String regexPattern, String text) {
         return Pattern.compile(regexPattern).matcher(text).find();
     }
@@ -204,7 +205,7 @@ public class CommonUtils {
         return ListSectionType.INVALID;
     }
 
-    public static Object convertResponseToHookObj(String response) {
+    public static AbsHookArg convertResponseToHookObj(String response) {
         return SerializeUtils.castValue(SerializeUtils.toMap(response), AbsHookArg.class);
     }
 

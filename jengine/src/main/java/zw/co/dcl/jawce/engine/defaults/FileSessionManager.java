@@ -1,5 +1,7 @@
 package zw.co.dcl.jawce.engine.defaults;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.service.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.utils.SerializeUtils;
 
@@ -9,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * A file-based session manager that uses synchronized methods
@@ -19,9 +20,8 @@ import java.util.logging.Logger;
  * all global data are saved in the global.sessions file
  */
 public class FileSessionManager implements ISessionManager {
-    private final static Logger LOGGER = Logger.getLogger(FileSessionManager.class.getName());
     private static volatile FileSessionManager instance;
-
+    private final Logger logger = LoggerFactory.getLogger(FileSessionManager.class);
     private final String USER_PROPS_KEY = "kUserProp";
     private final String SESSION_FILE_EXT = ".session";
 
@@ -35,7 +35,7 @@ public class FileSessionManager implements ISessionManager {
             var GLOBAL_SESSION_FILE_NAME = "global" + SESSION_FILE_EXT;
             this.GLOBAL_SESSION_FILE = this.SESSION_DIR.resolve(GLOBAL_SESSION_FILE_NAME).toAbsolutePath().normalize();
             createFileIfNotExist(GLOBAL_SESSION_FILE.toFile());
-            LOGGER.info("File based session manager initialized!");
+            logger.debug("File based session manager initialized!");
         } catch (Exception e) {
             throw new RuntimeException("Cannot create sessions directory: " + e.getMessage());
         }
@@ -222,7 +222,7 @@ public class FileSessionManager implements ISessionManager {
     public void cleanUp() {
         try {
             SerializeUtils.deleteDirectoryRecursively(this.SESSION_DIR);
-            LOGGER.info("File manager directory deleted");
+            logger.debug("File manager directory deleted");
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete file session folder", e);
         }

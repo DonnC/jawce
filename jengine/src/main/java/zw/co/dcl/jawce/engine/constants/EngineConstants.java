@@ -8,7 +8,7 @@ public class EngineConstants {
     public final static String ENGINE_EXC_MSG_SPLITTER = "#qx#";  // 5000 | 263778000999 | failed to understand option
     public final static String REFL_CLS_METHOD_SPLITTER = ":";  // ..clsName:methodName
     public final static String TPL_TRIGGER_ROUTE_PARAM_KEY = "trigger-route";
-    public final static String TPL_REST_HOOK_PLACEHOLDER_KEY = "rest:";
+    public final static String REST_HOOK_TAG = "/";
     public final static String TPL_CHECKPOINT_KEY = "checkpoint";
 
 //    if present, acknowledge the message (blue-tick)
@@ -49,5 +49,4 @@ public class EngineConstants {
     public final static String CHANNEL_FLOW_VERSION = "3";
     public final static String CHANNEL_SUPPORTED_FLOW_ACTION = "navigate";
     public final static String CHANNEL_MESSAGE_SUFFIX = "/messages";
-    public final static String CHANNEL_MEDIA_SUFFIX = "/media";
 }
