@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import zw.co.dcl.jawce.engine.configs.EngineConfig;
+import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ChannelMessageProcessor {
-    protected final MsgProcessorDTO dto;
-    protected final EngineConfig config;
     private final Logger logger = LoggerFactory.getLogger(ChannelMessageProcessor.class);
+    protected final MsgProcessorDTO dto;
+    protected final JawceConfig config;
     protected AbsEngineTemplate currentTemplate;
     protected ISessionManager session;
     protected ChannelUserInput currentStageUserInput = null;
@@ -39,13 +39,13 @@ public abstract class ChannelMessageProcessor {
     private String sessionId;
     private HookService hookService;
 
-    protected ChannelMessageProcessor(MsgProcessorDTO dto, EngineConfig config) {
+    protected ChannelMessageProcessor(MsgProcessorDTO dto, JawceConfig config) {
         this.triggerParams = new HashMap<>();
         this.config = config;
         this.hookService = new HookService(this.config);
         this.dto = dto;
         this.sessionId = dto.user().waId();
-        this.session = this.config.getSessionManager().session(this.sessionId);
+        this.session = dto.session();
         this.getCurrentStageTemplate();
         this.getMessageBody();
         this.processStageTrigger();

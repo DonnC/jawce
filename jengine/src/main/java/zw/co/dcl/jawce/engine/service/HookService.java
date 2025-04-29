@@ -7,7 +7,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import zw.co.dcl.jawce.engine.configs.EngineConfig;
+import org.springframework.stereotype.Service;
+import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.exceptions.EngineInternalException;
@@ -20,14 +21,15 @@ import zw.co.dcl.jawce.engine.utils.CommonUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+@Service
 public class HookService {
     final Logger logger = LoggerFactory.getLogger(HookService.class);
     final EngineDtoMapper dtoMapper = Mappers.getMapper(EngineDtoMapper.class);
 
     final IClientManager client;
-    final EngineConfig config;
+    final JawceConfig config;
 
-    public HookService(EngineConfig config) {
+    public HookService(JawceConfig config) {
         this.config = config;
         this.client = config.getClientManager();
     }

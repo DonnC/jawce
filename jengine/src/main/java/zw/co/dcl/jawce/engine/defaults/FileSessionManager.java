@@ -30,7 +30,7 @@ public class FileSessionManager implements ISessionManager {
 
     private FileSessionManager() {
         try {
-            this.SESSION_DIR = Paths.get("./file-session").toAbsolutePath().normalize();
+            this.SESSION_DIR = Paths.get("./jawce").toAbsolutePath().normalize();
             Files.createDirectories(this.SESSION_DIR);
             var GLOBAL_SESSION_FILE_NAME = "global" + SESSION_FILE_EXT;
             this.GLOBAL_SESSION_FILE = this.SESSION_DIR.resolve(GLOBAL_SESSION_FILE_NAME).toAbsolutePath().normalize();

@@ -2,19 +2,19 @@ package zw.co.dcl.jawce.engine.defaults;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
 import zw.co.dcl.jawce.engine.model.abs.AbsEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.service.iface.ITemplateStorageManager;
 import zw.co.dcl.jawce.engine.utils.SerializeUtils;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 /**
  * A default storage manager that is based on YAML templates
@@ -28,34 +28,41 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
     private static Map<String, Object> triggers = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(YamlTemplateStorageManager.class);
 
-    public YamlTemplateStorageManager(Path templatesFolderPath, Path triggersFolderPath) {
-        templates = getResourceAsMap(templatesFolderPath);
-        triggers = getResourceAsMap(triggersFolderPath);
-        logger.debug("Template storage manager initialized");
+    public YamlTemplateStorageManager(TemplateStorageProperties properties) {
+        templates = loadResourcesAsMap(properties.getTemplatesPath());
+        triggers = loadResourcesAsMap(properties.getTriggersPath());
+        logger.debug("Template storage manager initialized with templates: {} and triggers: {}", templates.size(), triggers.size());
     }
 
-    private Map<String, Object> getResourceAsMap(Path folderDir) {
+    private Map<String, Object> loadResourcesAsMap(String folderPath) {
         Map<String, Object> map = new ConcurrentHashMap<>();
 
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            if(Files.exists(folderDir) && Files.isDirectory(folderDir)) {
-                try (Stream<Path> paths = Files.walk(folderDir)) {
-                    paths.filter(filePath -> filePath.toString().endsWith(".yml") || filePath.toString().endsWith(".yaml"))
-                            .forEach(filePath -> {
-                                try {
-                                    map.putAll(SerializeUtils.readPath(filePath));
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
+            Resource[] resources = resolver.getResources("classpath*:" + folderPath + "/**/*.yml");
+
+            for (Resource resource : resources) {
+                try {
+                    map.putAll(SerializeUtils.readInputStreamAsMap(resource.getInputStream()));
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to load resource: " + resource.getFilename(), e);
                 }
-            } else {
-                throw new RuntimeException("Templates / triggers directory does not exist: " + folderDir);
             }
 
-        } catch (Exception err) {
-            throw new RuntimeException("Error loading template", err);
+            // Also try loading *.yaml files
+            resources = resolver.getResources("classpath*:" + folderPath + "/**/*.yaml");
+            for (Resource resource : resources) {
+                try {
+                    map.putAll(SerializeUtils.readInputStreamAsMap(resource.getInputStream()));
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to load resource: " + resource.getFilename(), e);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading templates/triggers from folder: " + folderPath, e);
         }
+
         return map;
     }
 

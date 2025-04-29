@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,8 +53,8 @@ public class SerializeUtils {
         return objectMapper.readTree(data);
     }
 
-    static public Map readPath(Path filePath) throws IOException {
-        return objectMapper.readValue(Files.newInputStream(filePath), Map.class);
+    static public Map readInputStreamAsMap(InputStream ins) throws IOException {
+        return objectMapper.readValue(ins, Map.class);
     }
 
     static public Map<String, Object> readMapFromFile(File file) {

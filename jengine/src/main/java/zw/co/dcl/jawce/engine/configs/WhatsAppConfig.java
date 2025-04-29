@@ -1,8 +1,15 @@
 package zw.co.dcl.jawce.engine.configs;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 
-@Data
+@Setter
+@Getter
+@Configuration
+@ConfigurationProperties(prefix = "whatsapp")
 public class WhatsAppConfig {
     private boolean local = false;
     private String localUrl;

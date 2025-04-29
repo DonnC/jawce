@@ -13,7 +13,7 @@
     <version>1.0.0</version>
     <name>jengine</name>
     <packaging>jar</packaging>
-    <description>JAWCE Java Core Engine</description>
+    <description>Java WhatsApp Cloud Engine</description>
 
     <properties>
         <java.version>17</java.version>

@@ -2,7 +2,7 @@ package zw.co.dcl.jawce.engine.processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import zw.co.dcl.jawce.engine.configs.EngineConfig;
+import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
 import zw.co.dcl.jawce.engine.constants.TemplateTypes;
@@ -22,7 +22,7 @@ public class MessageProcessor extends ChannelMessageProcessor implements IMessag
     private final Logger logger = LoggerFactory.getLogger(MessageProcessor.class);
     List<EnginePreProcessor> nestedPreProcessorResults;
 
-    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, EngineConfig config) {
+    public MessageProcessor(MsgProcessorDTO messageProcessorDTO, JawceConfig config) {
         super(messageProcessorDTO, config);
     }
 

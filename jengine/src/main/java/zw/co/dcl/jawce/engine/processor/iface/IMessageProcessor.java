@@ -1,5 +1,6 @@
 package zw.co.dcl.jawce.engine.processor.iface;
 
+import zw.co.dcl.jawce.engine.model.abs.AbsEngineTemplate;
 import zw.co.dcl.jawce.engine.model.dto.EnginePreProcessor;
 import zw.co.dcl.jawce.engine.model.dto.MsgProcessorResponseDTO;
 
@@ -10,7 +11,7 @@ public interface IMessageProcessor {
 
     boolean hasInteractionActivityExpired();
 
-    Map<String, Object>  authenticate(Map<String, Object> template);
+    Map<String, Object>  authenticate(AbsEngineTemplate template);
 
     EnginePreProcessor preProcessor() throws Exception;
 

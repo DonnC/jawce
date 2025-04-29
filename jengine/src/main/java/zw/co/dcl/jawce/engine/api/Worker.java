@@ -1,9 +1,11 @@
-package zw.co.dcl.jawce.engine;
+package zw.co.dcl.jawce.engine.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import zw.co.dcl.jawce.engine.configs.EngineConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstants;
 import zw.co.dcl.jawce.engine.constants.SessionConstants;
@@ -19,25 +21,23 @@ import zw.co.dcl.jawce.engine.utils.CommonUtils;
 
 import java.util.*;
 
-public class JawceEngineWorker {
-    final Logger logger = LoggerFactory.getLogger(JawceEngineWorker.class);
+public class Worker {
+    final Logger logger = LoggerFactory.getLogger(Worker.class);
 
     final WhatsAppConfig waConfig;
-    final EngineConfig engineConfig;
+    final JawceConfig jawceConfig;
+    ISessionManager session;
 
-    public JawceEngineWorker(WhatsAppConfig whatsappConfig, EngineConfig engineConfig) {
+    public Worker(WhatsAppConfig whatsappConfig, JawceConfig jawceConfig, ISessionManager sessionManager) {
         this.waConfig = whatsappConfig;
-        this.engineConfig = engineConfig;
-    }
-
-    ISessionManager session(String sessionId) {
-        return this.engineConfig.getSessionManager().session(sessionId);
+        this.jawceConfig = jawceConfig;
+        this.session = sessionManager;
     }
 
     Set<String> getMessageQueue(WaUser user) {
         Set<String> queue = new HashSet<>();
-        if(this.session(user.waId()).get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY) != null) {
-            var qHistory = this.session(user.waId()).get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, Set.class);
+        if(this.session.get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY) != null) {
+            var qHistory = this.session.get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, Set.class);
             queue = new HashSet<String>(qHistory);
         }
         return queue;
@@ -63,7 +63,7 @@ public class JawceEngineWorker {
 
             MDC.put(EngineConstants.MDC_ID_KEY, waUser.waId());
 
-            if(CommonUtils.isOldWebhook(waUser.timestamp(), this.engineConfig.getWebhookTimestampThresholdSecs())) {
+            if(CommonUtils.isOldWebhook(waUser.timestamp(), this.jawceConfig.getWebhookTimestampThresholdSecs())) {
                 logger.warn("OLD WEBHOOK REQ RECEIVED: {}. DISCARDED", CommonUtils.convertTimestamp(waUser.timestamp()));
                 return Optional.empty();
             }
@@ -88,43 +88,7 @@ public class JawceEngineWorker {
                 count++;
             }
         }
-        this.session(user.waId()).save(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, queue);
-    }
-
-
-    public Object sendQuickBtnMsg(ButtonTemplate payload) {
-        assert payload.buttons().size() <= 3;
-
-        HookArg args = new HookArg();
-        var userSession = this.config.sessionManager().session(payload.recipient());
-        args.setSession(userSession);
-        args.setWaUser(new WaUser(null, payload.recipient(), null, null));
-
-        Map<String, Object> btnTemplate = new java.util.HashMap<>(Map.of(
-                "body", payload.message(),
-                "buttons", new ArrayList<>(payload.buttons())
-        ));
-
-        if(payload.title() != null) btnTemplate.put("title", payload.title());
-        if(payload.footer() != null) btnTemplate.put("footer", payload.footer());
-
-        final MessageDto messageDto = new MessageDto(
-                this.service,
-                Map.of("message", btnTemplate, "type", "button"),
-                args,
-                (String) args.getSession().get(payload.recipient(), SessionConstants.CURRENT_STAGE),
-                payload.replyMessageId()
-        );
-
-        ButtonMessage bm = new ButtonMessage(messageDto);
-        return this.service.sendWhatsappRequest(
-                new ChannelRequestDto(
-                        userSession,
-                        new MsgProcessorResponseDTO(bm.generatePayload(), null, payload.recipient())
-                ),
-                false,
-                this.channelOriginConfig
-        );
+        this.session.save(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, queue);
     }
 
     public String verifyHubToken(String mode, String challenge, String token) {
@@ -142,26 +106,26 @@ public class JawceEngineWorker {
         var sessionId = user.waId();
         var msgData = CommonUtils.extractWaMessage(map);
         var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
-        var session = this.session(sessionId);
+        this.session = this.session.session(sessionId);
 
-        if(this.engineConfig.isHandleSessionQueue()) {
+        if(this.jawceConfig.isHandleSessionQueue()) {
             if(this.getMessageQueue(user).contains(user.msgId())) {
                 logger.warn("Duplicate message found: {}. Skipping..", msgData);
                 return;
             }
         }
 
-        Long lastDebounceTimestamp = session.get(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, Long.class);
+        Long lastDebounceTimestamp = this.session.get(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, Long.class);
         long currentTime = System.currentTimeMillis();
 
-        if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= this.engineConfig.getDebounceTimeoutMs()) {
-            session.save(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, currentTime);
+        if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= this.jawceConfig.getDebounceTimeoutMs()) {
+            this.session.save(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, currentTime);
         } else {
             logger.warn("Message ignored due to debounce..");
             return;
         }
 
-        if(this.engineConfig.isHandleSessionQueue()) {
+        if(this.jawceConfig.isHandleSessionQueue()) {
             this.addToMessageQueue(user);
         }
 
@@ -170,15 +134,16 @@ public class JawceEngineWorker {
                     new MsgProcessorDTO(
                             user,
                             supportedMsgType,
-                            msgData
+                            msgData,
+                            this.session
                     ),
-                    this.engineConfig
+                    this.jawceConfig
             );
 
             var channelPayload = msgProcessor.process();
 
             this.service.sendWhatsappRequest(
-                    new ChannelRequestDto(session, channelPayload),
+                    new ChannelRequestDto(this.session.session(sessionId), channelPayload),
                     true,
                     channelOriginConfig
             );
