@@ -12,7 +12,7 @@
     <artifactId>jchatbot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>jchatbot</name>
-    <description>JAWCE example WhatsApp ChatBot</description>
+    <description>WhatsApp chatbot example with jawce</description>
 
     <url/>
     <licenses>

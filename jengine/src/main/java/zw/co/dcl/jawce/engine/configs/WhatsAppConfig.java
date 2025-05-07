@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "whatsapp")
 public class WhatsAppConfig {
-    private boolean local = false;
     private String localUrl;
     private String hubToken;
     private String accessToken;

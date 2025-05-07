@@ -1,13 +1,18 @@
 package zw.co.dcl.jawce.engine.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import zw.co.dcl.jawce.engine.model.abs.AbsEngineTemplate;
+import lombok.NoArgsConstructor;
+import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class TemplateDynamicBody {
-    private AbsEngineTemplate template;
+@NoArgsConstructor
+@AllArgsConstructor
+public class TemplateDynamicBody implements Serializable {
+    private BaseEngineTemplate template;
     private Map<String, Object> flowPayload;
     private Map<String, Object> renderPayload;
 }

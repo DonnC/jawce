@@ -1,7 +1,3 @@
-# an example chatbot stage templates
-# the templates can be separated into different files for easy management
-# stage names can be numbers or any supported YAML data type
-
 "START-MENU":
   type: button
   template: "zw.co.dcl.jchatbot.hooks.GreetingHook:getDefaultUsername"

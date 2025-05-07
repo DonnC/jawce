@@ -19,6 +19,12 @@ public class JawceConfig {
     private int sessionTtlMins = 30;
     private long debounceTimeoutMs = 6000;
     private int webhookTimestampThresholdSecs = 10;
+    private String startMenu;
     private String restHookAuthToken;
     private String restHookBaseUrl;
+
+    // --- global hooks
+
+    // called after all, the webhook checks are done but before any other template processing is done
+    private String onWebhookPrechecksComplete;
 }

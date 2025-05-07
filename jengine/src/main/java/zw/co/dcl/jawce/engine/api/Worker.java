@@ -1,85 +1,64 @@
 package zw.co.dcl.jawce.engine.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
+import zw.co.dcl.jawce.engine.api.utils.WhatsappUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
-import zw.co.dcl.jawce.engine.constants.EngineConstants;
-import zw.co.dcl.jawce.engine.constants.SessionConstants;
-import zw.co.dcl.jawce.engine.exceptions.*;
-import zw.co.dcl.jawce.engine.model.core.HookArg;
+import zw.co.dcl.jawce.engine.constants.EngineConstant;
+import zw.co.dcl.jawce.engine.constants.SessionConstant;
+import zw.co.dcl.jawce.engine.internal.dto.Webhook;
+import zw.co.dcl.jawce.engine.internal.events.OnceOffHookEvent;
+import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
+import zw.co.dcl.jawce.engine.internal.service.ClientHelperService;
+import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
+import zw.co.dcl.jawce.engine.model.core.Hook;
 import zw.co.dcl.jawce.engine.model.core.WaUser;
-import zw.co.dcl.jawce.engine.model.dto.*;
-import zw.co.dcl.jawce.engine.model.template.ButtonTemplate;
-import zw.co.dcl.jawce.engine.processor.ButtonMessage;
-import zw.co.dcl.jawce.engine.processor.MessageProcessor;
-import zw.co.dcl.jawce.engine.service.iface.ISessionManager;
-import zw.co.dcl.jawce.engine.utils.CommonUtils;
 
 import java.util.*;
 
+@Slf4j
 public class Worker {
-    final Logger logger = LoggerFactory.getLogger(Worker.class);
-
+    final ApplicationEventPublisher eventPublisher;
     final WhatsAppConfig waConfig;
     final JawceConfig jawceConfig;
+    final ClientHelperService service;
+    final WebhookProcessor webhookProcessor;
     ISessionManager session;
 
-    public Worker(WhatsAppConfig whatsappConfig, JawceConfig jawceConfig, ISessionManager sessionManager) {
-        this.waConfig = whatsappConfig;
+    public Worker(
+            ApplicationEventPublisher eventPublisher,
+            WhatsAppConfig whatsAppConfig,
+            JawceConfig jawceConfig,
+            ClientHelperService clientHelperService,
+            WebhookProcessor webhookProcessor,
+            ISessionManager sessionManager) {
+        this.eventPublisher = eventPublisher;
+        this.waConfig = whatsAppConfig;
         this.jawceConfig = jawceConfig;
+        this.service = clientHelperService;
+        this.webhookProcessor = webhookProcessor;
         this.session = sessionManager;
     }
 
     Set<String> getMessageQueue(WaUser user) {
         Set<String> queue = new HashSet<>();
-        if(this.session.get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY) != null) {
-            var qHistory = this.session.get(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, Set.class);
+        if(this.session.get(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY) != null) {
+            var qHistory = this.session.get(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY, Set.class);
             queue = new HashSet<String>(qHistory);
         }
         return queue;
     }
 
-    Optional<WaUser> verifyWebhookPayload(Object payload, Map<String, Object> requestHeaders) {
-        var map = CommonUtils.linkedHashToMap((LinkedHashMap) payload);
-
-        if(CommonUtils.isChannelErrorMessage(map)) throw new EngineWhatsappException(map.toString());
-        if(!CommonUtils.isValidChannelMessage(map))
-            throw new EngineInternalException("invalid channel message received");
-
-        if(CommonUtils.hasChannelMsgObject(map)) {
-            if(!requestHeaders.containsKey(EngineConstants.X_HUB_SIG_HEADER_KEY))
-                throw new EngineInternalException("unverified request payload");
-
-            Map<String, Object> msgData = CommonUtils.extractWaMessage(map);
-
-            var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
-            if(!supportedMsgType.isSupported()) throw new EngineInternalException("unsupported message type");
-
-            WaUser waUser = CommonUtils.extractWaCurrentUserObj(map);
-
-            MDC.put(EngineConstants.MDC_ID_KEY, waUser.waId());
-
-            if(CommonUtils.isOldWebhook(waUser.timestamp(), this.jawceConfig.getWebhookTimestampThresholdSecs())) {
-                logger.warn("OLD WEBHOOK REQ RECEIVED: {}. DISCARDED", CommonUtils.convertTimestamp(waUser.timestamp()));
-                return Optional.empty();
-            }
-
-            return Optional.of(waUser);
-        }
-
-        logger.warn("No message obj, ignoring..");
-        return Optional.empty();
-    }
-
     void addToMessageQueue(WaUser user) {
         Set<String> queue = getMessageQueue(user);
         queue.add(user.msgId());
-        if(queue.size() > EngineConstants.MESSAGE_QUEUE_COUNT) {
-            logger.warn("Message queue limit reached, applying FIFO..");
+        if(queue.size() > EngineConstant.MESSAGE_QUEUE_COUNT) {
+            log.warn("Message queue limit reached, applying FIFO..");
             Iterator<String> iterator = queue.iterator();
             int count = 0;
             while (iterator.hasNext() && count < queue.size() - 10) {
@@ -88,124 +67,81 @@ public class Worker {
                 count++;
             }
         }
-        this.session.save(user.waId(), SessionConstants.SESSION_MESSAGE_HISTORY_KEY, queue);
+        this.session.save(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY, queue);
     }
 
-    public String verifyHubToken(String mode, String challenge, String token) {
-        if("subscribe".equals(mode) && token.equals(this.waConfig.getHubToken())) return challenge;
-        else throw new RuntimeException("Invalid hub token");
+    void fireGlobalHook(String sessionId) {
+        if(this.jawceConfig.getOnWebhookPrechecksComplete() != null) {
+            var tempHook = new Hook();
+            tempHook.setHook(this.jawceConfig.getOnWebhookPrechecksComplete());
+            tempHook.setSessionId(sessionId);
+            tempHook.setSession(this.session);
+
+            eventPublisher.publishEvent(new OnceOffHookEvent(this, tempHook));
+        }
     }
 
-    public void processWebhook(Object payload, Map<String, Object> requestHeaders) {
-        var map = CommonUtils.linkedHashToMap((LinkedHashMap) payload);
-        var userOpt = this.verifyWebhookPayload(payload, requestHeaders);
-
-        if(userOpt.isEmpty()) return;
+    Optional<Webhook> initChecks(Map<String, Object> webhookPayload, Map<String, Object> webhookHeaders) {
+        var userOpt = WhatsappUtils.getUser(webhookPayload, webhookHeaders, this.jawceConfig.getWebhookTimestampThresholdSecs());
+        if(userOpt.isEmpty()) return Optional.empty();
 
         var user = userOpt.get();
         var sessionId = user.waId();
-        var msgData = CommonUtils.extractWaMessage(map);
-        var supportedMsgType = CommonUtils.isValidSupportedMessageType(msgData);
+        var message = WhatsappUtils.extractMessage(webhookPayload);
+        var messageType = WhatsappUtils.isValidSupportedMessageType(message);
         this.session = this.session.session(sessionId);
 
         if(this.jawceConfig.isHandleSessionQueue()) {
             if(this.getMessageQueue(user).contains(user.msgId())) {
-                logger.warn("Duplicate message found: {}. Skipping..", msgData);
-                return;
+                log.warn("Duplicate message found: {}. Skipping..", message);
+                return Optional.empty();
             }
         }
 
-        Long lastDebounceTimestamp = this.session.get(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, Long.class);
+        Long lastDebounceTimestamp = this.session.get(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, Long.class);
         long currentTime = System.currentTimeMillis();
 
         if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= this.jawceConfig.getDebounceTimeoutMs()) {
-            this.session.save(sessionId, SessionConstants.CURRENT_DEBOUNCE_KEY, currentTime);
+            this.session.save(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, currentTime);
         } else {
-            logger.warn("Message ignored due to debounce..");
-            return;
+            log.warn("Message ignored due to debounce..");
+            return Optional.empty();
         }
 
         if(this.jawceConfig.isHandleSessionQueue()) {
             this.addToMessageQueue(user);
         }
 
+        return Optional.of(new Webhook(user, messageType, message));
+    }
+
+    public int verifyHubToken(String mode, String challenge, String token) {
+        if("subscribe".equals(mode) && token.equals(this.waConfig.getHubToken())) return Integer.parseInt(challenge);
+        throw new RuntimeException("Challenge failed, invalid hub token!");
+    }
+
+    public void processWebhook(Map<String, Object> webhookPayload, Map<String, Object> webhookHeaders) {
+        var webhook = this.initChecks(webhookPayload, webhookHeaders);
+        if(webhook.isEmpty()) return;
+        this.fireGlobalHook(webhook.get().user().waId());
+
         try {
-            MessageProcessor msgProcessor = new MessageProcessor(
-                    new MsgProcessorDTO(
-                            user,
-                            supportedMsgType,
-                            msgData,
-                            this.session
-                    ),
-                    this.jawceConfig
-            );
+            var result = this.webhookProcessor.process(webhook.get());
 
-            var channelPayload = msgProcessor.process();
+            this.service.sendWhatsAppRequest(result);
 
-            this.service.sendWhatsappRequest(
-                    new ChannelRequestDto(this.session.session(sessionId), channelPayload),
-                    true,
-                    channelOriginConfig
-            );
-
-            session.save(sessionId, SessionConstants.CURRENT_MSG_ID_KEY, user.msgId());
-        } catch (EngineRenderException e) {
-            sendQuickBtnMsg(
-                    new QuickBtnPayload(
-                            sessionId,
-                            "Failed to process your message",
-                            null,
-                            "Message",
-                            List.of("Retry", "Report"),
-                            null
-                    )
-            );
-        } catch (EngineResponseException e) {
-            var errBody = CommonUtils.getDataDatumArgs(EngineConstants.ENGINE_EXC_MSG_SPLITTER, e.getMessage());
-            logger.warn("[{}] Stage: {} | {} Invalid response err", waUser.msgId(), errBody.data(), errBody.datum());
-
-            sendQuickBtnMsg(
-                    new QuickBtnPayload(
-                            sessionId,
-                            "%s.\n\n%s".formatted(errBody.other(), "You may click the button to return to Menu"),
-                            null,
-                            "Message",
-                            List.of("Menu", "Report"),
-                            null
-                    )
-            );
-        } catch (UserSessionValidationException e) {
-            logger.warn("Ambiguous session mismatch, Dialing user: {} | Session user: {}",
-                    waUser.msgId(),
-                    session.get(sessionId, SessionConstants.SERVICE_PROFILE_MSISDN_KEY, String.class)
-            );
-            logger.warn(e.getMessage());
-
-            sendQuickBtnMsg(
-                    new QuickBtnPayload(
-                            sessionId,
-                            "Could not process request (AMB.ERR)",
-                            "Tip: type / for shortcuts",
-                            "Message",
-                            List.of("Menu"),
-                            null
-                    )
-            );
-        } catch (EngineSessionInactivityException | EngineSessionExpiredException e) {
-            session.clear(sessionId);
-            logger.error("[{}] Session expired / inactive - cleared", waUser.msgId());
-            sendQuickBtnMsg(
-                    new QuickBtnPayload(
-                            sessionId,
-                            e.getMessage(),
-                            "Session Expired",
-                            "Security Check 🔐",
-                            List.of("Menu"),
-                            null
-                    )
-            );
+            session.save(webhook.get().user().waId(), SessionConstant.CURRENT_MSG_ID_KEY, "user.msgId()");
+        } catch (Exception e) {
+            // TODO: handle all exceptions here
+            log.error("Failed to process request", e);
         } finally {
-            MDC.remove(EngineConstants.MDC_ID_KEY);
+            MDC.remove(EngineConstant.MDC_WA_ID_KEY);
+            MDC.remove(EngineConstant.MDC_WA_NAME_KEY);
         }
+    }
+
+    @EventListener
+    public void handleWebhookEvent(WebhookEvent event) {
+        this.processWebhook(event.getPayload(), event.getHeaders());
     }
 }

@@ -2,12 +2,12 @@ package zw.co.dcl.jawce.engine.model.messages;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import zw.co.dcl.jawce.engine.model.abs.AbsInteractiveMessage;
+import zw.co.dcl.jawce.engine.model.abs.BaseInteractiveMessage;
 
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CtaMessage extends AbsInteractiveMessage {
+public class CtaMessage extends BaseInteractiveMessage {
     private String url;
     private String button;
 }

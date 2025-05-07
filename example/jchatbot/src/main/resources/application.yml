@@ -1,20 +1,14 @@
 jawce:
-  handle-session-queue: true
-  handle-session-inactivity: true
-  has-auth: true
+  has-auth: false
   tag-on-reply: true
+  start-menu: "START-MENU"
 
 whatsapp:
-  local: false
   hub-token: some-hub-token
   access-token: some-access-token
   phone-number-id: your-phone-id
   app-secret: your-app-secret
-
-template:
-  storage:
-    templates-path: "templates"
-    triggers-path: "triggers"
+  local-url: "http://localhost:3000/api/hook-response"
 
 server:
   servlet:
@@ -22,5 +16,7 @@ server:
   port: 8080
 
 spring:
+  mustache:
+    check-template-location: false
   application:
-    name: "JAWCE-CHATBOT"
+    name: "jawce-chatbot"

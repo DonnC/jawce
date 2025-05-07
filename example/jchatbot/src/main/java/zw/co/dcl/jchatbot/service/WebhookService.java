@@ -1,32 +1,31 @@
 package zw.co.dcl.jchatbot.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import zw.co.dcl.jchatbot.Util;
-import zw.co.dcl.jchatbot.WebhookEvent;
+import zw.co.dcl.jawce.engine.api.Worker;
+import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
+import zw.co.dcl.jchatbot.util.Util;
 
 import java.util.Map;
 
 @Service
 public class WebhookService {
-    @Autowired
-    private WebhookConfigService serviceConfig;
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
+    private final Worker jawceWorker;
 
-    public ResponseEntity<?> verifyToken(String mode, String token, String challenge) {
-        if(serviceConfig.getEntryInstance().verifyHubToken(mode, challenge, token).equals(challenge)) {
-            return ResponseEntity.ok(Integer.parseInt(challenge));
-        }
-        return ResponseEntity.badRequest().build();
+    public WebhookService(ApplicationEventPublisher eventPublisher, Worker jawceWorker) {
+        this.eventPublisher = eventPublisher;
+        this.jawceWorker = jawceWorker;
     }
 
-    public ResponseEntity<String> processRequest(Map<String, Object> payload, HttpServletRequest request) {
+    public int verifyToken(String mode, String token, String challenge) {
+        return jawceWorker.verifyHubToken(mode, challenge, token);
+    }
+
+    public String processRequest(Map<String, Object> payload, HttpServletRequest request) {
         var headers = Util.requestHeadersToMap(request);
         eventPublisher.publishEvent(new WebhookEvent(this, payload, headers));
-        return ResponseEntity.ok("ACK");
+        return "ok!";
     }
 }
