@@ -3,9 +3,11 @@ package zw.co.dcl.jawce.engine.model.abs;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import zw.co.dcl.jawce.engine.constants.TemplateType;
+import zw.co.dcl.jawce.engine.internal.mappers.EngineRouteDeserializer;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.template.*;
 
@@ -37,6 +39,8 @@ import java.util.Map;
 public abstract class BaseEngineTemplate implements Serializable {
     @JsonProperty("kind")
     private String type;
+
+    @JsonDeserialize(using = EngineRouteDeserializer.class)
     private List<EngineRoute> routes;
 
     // attr

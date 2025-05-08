@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 @ConfigurationProperties(prefix = "template.storage")
 public class TemplateStorageProperties {
-    private String templatesPath = "classpath*:templates";
-    private String triggersPath = "classpath*:triggers";
+    private String templatesPath = "classpath:templates";
+    private String triggersPath = "classpath:triggers";
 }
