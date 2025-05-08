@@ -24,7 +24,7 @@ public class SerializeUtils {
     private static final Logger logger = LoggerFactory.getLogger(SerializeUtils.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static <T> T castValue(Object fromObj, Class<T> type) {
+    static public <T> T castValue(Object fromObj, Class<T> type) {
         return objectMapper.convertValue(fromObj, type);
     }
 
@@ -47,7 +47,8 @@ public class SerializeUtils {
     }
 
     static public Map<String, Object> fromTemplate(BaseEngineTemplate template) {
-        return SerializeUtils.toMap(template);
+        return objectMapper.convertValue(template, new TypeReference<>() {
+        });
     }
 
     static public BaseEngineTemplate toTemplate(Map<String, Object> mapTemplate) {
@@ -60,10 +61,6 @@ public class SerializeUtils {
 
     static public JsonNode readStringAsTree(String data) throws JsonProcessingException {
         return objectMapper.readTree(data);
-    }
-
-    static public Map readInputStreamAsMap(InputStream ins) throws IOException {
-        return objectMapper.readValue(ins, Map.class);
     }
 
     static public Map<String, Object> readMapFromFile(File file) {
@@ -102,5 +99,4 @@ public class SerializeUtils {
             });
         }
     }
-
 }
