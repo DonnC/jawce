@@ -32,8 +32,7 @@ public class WhatsappUtils {
     static final List<String> supportedTypes = List.of("text", "document", "interactive", "button",
             "unknown", "location", "image", "video", "audio", "sticker");
 
-
-    public static Optional<WaUser> getUser(Map<String, Object> webhookPayload, Map<String, Object> webhookHeaders, int webhookTtl) {
+    public static Optional<WaUser> getUser(Map<String, Object> webhookPayload, int webhookTtl) {
         if(isRequestErrorMessage(webhookPayload)) {
             throw new WhatsappException(webhookPayload.toString());
         }
@@ -42,11 +41,6 @@ public class WhatsappUtils {
         }
 
         if(hasChannelMsgObject(webhookPayload)) {
-            if(!webhookHeaders.containsKey(EngineConstant.X_HUB_SIG_HEADER_KEY)) {
-                // TODO: implement webhook payload integrity check
-                throw new InternalException("unverified request payload");
-            }
-
             var msgData = extractMessage(webhookPayload);
 
             var supportedMsgType = isValidSupportedMessageType(msgData);

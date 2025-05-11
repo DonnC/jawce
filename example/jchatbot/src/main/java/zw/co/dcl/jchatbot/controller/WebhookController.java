@@ -1,8 +1,8 @@
 package zw.co.dcl.jchatbot.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import zw.co.dcl.jawce.engine.api.annotation.VerifyWhatsAppPayload;
 import zw.co.dcl.jchatbot.service.WebhookService;
 
 import java.util.Map;
@@ -26,8 +26,9 @@ public class WebhookController {
         return ResponseEntity.ok(webhookService.verifyToken(mode, token, challenge));
     }
 
+    @VerifyWhatsAppPayload
     @PostMapping
-    ResponseEntity<String> handler(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
-        return ResponseEntity.ok(webhookService.processRequest(payload, request));
+    ResponseEntity<String> handler(@RequestBody Map<String, Object> payload) {
+        return ResponseEntity.ok(webhookService.processRequest(payload));
     }
 }

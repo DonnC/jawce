@@ -102,11 +102,8 @@ public class Utils {
         return Duration.between(parseZonedDateTime(lastInteractionTime), currentSystemDate()).abs().toMinutes() > maxInteractionInMins;
     }
 
-    public static boolean isRegexInput(String input) {
-        return input.startsWith(EngineConstant.TPL_REGEX_PLACEHOLDER_KEY);
-    }
-
     public static boolean isRegexPatternMatch(String regexPattern, String text) {
-        return Pattern.compile(regexPattern).matcher(text).find();
+        var p = regexPattern.replaceAll(EngineConstant.TPL_REGEX_PLACEHOLDER_KEY, "").trim();
+        return Pattern.compile(p).matcher(text).find();
     }
 }

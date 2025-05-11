@@ -63,6 +63,7 @@ public abstract class BaseTemplateProcessor {
 
         // init Hook
         var arg = new Hook();
+        arg.setSessionId(this.sessionId);
         arg.setSession(this.session);
         arg.setWaUser(message.user());
         arg.setUserInput(this.userInput.input());

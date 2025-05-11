@@ -56,7 +56,7 @@ public class JawceAutoConfig {
             JawceConfig jawceConfig,
             ClientHelperService clientHelperService,
             WebhookProcessor webhookProcessor,
-            ISessionManager sessionManager // this will be injected if user provides it
+            ISessionManager sessionManager
     ) {
         return new Worker(publisher, whatsAppConfig, jawceConfig, clientHelperService, webhookProcessor, sessionManager);
     }

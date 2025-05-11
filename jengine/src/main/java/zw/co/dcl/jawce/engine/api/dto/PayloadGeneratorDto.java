@@ -8,7 +8,6 @@ public record PayloadGeneratorDto(
         BaseEngineTemplate template,
         Hook hookArg,
         String stage,
-        String replyMessageId,
         HookService hookService
 ) {
 }

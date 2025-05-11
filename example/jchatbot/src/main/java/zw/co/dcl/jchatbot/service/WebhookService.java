@@ -23,9 +23,8 @@ public class WebhookService {
         return jawceWorker.verifyHubToken(mode, challenge, token);
     }
 
-    public String processRequest(Map<String, Object> payload, HttpServletRequest request) {
-        var headers = Util.requestHeadersToMap(request);
-        eventPublisher.publishEvent(new WebhookEvent(this, payload, headers));
+    public String processRequest(Map<String, Object> payload) {
+        eventPublisher.publishEvent(new WebhookEvent(this, payload));
         return "ok!";
     }
 }

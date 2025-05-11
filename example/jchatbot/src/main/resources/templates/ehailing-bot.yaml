@@ -9,7 +9,7 @@
       - Proceed
       - GitHub
   routes:
-    "proceed": "PICKUP-DRIVE-MAIN-MENU"
+    "re:.*": "PICKUP-DRIVE-MAIN-MENU"
     "github": "JAWCE-GITHUB-DOCS"
 
 "JAWCE-GITHUB-DOCS":

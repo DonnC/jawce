@@ -8,11 +8,9 @@ import java.util.Map;
 @Getter
 public class WebhookEvent extends ApplicationEvent {
     private final Map<String, Object> payload;
-    private final Map<String, Object> headers;
 
-    public WebhookEvent(Object source, Map<String, Object> payload, Map<String, Object> headers) {
+    public WebhookEvent(Object source, Map<String, Object> payload) {
         super(source);
         this.payload = payload;
-        this.headers = headers;
     }
 }

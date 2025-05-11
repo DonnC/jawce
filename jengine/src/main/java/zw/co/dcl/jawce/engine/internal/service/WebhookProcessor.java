@@ -124,7 +124,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
         if(this.isFromTrigger) return this.stage;
 
-        log.info("Current - stage: [{}] | template: {}", this.stage, this.template);
+        log.debug("Current stage: {} | template: {}", this.stage, this.template);
 
         // get the next stage, from defined template routes
         for (EngineRoute trigger : this.template.getRoutes()) {

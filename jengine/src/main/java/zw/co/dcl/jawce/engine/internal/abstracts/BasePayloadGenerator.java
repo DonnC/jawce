@@ -1,6 +1,7 @@
 package zw.co.dcl.jawce.engine.internal.abstracts;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 import zw.co.dcl.jawce.engine.api.dto.PayloadGeneratorDto;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.TemplateRenderException;
@@ -26,7 +27,7 @@ public abstract class BasePayloadGenerator {
         this.template = dto.template();
         this.hookArg = dto.hookArg();
         this.stage = dto.stage();
-        this.replyMessageId = dto.replyMessageId();
+        this.replyMessageId = dto.template().getReplyMessageId();
         this.validator();
         this.processTemplate();
     }
@@ -34,6 +35,9 @@ public abstract class BasePayloadGenerator {
     Map<String, Object> processRenderTemplate() {
         try {
             this.hookArg.setHook(this.template.getTemplate());
+
+            Assert.notNull(this.hookArg.getSession(), "hook session object is null");
+
             var result = this.dto.hookService().processHook(this.hookArg);
 
             if(result.getTemplateDynamicBody() != null) {

@@ -61,11 +61,9 @@ public class PayloadGenerator extends BasePayloadGenerator {
                 PayloadType.INTERACTIVE,
                 this.replyMessageId));
 
-
         var locReqPayload = new HashMap<>();
 
         if(this.template instanceof RequestLocationTemplate locTemplate) {
-
             locReqPayload.put("type", InteractivePayloadType.LOCATION_REQUEST_MESSAGE.name().toLowerCase());
             locReqPayload.put("body", Map.of("text", locTemplate.getMessage()));
             locReqPayload.put("action", Map.of("name", "send_location"));

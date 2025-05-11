@@ -93,8 +93,8 @@ public class HookService {
             throw new InternalException("Invalid hook path: " + arg.getHook());
         }
 
-        String classNamePath = arg.getHook().substring(0, lastDot);
-        String methodName = arg.getHook().substring(lastDot + 1);
+        var classNamePath = arg.getHook().substring(0, lastDot);
+        var methodName = arg.getHook().substring(lastDot + 1);
 
         Class<?> hookClass;
         Object hookObj;
@@ -110,9 +110,8 @@ public class HookService {
                 hookObj = createHookInstance(hookClass, arg);
             }
 
-
-            Method method = hookClass.getDeclaredMethod(methodName);
-            Object response = method.invoke(hookObj);
+            var method = hookClass.getDeclaredMethod(methodName, Hook.class);
+            var response = method.invoke(hookObj, arg);
 
             if(!(response instanceof Hook)) {
                 throw new InternalException("Reflective hook must return a Hook, but got: " +
@@ -120,7 +119,6 @@ public class HookService {
             }
 
             return (Hook) response;
-
         } catch (Exception ex) {
             log.error("Error during reflective hook execution", ex);
             throw ex;
@@ -129,12 +127,12 @@ public class HookService {
 
     Object createHookInstance(Class<?> hookClass, Hook arg) throws Exception {
         try {
-            Constructor<?> ctor = hookClass.getDeclaredConstructor(Hook.class);
+            var ctor = hookClass.getDeclaredConstructor(Hook.class);
             return ctor.newInstance(arg);
         } catch (NoSuchMethodException e) {
-            Object instance = hookClass.getDeclaredConstructor().newInstance();
+            var instance = hookClass.getDeclaredConstructor().newInstance();
             try {
-                Method setter = hookClass.getMethod("setHookArg", Hook.class);
+                var setter = hookClass.getMethod("setHookArg", Hook.class);
                 setter.invoke(instance, arg);
                 return instance;
             } catch (NoSuchMethodException nsme) {
@@ -145,8 +143,8 @@ public class HookService {
     }
 
     public Hook processHook(Hook arg) throws Exception {
+        log.debug("PROCESSING HOOK ARG: {}", arg);
         log.debug("PROCESSING HOOK: {}", arg.getHook());
-
 
         if(this.isRestHook(arg.getHook())) {
             return this.processRestHook(arg);
