@@ -8,7 +8,7 @@ import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
 import zw.co.dcl.jchatbot.service.engine.FileSessionManager;
 import zw.co.dcl.jchatbot.service.engine.RestTemplateClientManager;
-import zw.co.dcl.jchatbot.service.engine.YamlTemplateStorageManager;
+import zw.co.dcl.jchatbot.service.engine.YmlJsonTemplateStorageManager;
 
 @Configuration
 public class EngineConfigs {
@@ -28,7 +28,7 @@ public class EngineConfigs {
     }
 
     @Bean
-    public ITemplateStorageManager templateStorageManager(YamlTemplateStorageManager yamlTemplateStorageManager) {
-        return yamlTemplateStorageManager;
+    public ITemplateStorageManager templateStorageManager(YmlJsonTemplateStorageManager ymlJsonTemplateStorageManager) {
+        return ymlJsonTemplateStorageManager;
     }
 }

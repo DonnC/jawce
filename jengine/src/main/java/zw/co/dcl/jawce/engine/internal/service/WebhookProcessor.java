@@ -1,7 +1,6 @@
 package zw.co.dcl.jawce.engine.internal.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import zw.co.dcl.jawce.engine.api.dto.PayloadGeneratorDto;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.ResponseException;
@@ -106,13 +105,13 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         var hasRetryGlobalRoute = new AtomicBoolean(false);
 
         this.template.getRoutes().forEach((e) -> {
-            if(e.getNextStage().equals(EngineConstant.RETRY_NAME)) {
+            if(e.getNextStage().equals(EngineConstant.BTN_RETRY)) {
                 hasRetryGlobalRoute.set(true);
             }
         });
 
         boolean gotoCheckpoint = !hasRetryGlobalRoute.get()
-                && this.userInput.input().equalsIgnoreCase(EngineConstant.RETRY_NAME)
+                && this.userInput.input().equalsIgnoreCase(EngineConstant.BTN_RETRY)
                 && checkpoint != null
                 && this.session.get(this.sessionId, SessionConstant.SESSION_DYNAMIC_RETRY_KEY) != null
                 && !this.isFromTrigger;

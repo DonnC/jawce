@@ -136,6 +136,7 @@ public class Worker {
         btn.setMessage(btnMsg);
 
         var hook = new Hook();
+        hook.setSession(this.session.session(button.getRecipient()));
         hook.setSessionId(button.getRecipient());
         hook.setWaUser(new WaUser(button.getRecipient(), button.getRecipient(), null, null));
 
@@ -171,7 +172,7 @@ public class Worker {
             this.sendQuickButtonMessage(
                     QuickBtnTemplate.builder()
                             .title("Message")
-                            .buttons(List.of("Retry"))
+                            .buttons(List.of(EngineConstant.BTN_RETRY))
                             .message(e.getMessage())
                             .build()
             );
@@ -181,7 +182,7 @@ public class Worker {
             this.sendQuickButtonMessage(
                     QuickBtnTemplate.builder()
                             .title("Message")
-                            .buttons(List.of("Retry", "Report"))
+                            .buttons(List.of(EngineConstant.BTN_RETRY, EngineConstant.BTN_REPORT))
                             .message("Failed to process your message")
                             .build()
             );
@@ -191,7 +192,7 @@ public class Worker {
             this.sendQuickButtonMessage(
                     QuickBtnTemplate.builder()
                             .title("Message")
-                            .buttons(List.of("Menu", "Report"))
+                            .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
                             .message("%s.\n\n%s".formatted(e.getError().message(), "You may click the button to return to Menu"))
                             .build()
             );
@@ -201,7 +202,7 @@ public class Worker {
             this.sendQuickButtonMessage(
                     QuickBtnTemplate.builder()
                             .title("Message")
-                            .buttons(List.of("Menu"))
+                            .buttons(List.of(EngineConstant.BTN_MENU))
                             .message("Could not process request\n\n_AMB Err_")
                             .build()
             );
@@ -215,7 +216,7 @@ public class Worker {
                     QuickBtnTemplate.builder()
                             .title("Security Check 🔐")
                             .footer("Session Expired")
-                            .buttons(List.of("Menu"))
+                            .buttons(List.of(EngineConstant.BTN_MENU))
                             .message(e.getMessage())
                             .build()
             );
@@ -225,7 +226,7 @@ public class Worker {
             this.sendQuickButtonMessage(
                     QuickBtnTemplate.builder()
                             .title("Message")
-                            .buttons(List.of("Menu", "Report"))
+                            .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
                             .message("Something went wrong. Please try again later.")
                             .build()
             );

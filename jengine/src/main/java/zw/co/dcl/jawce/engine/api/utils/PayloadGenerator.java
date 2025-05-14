@@ -8,14 +8,67 @@ import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.TemplateType;
 import zw.co.dcl.jawce.engine.internal.abstracts.BasePayloadGenerator;
+import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
+import zw.co.dcl.jawce.engine.model.abs.BaseInteractiveMessage;
 import zw.co.dcl.jawce.engine.model.template.*;
 
 import java.util.*;
 
 @Slf4j
 public class PayloadGenerator extends BasePayloadGenerator {
+    private Map<String, Object> interactivePayloadData = new HashMap<>();
+
     public PayloadGenerator(PayloadGeneratorDto dto) {
         super(dto);
+    }
+
+    boolean isInteractiveTemplate(BaseEngineTemplate template) {
+        return template instanceof ButtonTemplate
+                || template instanceof FlowTemplate
+                || template instanceof LocationTemplate
+                || template instanceof TemplateTemplate
+                || template instanceof CtaTemplate;
+    }
+
+    BaseInteractiveMessage extractInteractiveMessage(BaseEngineTemplate template) {
+        if(template instanceof ButtonTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        if(template instanceof FlowTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        if(template instanceof LocationTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        if(template instanceof TemplateTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        if(template instanceof CtaTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        return null;
+    }
+
+    void createInteractivePayload() {
+        if(this.isInteractiveTemplate(this.template)) {
+            var msg = this.extractInteractiveMessage(this.template);
+            Map<String, Object> data = new HashMap<>(Map.of("body", Map.of("text", msg.getBody())));
+
+            if(msg.getTitle() != null) {
+                data.put("header", Map.of("type", "text", "text", msg.getTitle()));
+            }
+
+            if(msg.getFooter() != null) {
+                data.put("footer", Map.of("text", msg.getFooter()));
+            }
+
+            this.interactivePayloadData = data;
+        }
     }
 
     String generateFlowToken(String user, String flow) {
@@ -76,6 +129,29 @@ public class PayloadGenerator extends BasePayloadGenerator {
         throw new InternalException("Invalid template type");
     }
 
+    public Map<String, Object> location() {
+        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+                this.hookArg.getWaUser().waId(),
+                PayloadType.LOCATION,
+                this.replyMessageId));
+
+        var locPayload = new HashMap<>();
+
+        if(this.template instanceof LocationTemplate locTemplate) {
+            var msg = locTemplate.getMessage();
+            locPayload.put("latitude", msg.getLat());
+            locPayload.put("longitude", msg.getLon());
+            locPayload.put("name", msg.getName());
+            locPayload.put("address", msg.getAddress());
+
+            payload.put(PayloadType.LOCATION.name().toLowerCase(), locPayload);
+
+            return payload;
+        }
+
+        throw new InternalException("Invalid template type");
+    }
+
     public Map<String, Object> media() {
         var payload = new HashMap<>(
                 WhatsappUtils.getCommonPayload(
@@ -117,20 +193,8 @@ public class PayloadGenerator extends BasePayloadGenerator {
         if(this.template instanceof ButtonTemplate buttonTemplate) {
             var message = buttonTemplate.getMessage();
 
-            Map<String, Object> interactivePayload = new HashMap<>(
-                    Map.of(
-                            "type", InteractivePayloadType.BUTTON.name().toLowerCase(),
-                            "body", Map.of("text", message.getBody())
-                    )
-            );
-
-            if(message.getTitle() != null) {
-                interactivePayload.put("header", Map.of("type", "text", "text", message.getTitle()));
-            }
-
-            if(message.getFooter() != null) {
-                interactivePayload.put("footer", Map.of("text", message.getFooter()));
-            }
+            Map<String, Object> interactivePayload = new HashMap<>(Map.of("type", InteractivePayloadType.BUTTON.name().toLowerCase()));
+            interactivePayload.putAll(this.interactivePayloadData);
 
             List<Map> btnPayload = new ArrayList<>();
 
@@ -153,6 +217,35 @@ public class PayloadGenerator extends BasePayloadGenerator {
         throw new InternalException("Invalid template type");
     }
 
+    public Map<String, Object> cta() {
+        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+                this.hookArg.getWaUser().waId(),
+                PayloadType.INTERACTIVE,
+                replyMessageId
+        ));
+
+        if(this.template instanceof CtaTemplate tpl) {
+            var message = tpl.getMessage();
+
+            Map<String, Object> interactivePayload = new HashMap<>(Map.of("type", InteractivePayloadType.CTA_URL.name().toLowerCase()));
+            interactivePayload.putAll(this.interactivePayloadData);
+
+            interactivePayload.put(
+                    "action", Map.of(
+                            "name", InteractivePayloadType.CTA_URL.name().toLowerCase(),
+                            "parameters", Map.of(
+                                    "url", message.getUrl(),
+                                    "display_text", message.getButton()
+                            )
+                    )
+            );
+            payload.put("interactive", interactivePayload);
+            return payload;
+        }
+
+        throw new InternalException("Invalid template type");
+    }
+
     public Map<String, Object> flow() {
         var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
@@ -165,22 +258,8 @@ public class PayloadGenerator extends BasePayloadGenerator {
         if(this.template instanceof FlowTemplate flowTemplate) {
             var message = flowTemplate.getMessage();
 
-            Map<String, Object> interactivePayload = new HashMap<>(
-                    Map.of(
-                            "type", InteractivePayloadType.FLOW.name().toLowerCase(),
-                            "body", Map.of(
-                                    "text", message.getBody()
-                            )
-                    )
-            );
-
-            if(message.getTitle() != null) {
-                interactivePayload.put("header", Map.of("type", "text", "text", message.getTitle()));
-            }
-
-            if(message.getFooter() != null) {
-                interactivePayload.put("footer", Map.of("text", message.getFooter()));
-            }
+            Map<String, Object> interactivePayload = new HashMap<>(Map.of("type", InteractivePayloadType.FLOW.name().toLowerCase()));
+            interactivePayload.putAll(this.interactivePayloadData);
 
             Map<String, Object> actionPayload = new HashMap<>();
             actionPayload.put("name", "flow");
@@ -212,14 +291,15 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> generate() {
+        this.createInteractivePayload();
         return switch (this.dto.template().getType()) {
             case TemplateType.TEXT -> this.text();
+            case TemplateType.CTA_BUTTON -> this.cta();
             case TemplateType.BUTTON -> this.button();
             case TemplateType.FLOW -> this.flow();
             case TemplateType.MEDIA, TemplateType.DOCUMENT, TemplateType.IMAGE -> this.media();
             case TemplateType.REQUEST_LOCATION -> this.locationRequest();
-            default ->
-                    throw new InternalException("specified template type not supported for stage: " + this.stage);
+            default -> throw new InternalException("specified template type not supported for stage: " + this.stage);
         };
     }
 }

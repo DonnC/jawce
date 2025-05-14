@@ -28,21 +28,21 @@ import java.util.stream.Stream;
 
 
 /**
- * A default storage manager that is based on YAML templates
+ * A default storage manager that is based on YAML / JSON templates
  * <p>
- * The manager reads all template & trigger yaml files in a directory path provided
+ * The manager reads all template & trigger yaml / json files in a directory path provided
  * <p>
- * TODO: implement yaml template manager
  */
 @Slf4j
 @Service
-public class YamlTemplateStorageManager implements ITemplateStorageManager {
+public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     private static final Map<String, BaseEngineTemplate> templates = new ConcurrentHashMap<>();
     private static final List<EngineRoute> triggers = new CopyOnWriteArrayList<>();
-    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+    private final ObjectMapper jsonMapper = new ObjectMapper();
     private final TemplateStorageProperties properties;
 
-    public YamlTemplateStorageManager(TemplateStorageProperties properties) {
+    public YmlJsonTemplateStorageManager(TemplateStorageProperties properties) {
         this.properties = properties;
         this.loadTemplates();
 
@@ -70,17 +70,16 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
         triggers.addAll(routes);
     }
 
-
     @Override
     public void loadTemplates() {
         var pathDir = this.properties.getTemplatesPath();
         Assert.notNull(pathDir, "Directory is null");
 
-        Map<String, BaseEngineTemplate> map = new ConcurrentHashMap<>();
+        Map<String, BaseEngineTemplate> loaded = new ConcurrentHashMap<>();
 
         if(pathDir.startsWith("classpath:")) {
             log.warn("Loading classpath resources from {}", pathDir);
-            String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml}";
+            String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml,json}";
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
             try {
@@ -88,9 +87,7 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
 
                 for (Resource res : resources) {
                     try (InputStream in = res.getInputStream()) {
-                        map.putAll(mapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {
-                        }));
-
+                        loaded.putAll(parseInput(in, res.getFilename()));
                     }
                 }
             } catch (IOException e) {
@@ -104,11 +101,10 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
                 throw new IllegalStateException("Directory does not exist: " + folderDir);
             }
             try (Stream<Path> paths = Files.walk(folderDir)) {
-                paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml"))
+                paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml") || p.toString().endsWith(".json"))
                         .forEach(p -> {
                             try (InputStream in = Files.newInputStream(p)) {
-                                map.putAll(mapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {
-                                }));
+                                loaded.putAll(parseInput(in, p.toString()));
                             } catch (IOException e) {
                                 throw new RuntimeException("Failed to load file " + p, e);
                             }
@@ -118,9 +114,21 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
             }
         }
 
-        log.warn("Loaded {} templates from {}", map.size(), pathDir);
+        log.warn("Loaded {} templates from {}", loaded.size(), pathDir);
 
-        templates.putAll(map);
+        templates.putAll(loaded);
+    }
+
+    Map<String, BaseEngineTemplate> parseInput(InputStream in, String filename) throws IOException {
+        if(filename.endsWith(".json")) {
+            return jsonMapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {
+            });
+        } else if(filename.endsWith(".yaml") || filename.endsWith(".yml")) {
+            return yamlMapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {
+            });
+        } else {
+            throw new IllegalArgumentException("Unsupported file type: " + filename);
+        }
     }
 
     @Override
@@ -131,8 +139,8 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
         Map<String, Object> map = new ConcurrentHashMap<>();
 
         if(pathDir.startsWith("classpath:")) {
-            log.warn("Loading trigers classpath resources from {}", pathDir);
-            String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml}";
+            log.warn("Loading triggers classpath resources from {}", pathDir);
+            String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml,json}";
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
             try {
@@ -140,7 +148,11 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
 
                 for (Resource res : resources) {
                     try (InputStream in = res.getInputStream()) {
-                        map.putAll(mapper.readValue(in, Map.class));
+                        if(res.getFilename().endsWith(".json")) {
+                            map.putAll(jsonMapper.readValue(in, Map.class));
+                        } else {
+                            map.putAll(yamlMapper.readValue(in, Map.class));
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -154,10 +166,14 @@ public class YamlTemplateStorageManager implements ITemplateStorageManager {
                 throw new IllegalStateException("Directory does not exist: " + folderDir);
             }
             try (Stream<Path> paths = Files.walk(folderDir)) {
-                paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml"))
+                paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml") || p.toString().endsWith(".json"))
                         .forEach(p -> {
                             try (InputStream in = Files.newInputStream(p)) {
-                                map.putAll(mapper.readValue(in, Map.class));
+                                if(p.toString().endsWith(".json")) {
+                                    map.putAll(jsonMapper.readValue(in, Map.class));
+                                } else {
+                                    map.putAll(yamlMapper.readValue(in, Map.class));
+                                }
                             } catch (IOException e) {
                                 throw new RuntimeException("Failed to load file " + p, e);
                             }
