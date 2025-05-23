@@ -6,8 +6,6 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
-import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
-import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.api.enums.ListSectionType;
 import zw.co.dcl.jawce.engine.api.enums.PayloadType;
 import zw.co.dcl.jawce.engine.api.enums.WebhookIntrMsgType;
@@ -15,9 +13,12 @@ import zw.co.dcl.jawce.engine.api.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.ResponseException;
 import zw.co.dcl.jawce.engine.api.exceptions.WhatsappException;
+import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
+import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.internal.dto.ResponseError;
 import zw.co.dcl.jawce.engine.internal.dto.UserInput;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
+import zw.co.dcl.jawce.engine.model.abs.BaseInteractiveMessage;
 import zw.co.dcl.jawce.engine.model.core.WaUser;
 import zw.co.dcl.jawce.engine.model.dto.SupportedMessageType;
 
@@ -77,6 +78,20 @@ public class WhatsappUtils {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(config.getAccessToken());
         return headers;
+    }
+
+    public static Map<String, Object> getBaseInteractivePayload(BaseInteractiveMessage msg) {
+        Map<String, Object> data = new HashMap<>(Map.of("body", Map.of("text", msg.getBody())));
+
+        if(msg.getTitle() != null) {
+            data.put("header", Map.of("type", "text", "text", msg.getTitle()));
+        }
+
+        if(msg.getFooter() != null) {
+            data.put("footer", Map.of("text", msg.getFooter()));
+        }
+
+        return data;
     }
 
     public static Map<String, Object> getCommonPayload(

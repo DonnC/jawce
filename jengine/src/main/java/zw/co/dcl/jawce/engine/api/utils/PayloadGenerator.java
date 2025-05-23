@@ -27,6 +27,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
                 || template instanceof FlowTemplate
                 || template instanceof LocationTemplate
                 || template instanceof TemplateTemplate
+                || template instanceof ListTemplate
                 || template instanceof CtaTemplate;
     }
 
@@ -48,6 +49,10 @@ public class PayloadGenerator extends BasePayloadGenerator {
         }
 
         if(template instanceof CtaTemplate tpl) {
+            return tpl.getMessage();
+        }
+
+        if(template instanceof ListTemplate tpl) {
             return tpl.getMessage();
         }
 
@@ -74,17 +79,6 @@ public class PayloadGenerator extends BasePayloadGenerator {
     String generateFlowToken(String user, String flow) {
         Random random = new Random();
         return flow.trim().toLowerCase() + "_" + user + "_" + random.nextLong(10L, 999L);
-    }
-
-    void createSectionRows(Map<String, Object> section, List<Map> rows, LinkedHashMap<String, Object> map) {
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            final Map<String, String> rowMap = new HashMap<>();
-            rowMap.put("id", entry.getKey());
-            rowMap.putAll((Map<? extends String, ? extends String>) entry.getValue());
-            rows.add(rowMap);
-        }
-
-        section.put("rows", rows);
     }
 
     public Map<String, Object> text() {
@@ -189,7 +183,6 @@ public class PayloadGenerator extends BasePayloadGenerator {
                 replyMessageId
         ));
 
-
         if(this.template instanceof ButtonTemplate buttonTemplate) {
             var message = buttonTemplate.getMessage();
 
@@ -210,6 +203,52 @@ public class PayloadGenerator extends BasePayloadGenerator {
             );
 
             interactivePayload.put("action", Map.of("buttons", btnPayload));
+            payload.put("interactive", interactivePayload);
+            return payload;
+        }
+
+        throw new InternalException("Invalid template type");
+    }
+
+    public Map<String, Object> list() {
+        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+                this.hookArg.getWaUser().waId(),
+                PayloadType.INTERACTIVE,
+                replyMessageId
+        ));
+
+        if(this.template instanceof ListTemplate listTemplate) {
+            var message = listTemplate.getMessage();
+
+            Map<String, Object> interactivePayload = new HashMap<>(Map.of("type", InteractivePayloadType.LIST.name().toLowerCase()));
+            interactivePayload.putAll(this.interactivePayloadData);
+
+            List<Map> listPayload = new ArrayList<>();
+
+
+            message.getSections().forEach((sec) -> {
+                        Map<String, Object> secData = new HashMap<>(Map.of("title", sec.getTitle()));
+
+                        List<Map> rows = new ArrayList<>();
+
+                        sec.getRows().forEach((row) -> {
+                            var r = new HashMap();
+                            r.put("id", row.getId());
+                            r.put("title", row.getTitle());
+                            r.put("description", row.getDescription());
+
+                            rows.add(r);
+                        });
+
+                        secData.put("rows", rows);
+                        listPayload.add(secData);
+                    }
+            );
+
+            interactivePayload.put("action", Map.of(
+                    "sections", listPayload,
+                    "button", message.getButton())
+            );
             payload.put("interactive", interactivePayload);
             return payload;
         }
@@ -297,6 +336,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             case TemplateType.CTA_BUTTON -> this.cta();
             case TemplateType.BUTTON -> this.button();
             case TemplateType.FLOW -> this.flow();
+            case TemplateType.LIST -> this.list();
             case TemplateType.MEDIA, TemplateType.DOCUMENT, TemplateType.IMAGE -> this.media();
             case TemplateType.REQUEST_LOCATION -> this.locationRequest();
             default -> throw new InternalException("specified template type not supported for stage: " + this.stage);

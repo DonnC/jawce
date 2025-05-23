@@ -224,7 +224,6 @@ public class WebhookProcessor extends BaseTemplateProcessor {
                 nextTemplate,
                 hookArg,
                 nextStage,
-                nextTemplate.getReplyMessageId(),
                 this.getHookService()
         );
 

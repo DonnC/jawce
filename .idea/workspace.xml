@@ -5,18 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/mappers/SectionsDeserializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/mappers/SectionsSerializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ListSection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SectionRowItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ListMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ListTemplate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/EngineConfigs.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/EngineConfigs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/YamlTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/YmlJsonTemplateStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsappUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsappUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/FlowTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/FlowTemplate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -365,7 +363,9 @@
       <workItem from="1746982999548" duration="416000" />
       <workItem from="1747073485976" duration="218000" />
       <workItem from="1747153741565" duration="6192000" />
-      <workItem from="1747204448678" duration="2806000" />
+      <workItem from="1747204448678" duration="6056000" />
+      <workItem from="1747312601521" duration="4011000" />
+      <workItem from="1747377878750" duration="1040000" />
     </task>
     <servers />
   </component>

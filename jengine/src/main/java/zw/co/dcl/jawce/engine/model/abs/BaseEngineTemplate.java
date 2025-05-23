@@ -68,4 +68,8 @@ public abstract class BaseEngineTemplate implements Serializable {
     private String middleware;
 
     private Map params = new HashMap<>();
+
+    protected Map<String, Object> asPayload(String recipient) {
+        return new HashMap<>();
+    };
 }

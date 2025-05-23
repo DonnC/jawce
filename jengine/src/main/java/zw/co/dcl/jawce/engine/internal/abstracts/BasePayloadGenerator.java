@@ -61,8 +61,9 @@ public abstract class BasePayloadGenerator {
     // the template hook will process dynamic templates & flows differently
     protected Map<String, Object> processTemplate() {
         if(this.template.getTemplate() != null) {
-            if(this.template.getType().equals(TemplateType.DYNAMIC) || this.template.getType().equals(TemplateType.FLOW))
+            if(this.template.getType().equals(TemplateType.DYNAMIC) || this.template.getType().equals(TemplateType.FLOW)) {
                 return null;
+            }
 
             return this.processRenderTemplate();
         }
