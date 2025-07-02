@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class JawceConfig {
     private boolean handleSessionQueue = true;
     private boolean handleSessionInactivity = true;
-    private boolean hasAuth = true;
+    private boolean hasAuth = false;
     private boolean tagOnReply = false;
     private boolean readReceipts = false;
     private boolean logInvalidWebhooks = false;
