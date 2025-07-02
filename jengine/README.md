@@ -13,7 +13,6 @@ Visit the [docs here](https://docs.page/donnc/jawce)
 ## About
 This project serves as a quick way to get WhatsApp chatbots up and running. It came to light due to the repetitive approach
 of WhatsApp ChatBots i was creating.
-It can serve as a standalone engine or be integrated into a Java project as a dependency
 
 ### Integration as a dependency
 Add the dependency to your `maven - pom` file

@@ -7,7 +7,3 @@
 
 # for reporting, default trigger needed by engine
 "REPORT": "re:^report$"
-
-# my example custom trigger
-# type `president` in the chat to invoke this trigger
-"CUSTOM-STAGE-TRIGGER": "re:(?i)^president$"

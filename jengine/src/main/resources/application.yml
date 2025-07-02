@@ -3,4 +3,4 @@ spring:
     check-template-location: false
 
   application:
-    name: JAWCE-CORE-ENGINE
+    name: "jawce-core"

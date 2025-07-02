@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application-local.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/trigger-custom-stage.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/MessageProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelMessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/processor/abstracts/ChannelMessageProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +21,7 @@
         <option value="Kotlin Object" />
         <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Interface" />
         <option value="Record" />
         <option value="Class" />
       </list>
@@ -66,68 +60,72 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.JCHATBOT LOCAL.executor": "Run",
-    "Maven.chatbot [clean,install].executor": "Run",
-    "Maven.chatbot [clean].executor": "Run",
-    "Maven.engine [clean,install].executor": "Run",
-    "Maven.engine [clean].executor": "Run",
-    "Maven.engine [install].executor": "Run",
-    "Maven.java-engine [clean,install].executor": "Run",
-    "Maven.jawce [clean,install].executor": "Run",
-    "Maven.jawce-java-engine [clean,install].executor": "Run",
-    "Maven.jawce-session [clean,install].executor": "Run",
-    "Maven.jchatbot [clean,install].executor": "Run",
-    "Maven.jchatbot [clean].executor": "Run",
-    "Maven.jengine [clean,install].executor": "Run",
-    "Maven.jengine [clean].executor": "Run",
-    "Maven.jengine [install].executor": "Run",
-    "Maven.jsession [clean,install].executor": "Run",
-    "Maven.kengine [clean,install].executor": "Run",
-    "Maven.kt-engine [clean,install].executor": "Run",
-    "Maven.session [clean,install].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ChatbotApplication.executor": "Run",
-    "Spring Boot.JawceEngine.executor": "Run",
-    "Spring Boot.JchatbotApplication.executor": "Run",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "dev",
-    "jdk.selected.JAVA_MODULE": "corretto-17",
-    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "settings.sync",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kt-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-vcs.roots.invalid&quot;: &quot;Invalid VCS root mapping&quot;,
+    &quot;Notification.DoNotAsk-vcs.roots.invalid&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JChatbot.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JawceEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JchatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/revamp&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.uml&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\jengine\src\main\resources\META-INF\spring" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\example" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources\templates" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.JCHATBOT LOCAL">
+  <component name="RunManager" selected="Spring Boot.JChatbot">
     <configuration name="JCHATBOT LOCAL" type="Application" factoryName="Application">
       <envs>
         <env name="spring.profiles.active" value="local" />
       </envs>
-      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.JchatbotApplication" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.JChatbot" />
       <module name="jchatbot" />
       <extension name="net.ashald.envfile">
         <option name="IS_ENABLED" value="false" />
@@ -138,6 +136,19 @@
         <ENTRIES>
           <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
         </ENTRIES>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="jengine" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.Application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zw.co.dcl.jawce.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
       </extension>
       <method v="2">
         <option name="Make" enabled="true" />
@@ -150,29 +161,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JawceEngine" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="jengine" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.JawceEngine" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="zw.co.dcl.jawce.engine.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="JawceEngineKtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="kengine" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.JawceEngineKtApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="JchatbotApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <configuration name="JChatbot" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="jchatbot" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jchatbot.JchatbotApplication" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jchatbot.JChatbot" />
       <extension name="net.ashald.envfile">
         <option name="IS_ENABLED" value="false" />
         <option name="IS_SUBST" value="false" />
@@ -187,24 +178,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="JawceEngineKtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="kengine" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.JawceEngineKtApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.JCHATBOT LOCAL" />
       <item itemvalue="Spring Boot.ChatbotApplication" />
       <item itemvalue="Spring Boot.JawceEngineKtApplication" />
-      <item itemvalue="Spring Boot.JchatbotApplication" />
-      <item itemvalue="Spring Boot.JawceEngine" />
+      <item itemvalue="Spring Boot.JChatbot" />
+      <item itemvalue="Spring Boot.Application" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.JawceEngine" />
+        <item itemvalue="Spring Boot.Application" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -313,7 +311,55 @@
       <workItem from="1737120098918" duration="197000" />
       <workItem from="1737303964082" duration="72000" />
       <workItem from="1737988063136" duration="183000" />
-      <workItem from="1738046499512" duration="5566000" />
+      <workItem from="1738046499512" duration="5928000" />
+      <workItem from="1738073170323" duration="454000" />
+      <workItem from="1738155756211" duration="886000" />
+      <workItem from="1740492986672" duration="10000" />
+      <workItem from="1740493098915" duration="653000" />
+      <workItem from="1744525408315" duration="3763000" />
+      <workItem from="1744699884111" duration="1836000" />
+      <workItem from="1744707361677" duration="1401000" />
+      <workItem from="1744722219664" duration="10000" />
+      <workItem from="1744736512182" duration="4828000" />
+      <workItem from="1744784512107" duration="11028000" />
+      <workItem from="1744823566992" duration="2558000" />
+      <workItem from="1744883237030" duration="648000" />
+      <workItem from="1744887389187" duration="251000" />
+      <workItem from="1744908051003" duration="3368000" />
+      <workItem from="1744913949281" duration="1423000" />
+      <workItem from="1745327145134" duration="26000" />
+      <workItem from="1745392973013" duration="41000" />
+      <workItem from="1745394828881" duration="9842000" />
+      <workItem from="1745476787933" duration="3184000" />
+      <workItem from="1745500948279" duration="2344000" />
+      <workItem from="1745526098649" duration="844000" />
+      <workItem from="1745866810503" duration="3954000" />
+      <workItem from="1745914764282" duration="3065000" />
+      <workItem from="1745947020605" duration="2105000" />
+      <workItem from="1745952229475" duration="2554000" />
+      <workItem from="1745994392506" duration="12355000" />
+      <workItem from="1746043590775" duration="3027000" />
+      <workItem from="1746115728838" duration="5352000" />
+      <workItem from="1746166436620" duration="17313000" />
+      <workItem from="1746268441140" duration="4426000" />
+      <workItem from="1746331913117" duration="3903000" />
+      <workItem from="1746387787608" duration="529000" />
+      <workItem from="1746452846278" duration="2610000" />
+      <workItem from="1746468641823" duration="20000" />
+      <workItem from="1746513137107" duration="4395000" />
+      <workItem from="1746533140182" duration="3147000" />
+      <workItem from="1746557266530" duration="2884000" />
+      <workItem from="1746604276515" duration="16208000" />
+      <workItem from="1746687998401" duration="11903000" />
+      <workItem from="1746901320750" duration="1175000" />
+      <workItem from="1746907070374" duration="3127000" />
+      <workItem from="1746957903354" duration="5846000" />
+      <workItem from="1746982999548" duration="416000" />
+      <workItem from="1747073485976" duration="218000" />
+      <workItem from="1747153741565" duration="6192000" />
+      <workItem from="1747204448678" duration="6056000" />
+      <workItem from="1747312601521" duration="4011000" />
+      <workItem from="1747377878750" duration="1040000" />
     </task>
     <servers />
   </component>
@@ -330,5 +376,9 @@
         <option value="GitHub.CommitStatus" />
       </list>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

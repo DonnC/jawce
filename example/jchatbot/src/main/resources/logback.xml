@@ -8,7 +8,7 @@
     <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%yellow([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %highlight(%-5level)
-                %cyan(%30.30(%logger{25})) [%highlight(waId)=%red(%X{waId:-NONE})] - %msg%n
+                %cyan(%30.30(%logger{25})) [%highlight(waId)=%red(%X{waId:-NONE}):%highlight(waName)=%cyan(%X{waName:-NONE})] - %msg%n
             </pattern>
         </encoder>
     </appender>

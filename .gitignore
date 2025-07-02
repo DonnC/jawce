@@ -33,7 +33,5 @@ target
 data
 
 /session
+/.session
 *.session
-/lmdb
-/file-session
-/lmdb-session

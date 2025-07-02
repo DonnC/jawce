@@ -23,6 +23,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/example/kchatbot/pom.xml" />
+        <option value="$PROJECT_DIR$/jsession/pom.xml" />
         <option value="$PROJECT_DIR$/kengine/pom.xml" />
       </set>
     </option>
