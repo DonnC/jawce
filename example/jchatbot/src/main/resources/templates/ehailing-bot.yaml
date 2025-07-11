@@ -6,29 +6,29 @@
     body: "Hi {{ whatsappName }}, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
     footer: jawce
     buttons:
-      - Proceed
+      - eHailing
       - GitHub
   routes:
-    "proceed": "PICKUP-DRIVE-MAIN-MENU"
-    "github": "JAWCE-GITHUB-DOCS"
+    "ehailing": "PICKUP-DRIVE-MAIN-MENU"
+    "github": "DEVELOPER-GITHUB"
 
-"JAWCE-GITHUB-DOCS":
+"DEVELOPER-GITHUB":
   kind: cta
   message:
     title: "WCE"
-    body: "See EngineConfig docs and star, fork, share, donate or contribute 😀"
-    url: "https://github.com/DonnC"
+    body: "Checkout jawce repository. You are welcome to star, fork, share, donate or contribute 😀"
+    url: "https://github.com/DonnC/jawce"
     button: "Github"
   routes:
     "re:.*": "START-MENU"
 
 "PICKUP-DRIVE-MAIN-MENU":
   kind: button
-  prop: RideType
+  prop: rideType
   message:
     title: PickDrive
     body: "To offer you with exclusive riding experience {{ s.whatsappName }}, select your preferred ride type"
-    footer: JAWCE
+    footer: jawce
     buttons:
       - Ride
       - Standard
@@ -52,8 +52,7 @@
   kind: button
   message:
     title: Ride Fee
-    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 8mins"
-    footer: JAWCE
+    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in ~8mins"
     buttons:
       - Accept
       - Counter Offer
@@ -66,7 +65,7 @@
   prop: rideComment
   message: "Provide additional info to the driver"
   routes:
-    "re:.*": "AVAILABLE-DRIVERS"
+    "re:.*": "CONFIRM-OFFER"
 
 "CONFIRM-OFFER":
   kind: button
@@ -74,27 +73,25 @@
   message:
     title: PickDrive Ride
     body: |
-      Ride: {{ p.RideType }}
+      Ride: {{ p.rideType }}
       Driver: Donald
       Vehicle Color: Silver
       Reg Number: QZW 0123
       
       Confirm to notify the driver to come pick you up now
-    footer: JAWCE
     buttons:
       - Confirm
       - Abort
   routes:
     "confirm": "DRIVER-COMMAND-COME"
-    "abort": "PICKUP-DRIVE"
+    "abort": "PICKUP-DRIVE-MAIN-MENU"
 
 "DRIVER-COMMAND-COME":
   kind: button
   message:
     title: PickDrive
     body: "Driver is coming to your location now!"
-    footer: JAWCE
     buttons:
-      - Rate
+      - Report
   routes:
     "rate": "REPORT"

@@ -159,81 +159,83 @@ public class Worker {
 
     public void processWebhook(Map<String, Object> webhookPayload) {
         var webhook = this.initChecks(webhookPayload);
-        if(webhook.isEmpty()) return;
-        this.fireGlobalHook(webhook.get().user().waId());
 
-        try {
-            var result = this.webhookProcessor.process(webhook.get());
-            this.service.sendWhatsAppRequest(result);
-            session.save(webhook.get().user().waId(), SessionConstant.CURRENT_MSG_ID_KEY, webhook.get().user().msgId());
-        } catch (HookException e) {
-            log.error("Hook processing failed: {}", e.getMessage());
+        webhook.ifPresent(message -> {
+            this.fireGlobalHook(message.user().waId());
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Message")
-                            .buttons(List.of(EngineConstant.BTN_RETRY))
-                            .message(e.getMessage())
-                            .build()
-            );
-        } catch (TemplateRenderException e) {
-            log.error("Template render failed: {}", e.getMessage());
+            try {
+                var result = this.webhookProcessor.process(message);
+                this.service.sendWhatsAppRequest(result);
+                session.save(message.user().waId(), SessionConstant.CURRENT_MSG_ID_KEY, message.user().msgId());
+            } catch (HookException e) {
+                log.error("Hook processing failed: {}", e.getMessage());
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Message")
-                            .buttons(List.of(EngineConstant.BTN_RETRY, EngineConstant.BTN_REPORT))
-                            .message("Failed to process your message")
-                            .build()
-            );
-        } catch (ResponseException e) {
-            log.error("Engine response exception: {}", e.getError());
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Message")
+                                .buttons(List.of(EngineConstant.BTN_RETRY))
+                                .message(e.getMessage())
+                                .build()
+                );
+            } catch (TemplateRenderException e) {
+                log.error("Template render failed: {}", e.getMessage());
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Message")
-                            .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
-                            .message("%s.\n\n%s".formatted(e.getError().message(), "You may click the button to return to Menu"))
-                            .build()
-            );
-        } catch (UserSessionValidationException e) {
-            log.error("User session validation failed: {}", e.getMessage());
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Message")
+                                .buttons(List.of(EngineConstant.BTN_RETRY, EngineConstant.BTN_REPORT))
+                                .message("Failed to process your message")
+                                .build()
+                );
+            } catch (ResponseException e) {
+                log.error("Engine response exception: {}", e.getError());
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Message")
-                            .buttons(List.of(EngineConstant.BTN_MENU))
-                            .message("Could not process request\n\n_AMB Err_")
-                            .build()
-            );
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Message")
+                                .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
+                                .message("%s.\n\n%s".formatted(e.getError().message(), "You may click the button to return to Menu"))
+                                .build()
+                );
+            } catch (UserSessionValidationException e) {
+                log.error("User session validation failed: {}", e.getMessage());
 
-        } catch (SessionExpiredException | SessionInactivityException e) {
-            log.error("Session expired / inactive, clearing user session..");
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Message")
+                                .buttons(List.of(EngineConstant.BTN_MENU))
+                                .message("Could not process request\n\n_AMB Err_")
+                                .build()
+                );
 
-            session.clear(webhook.get().user().waId());
+            } catch (SessionExpiredException | SessionInactivityException e) {
+                log.error("Session expired / inactive, clearing user session..");
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Security Check 🔐")
-                            .footer("Session Expired")
-                            .buttons(List.of(EngineConstant.BTN_MENU))
-                            .message(e.getMessage())
-                            .build()
-            );
-        } catch (Exception e) {
-            log.error("Engine failed to process webhook: {}", e.getMessage(), e);
+                session.clear(message.user().waId());
 
-            this.sendQuickButtonMessage(
-                    QuickBtnTemplate.builder()
-                            .title("Message")
-                            .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
-                            .message("Something went wrong. Please try again later.")
-                            .build()
-            );
-        } finally {
-            MDC.remove(EngineConstant.MDC_WA_ID_KEY);
-            MDC.remove(EngineConstant.MDC_WA_NAME_KEY);
-        }
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Security Check 🔐")
+                                .footer("Session Expired")
+                                .buttons(List.of(EngineConstant.BTN_MENU))
+                                .message(e.getMessage())
+                                .build()
+                );
+            } catch (Exception e) {
+                log.error("Engine failed to process webhook: {}", e.getMessage(), e);
+
+                this.sendQuickButtonMessage(
+                        QuickBtnTemplate.builder()
+                                .title("Message")
+                                .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
+                                .message("Something went wrong. Please try again later.")
+                                .build()
+                );
+            } finally {
+                MDC.remove(EngineConstant.MDC_WA_ID_KEY);
+                MDC.remove(EngineConstant.MDC_WA_NAME_KEY);
+            }
+        });
     }
 
     @EventListener

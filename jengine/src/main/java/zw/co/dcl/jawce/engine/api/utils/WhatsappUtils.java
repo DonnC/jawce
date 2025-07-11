@@ -147,16 +147,15 @@ public class WhatsappUtils {
             if(messagesNode.isArray() && messagesNode.size() == 1) {
                 return messagesNode.get(0).path("id").asText().startsWith("wamid");
             }
-
-            return false;
         } catch (Exception err) {
-            return false;
+            log.debug("Failed to check for valid response: {}", err.getMessage());
         }
+        return false;
     }
 
     static public boolean isValidWebhookMessage(Map<String, Object> map) {
         if(map.containsKey("object") && map.get("object").equals("whatsapp_business_account")) {
-            List<Map<String, Object>> entries = (List<Map<String, Object>>) map.get("entry");
+           var entries = (List<Map<String, Object>>) map.get("entry");
             for (Map<String, Object> entry : entries) {
                 final List<Map<String, Object>> changes = (List<Map<String, Object>>) entry.get("changes");
                 Map<String, Object> valueMap = changes.get(0);

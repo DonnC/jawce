@@ -62,17 +62,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     void createInteractivePayload() {
         if(this.isInteractiveTemplate(this.template)) {
             var msg = this.extractInteractiveMessage(this.template);
-            Map<String, Object> data = new HashMap<>(Map.of("body", Map.of("text", msg.getBody())));
-
-            if(msg.getTitle() != null) {
-                data.put("header", Map.of("type", "text", "text", msg.getTitle()));
-            }
-
-            if(msg.getFooter() != null) {
-                data.put("footer", Map.of("text", msg.getFooter()));
-            }
-
-            this.interactivePayloadData = data;
+            this.interactivePayloadData = WhatsappUtils.getBaseInteractivePayload(msg);
         }
     }
 
@@ -308,7 +298,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             if(message.isDraft()) params.put("mode", "draft");
 
             params.put("flow_message_version", EngineConstant.CHANNEL_FLOW_VERSION);
-            params.put("flow_token", this.generateFlowToken(this.hookArg.getWaUser().name(), message.getName()));
+            params.put("flow_token", Objects.requireNonNullElseGet(message.getToken(), () -> this.generateFlowToken(this.hookArg.getWaUser().name(), message.getName())));
             params.put("flow_id", message.getFlowId());
             params.put("flow_cta", message.getButton());
             params.put("flow_action", EngineConstant.CHANNEL_SUPPORTED_FLOW_ACTION);

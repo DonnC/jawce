@@ -1,11 +1,9 @@
 package zw.co.dcl.jchatbot.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import zw.co.dcl.jawce.engine.api.Worker;
 import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
-import zw.co.dcl.jchatbot.util.Util;
 
 import java.util.Map;
 
@@ -25,6 +23,6 @@ public class WebhookService {
 
     public String processRequest(Map<String, Object> payload) {
         eventPublisher.publishEvent(new WebhookEvent(this, payload));
-        return "ok!";
+        return "ACK!";
     }
 }

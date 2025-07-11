@@ -4,11 +4,10 @@ jawce:
   start-menu: "START-MENU"
 
 whatsapp:
-  hub-token: some-hub-token
-  access-token: some-access-token
-  phone-number-id: your-phone-id
-  app-secret: your-app-secret
-  local-url: "http://localhost:3000/api/hook-response"
+  hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN
+  access-token: REPLACE-WITH-ACCESS-TOKEN
+  phone-number-id: REPLACE-WITH-PHONE-NUMBER-ID
+  app-secret: YOUR-APPLICATION-SECRET
 
 server:
   servlet:

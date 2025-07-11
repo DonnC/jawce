@@ -41,7 +41,10 @@ public abstract class BaseTemplateProcessor {
     protected ISessionManager session;
     Map<String, Object> params;
 
-    public BaseTemplateProcessor(HookService hookService, ISessionManager sessionManager, ITemplateStorageManager templateStorageManager, JawceConfig config) {
+    public BaseTemplateProcessor(
+            HookService hookService, ISessionManager sessionManager,
+            ITemplateStorageManager templateStorageManager, JawceConfig config
+    ) {
         this.hookService = hookService;
         this.sessionManager = sessionManager;
         this.templateStorageManager = templateStorageManager;

@@ -19,7 +19,10 @@ public class ClientHelperService {
     private final JawceConfig config;
     private final WhatsAppConfig whatsAppConfig;
 
-    public ClientHelperService(IClientManager clientManager, ISessionManager sessionManager, JawceConfig config, WhatsAppConfig whatsAppConfig) {
+    public ClientHelperService(
+            IClientManager clientManager, ISessionManager sessionManager,
+            JawceConfig config, WhatsAppConfig whatsAppConfig
+    ) {
         this.clientManager = clientManager;
         this.sessionManager = sessionManager;
         this.config = config;
