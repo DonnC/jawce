@@ -9,7 +9,7 @@ import zw.co.dcl.jawce.engine.model.abs.BaseInteractiveMessage;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MediaMessage extends BaseInteractiveMessage {
-    @JsonProperty("kind")
+    @JsonProperty("type")
     private String type;
     @JsonProperty("media-id")
     private String mediaId;

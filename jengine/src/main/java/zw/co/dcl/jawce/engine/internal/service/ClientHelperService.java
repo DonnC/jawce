@@ -63,7 +63,7 @@ public class ClientHelperService {
         }
     }
 
-    public String sendWhatsAppRequest(WebhookProcessorResult requestDto) throws Exception {
+    public String sendWhatsAppRequest(WebhookProcessorResult requestDto) {
         try {
             var response = this.clientManager.post(
                     WhatsappUtils.getUrl(this.whatsAppConfig),

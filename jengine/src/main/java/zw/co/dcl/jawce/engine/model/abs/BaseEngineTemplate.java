@@ -24,7 +24,7 @@ import java.util.Map;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "kind",
+        property = "type",
         visible = true
 )
 @JsonSubTypes({
@@ -40,7 +40,7 @@ import java.util.Map;
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseEngineTemplate implements Serializable {
-    @JsonProperty("kind")
+    @JsonProperty("type")
     private String type;
 
     @JsonSerialize(using = EngineRouteMapSerializer.class)
@@ -70,8 +70,4 @@ public abstract class BaseEngineTemplate implements Serializable {
     private String middleware;
 
     private Map params = new HashMap<>();
-
-    protected Map<String, Object> asPayload(String recipient) {
-        return new HashMap<>();
-    }
 }

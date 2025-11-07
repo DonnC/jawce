@@ -11,7 +11,7 @@ A dependency for creating complete WhatsApp chatbots with ease using a template-
 ## Setup
 For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
 
-> Developed with Java 17+ with maven
+> Developed with Java 17+ using maven
 
 1. Clone repository
 ```bash

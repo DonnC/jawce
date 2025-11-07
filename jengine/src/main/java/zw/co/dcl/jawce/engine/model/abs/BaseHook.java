@@ -8,6 +8,7 @@ import zw.co.dcl.jawce.engine.model.core.WaUser;
 import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -25,5 +26,5 @@ public abstract class BaseHook implements Serializable {
     private boolean hasAuth = false;
     private String hook;
     private String route;
-    private Map<String, Object> params;
+    private Map<String, Object> params = new HashMap<>();
 }
