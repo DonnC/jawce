@@ -1,38 +1,33 @@
-# an example chatbot stage templates
-# the templates can be separated into different files for easy management
-# stage names can be numbers or any supported YAML data type
-
 "START-MENU":
   type: button
-  template: "zw.co.dcl.jchatbot.hooks.GreetingHook:getDefaultUsername"
   message:
     title: PickDrive
-    body: "Hi {{ user }}, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
-    footer: JAWCE
+    body: "Hi {{ s.waName }}, I'm PickDrive Assistant - making your inner-city travelling a breeze.\n\nTo start, click the button below"
+    footer: jawce
     buttons:
-      - Proceed
+      - eHailing
       - GitHub
   routes:
-    "proceed": "PICKUP-DRIVE-MAIN-MENU"
-    "github": "JAWCE-GITHUB-DOCS"
+    "ehailing": "PICKUP-DRIVE-MAIN-MENU"
+    "github": "DEVELOPER-GITHUB"
 
-"JAWCE-GITHUB-DOCS":
+"DEVELOPER-GITHUB":
   type: cta
   message:
     title: "WCE"
-    body: "See Engine docs and star, fork, share, donate or contribute 😀"
-    url: "https://github.com/DonnC"
+    body: "Checkout jawce repository. You are welcome to star, fork, share, donate or contribute 😀"
+    url: "https://github.com/DonnC/jawce"
     button: "Github"
   routes:
     "re:.*": "START-MENU"
 
 "PICKUP-DRIVE-MAIN-MENU":
   type: button
-  prop: RideType
+  prop: rideType
   message:
     title: PickDrive
-    body: "To offer you with exclusive riding experience, select your preferred ride type"
-    footer: JAWCE
+    body: "To offer you with exclusive riding experience `{{ s.waName }}`, select your preferred ride type"
+    footer: jawce
     buttons:
       - Ride
       - Standard
@@ -56,8 +51,7 @@
   type: button
   message:
     title: Ride Fee
-    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in approx ~ 8mins"
-    footer: JAWCE
+    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in ~8mins"
     buttons:
       - Accept
       - Counter Offer
@@ -70,63 +64,34 @@
   prop: rideComment
   message: "Provide additional info to the driver"
   routes:
-    "re:.*": "AVAILABLE-DRIVERS"
-
-"AVAILABLE-DRIVERS":
-  type: list
-  prop: driver
-  message:
-    title: Available Drivers
-    body: "I found rides matching your choice. Select one you like and they will be ready to pick you up"
-    footer: JAWCE
-    button: Rides
-    sections:
-      "Available Rides":
-        0:
-          title: Donald | $3.50
-          description: Honda Fit, 300m - (4.0) ⭐
-        1:
-          title: Pamela | $3.20
-          description: Toyota Aqua, 300m - (3.8) ⭐
-        2:
-          title: Tanaka | $3.00
-          description: Honda Fit, 250m - (4.2) ⭐
-        3:
-          title: Constance | $4.00
-          description: Nissan Note, 100m - (2.8) ⭐
-        4:
-          title: Mr Smith | $3.00
-          description: Toyota Vitz, 320m - (3.2) ⭐
-  routes:
     "re:.*": "CONFIRM-OFFER"
 
 "CONFIRM-OFFER":
   type: button
-  on-receive: "rest:/ride/capture"
+  on-receive: "zw.co.dcl.jchatbot.hooks.CaptureHook.capture"
+  typing: true
   message:
     title: PickDrive Ride
     body: |
-      Ride: {{ p.RideType }}
-      Driver: Donald
-      Vehicle Color: Silver
-      Reg Number: QZW 0123
+      - Ride: `{{ p.rideType }}`
+      - Driver: `Donald`
+      - Vehicle Color: `Silver`
+      - Reg Number: `QZW 0123`
       
       Confirm to notify the driver to come pick you up now
-    footer: JAWCE
     buttons:
       - Confirm
       - Abort
   routes:
     "confirm": "DRIVER-COMMAND-COME"
-    "abort": "PICKUP-DRIVE"
+    "abort": "PICKUP-DRIVE-MAIN-MENU"
 
 "DRIVER-COMMAND-COME":
   type: button
   message:
     title: PickDrive
     body: "Driver is coming to your location now!"
-    footer: JAWCE
     buttons:
-      - Rate
+      - Report
   routes:
     "rate": "REPORT"

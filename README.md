@@ -1,59 +1,28 @@
 # Java WhatsApp ChatBot Engine
-A dependency for creating WhatsApp chatbots using a template-driven approach.
-
-Templates use YAML allowing you to define conversation flows and business logic in a clean and modular
-way.
+A dependency for creating complete WhatsApp chatbots with ease using a template-driven approach.
 
 ## Features
-
-- **Template-Driven Design**: Use YAML templates for conversational flows.
+- **Template-Driven Design**: By default, you can use YAML | JSON templates for conversational flows. But you can implement your own TemplateStorageManager
 - **Hooks for Business Logic**: Attach Java classes / RESTful endpoints to process messages or actions.
 - Abstracts the API for WhatsApp Cloud.
+- Supports all official WhatsApp message types including Flows
 - Supports dynamic messages with placeholders.
 
 ## Setup
 For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
 
-> Developed with Java 17
+> Developed with Java 17+ using maven
 
 1. Clone repository
 ```bash
 git clone git@github.com:DonnC/jawce.git
 ```
 2. Install all project maven dependencies
-- Start by installing dependencies in the `jsession` folder
-- Next, install `jengine` folder dependencies
-- Finally install dependencies for the `example/jchabot` folder
+- Install main engine dependencies in`jengine` folder
+- Install dependencies for the `example/jchabot` folder
+
 3. Navigate to the example chatbot >`example/jchatbot/src/main/resources/application.yml` properties file 
 and replace configs with your WhatsApp account configs
-
-```yaml
-chatbot:
-  configs:
-    # ~ snippet ~
-    hub-token: "your-webhook-hub-challenge-token"
-    phone-number-id: "your-phone-number-id"
-    access-token: "your-access-token"
-```
-4. Configure chatbot resources under the `resources` section
-```yaml
-resources:
-  templates: "path-to-templates-dir"
-  triggers: "path-to-triggers-dir"
-  watcher: "path-to-watcher-dir"
-```
-
-Configure the full path to where the resources are, for example. 
-
-If you clone the project in `C:\\Projects` folder, it will be like below
-```yaml
-resources:
-    templates: C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\templates
-    triggers:  C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\triggers
-    watcher:   C:\\Projects\\jawce\\example\\jchatbot\\src\\main\\resources\\watch
-```
-
-> The watcher is used to listen to file changes in the watch dir which will trigger all templates to reload without restarting the service.
 
 ### Engine dependency
 > Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/example/jchatbot) for a quick getting started template

@@ -12,7 +12,7 @@
     <artifactId>jchatbot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>jchatbot</name>
-    <description>JAWCE example WhatsApp ChatBot</description>
+    <description>WhatsApp chatbot example with jawce</description>
 
     <url/>
     <licenses>
@@ -77,17 +77,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>templates/**</exclude>
-                    <exclude>triggers/**</exclude>
-                    <exclude>watch/**</exclude>
-                </excludes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -1,14 +1,20 @@
 package zw.co.dcl.jawce.engine.model.dto;
 
-import zw.co.dcl.jawce.engine.enums.WebhookResponseMessageType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public record TemplateDynamicBody(
-        WebhookResponseMessageType type,
-        // for Flow payload
-        Map<String, Object> payload,
-        // for Template payload
-        Map<String, Object> renderPayload
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TemplateDynamicBody implements Serializable {
+    private BaseEngineTemplate template;
+    private Map<String, Object> flowPayload;
+    private Map<String, Object> renderPayload;
 }

@@ -1,24 +1,13 @@
-resources:
-  # TODO: replace with your path to these folders
-  templates:
-  triggers:
-  watcher:
-  hooks:
-    base-url: "http://localhost:${server.port}${server.servlet.context-path}"
-    security-token: "my-secure-secret-token"
+jawce:
+  has-auth: false
+  tag-on-reply: true
+  start-menu: "START-MENU"
 
-chatbot:
-  configs:
-    initial-stage: "START-MENU"
-    session-ttl: 30
-    # TODO: replace with your credentials
-    hub-token: "your-webhook-hub-challenge-token"
-    phone-number-id: "your-phone-number-id"
-    access-token: "your-access-token"
-
-channel-config:
-  test-local: false
-  local-url: "http://localhost:3000/api/hook-response"
+whatsapp:
+  hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN
+  access-token: REPLACE-WITH-ACCESS-TOKEN
+  phone-number-id: REPLACE-WITH-PHONE-NUMBER-ID
+  app-secret: YOUR-APPLICATION-SECRET
 
 server:
   servlet:
@@ -26,5 +15,7 @@ server:
   port: 8080
 
 spring:
+  mustache:
+    check-template-location: false
   application:
-    name: "JAWCE-CHATBOT"
+    name: "jawce-chatbot"
