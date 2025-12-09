@@ -59,6 +59,7 @@ public abstract class BaseEngineTemplate implements Serializable {
     private boolean isTransient = false;
     @JsonProperty("message-id")
     private String replyMessageId;
+    private String reaction;
 
     // hooks
     private String template;

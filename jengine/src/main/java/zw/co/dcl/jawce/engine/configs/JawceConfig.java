@@ -12,16 +12,17 @@ import org.springframework.context.annotation.Configuration;
 public class JawceConfig {
     private boolean handleSessionQueue = true;
     private boolean handleSessionInactivity = true;
-    private boolean hasAuth = false;
     private boolean tagOnReply = false;
     private boolean readReceipts = false;
-    private boolean logInvalidWebhooks = false;
+    private boolean logInvalidWebhooks = true;
+    private boolean emulate = false;
     private int sessionTtlMins = 30;
-    private long debounceTimeoutMs = 6000;
+    private long debounceTimeoutMs = 3000;
     private int webhookTimestampThresholdSecs = 10;
     private String startMenu;
     private String restHookAuthToken;
     private String restHookBaseUrl;
+    private String emulatorUrl = "http://localhost:3001/send-to-emulator";
 
     // --- global hooks
 

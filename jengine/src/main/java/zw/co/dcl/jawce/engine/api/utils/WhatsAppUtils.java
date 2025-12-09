@@ -12,7 +12,7 @@ import zw.co.dcl.jawce.engine.api.enums.WebhookIntrMsgType;
 import zw.co.dcl.jawce.engine.api.enums.WebhookResponseMessageType;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.ResponseException;
-import zw.co.dcl.jawce.engine.api.exceptions.WhatsappException;
+import zw.co.dcl.jawce.engine.api.exceptions.WhatsAppException;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.internal.dto.ResponseError;
@@ -29,13 +29,13 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 @Slf4j
-public class WhatsappUtils {
+public class WhatsAppUtils {
     static final List<String> supportedTypes = List.of("text", "document", "interactive", "button",
             "unknown", "location", "image", "video", "audio", "sticker");
 
     public static Optional<WaUser> getUser(Map<String, Object> webhookPayload, int webhookTtl) {
         if(isRequestErrorMessage(webhookPayload)) {
-            throw new WhatsappException(webhookPayload.toString());
+            throw new WhatsAppException(webhookPayload.toString());
         }
         if(!isValidWebhookMessage(webhookPayload)) {
             throw new InternalException("invalid channel message received");
@@ -65,9 +65,7 @@ public class WhatsappUtils {
     }
 
     public static String getUrl(WhatsAppConfig config) {
-        return config.getLocalUrl() != null ?
-                config.getLocalUrl() :
-                EngineConstant.CHANNEL_BASE_URL
+        return EngineConstant.CHANNEL_BASE_URL
                         + config.getApiVersion() + "/"
                         + config.getPhoneNumberId()
                         + EngineConstant.CHANNEL_MESSAGE_SUFFIX;

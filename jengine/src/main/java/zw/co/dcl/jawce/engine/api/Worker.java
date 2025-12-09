@@ -10,7 +10,7 @@ import zw.co.dcl.jawce.engine.api.dto.QuickBtnTemplate;
 import zw.co.dcl.jawce.engine.api.exceptions.*;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.utils.PayloadGenerator;
-import zw.co.dcl.jawce.engine.api.utils.WhatsappUtils;
+import zw.co.dcl.jawce.engine.api.utils.WhatsAppUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
@@ -89,13 +89,13 @@ public class Worker {
     }
 
     Optional<Webhook> initChecks(Map<String, Object> webhookPayload) {
-        var userOpt = WhatsappUtils.getUser(webhookPayload, this.jawceConfig.getWebhookTimestampThresholdSecs());
+        var userOpt = WhatsAppUtils.getUser(webhookPayload, this.jawceConfig.getWebhookTimestampThresholdSecs());
         if(userOpt.isEmpty()) return Optional.empty();
 
         var user = userOpt.get();
         var sessionId = user.waId();
-        var message = WhatsappUtils.extractMessage(webhookPayload);
-        var messageType = WhatsappUtils.isValidSupportedMessageType(message);
+        var message = WhatsAppUtils.extractMessage(webhookPayload);
+        var messageType = WhatsAppUtils.isValidSupportedMessageType(message);
         this.session = this.session.session(sessionId);
 
         if(this.jawceConfig.isHandleSessionQueue()) {
@@ -108,7 +108,9 @@ public class Worker {
         Long lastDebounceTimestamp = this.session.get(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, Long.class);
         long currentTime = System.currentTimeMillis();
 
-        if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= this.jawceConfig.getDebounceTimeoutMs()) {
+        var debounceTime = this.jawceConfig.isEmulate() ? 0 : this.jawceConfig.getDebounceTimeoutMs();
+
+        if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= debounceTime) {
             this.session.save(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, currentTime);
         } else {
             log.warn("Message ignored due to debounce..");
@@ -118,6 +120,16 @@ public class Worker {
         if(this.jawceConfig.isHandleSessionQueue()) {
             this.addToMessageQueue(user);
         }
+
+        // --- save session defaults
+        if(this.session.get(sessionId, SessionConstant.DEFAULT_WA_USERNAME, String.class) == null) {
+            this.session.save(sessionId, SessionConstant.DEFAULT_WA_USERNAME, user.name());
+        }
+
+        if(this.session.get(sessionId, SessionConstant.DEFAULT_WA_MOBILE, String.class) == null) {
+            this.session.save(sessionId, SessionConstant.DEFAULT_WA_MOBILE, user.waId());
+        }
+        // --- end
 
         return Optional.of(new Webhook(user, messageType, message));
     }

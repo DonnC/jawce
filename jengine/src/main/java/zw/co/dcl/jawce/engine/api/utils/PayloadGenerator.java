@@ -62,7 +62,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     void createInteractivePayload() {
         if(this.isInteractiveTemplate(this.template)) {
             var msg = this.extractInteractiveMessage(this.template);
-            this.interactivePayloadData = WhatsappUtils.getBaseInteractivePayload(msg);
+            this.interactivePayloadData = WhatsAppUtils.getBaseInteractivePayload(msg);
         }
     }
 
@@ -73,7 +73,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
 
     public Map<String, Object> text() {
         var payload = new HashMap<>(
-                WhatsappUtils.getCommonPayload(
+                WhatsAppUtils.getCommonPayload(
                         this.hookArg.getWaUser().waId(),
                         PayloadType.TEXT,
                         this.replyMessageId
@@ -93,7 +93,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> locationRequest() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 this.replyMessageId));
@@ -114,7 +114,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> location() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.LOCATION,
                 this.replyMessageId));
@@ -138,7 +138,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
 
     public Map<String, Object> media() {
         var payload = new HashMap<>(
-                WhatsappUtils.getCommonPayload(
+                WhatsAppUtils.getCommonPayload(
                         this.hookArg.getWaUser().waId(),
                         PayloadType.MEDIA,
                         this.replyMessageId
@@ -167,7 +167,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> button() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -201,7 +201,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> list() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -247,7 +247,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> cta() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -276,7 +276,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> flow() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 this.replyMessageId

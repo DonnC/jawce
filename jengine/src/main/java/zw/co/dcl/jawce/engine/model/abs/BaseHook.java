@@ -23,8 +23,7 @@ public abstract class BaseHook implements Serializable {
     private Map<String, Object> additionalData;
     private TemplateDynamicBody templateDynamicBody;
     private boolean fromTrigger = false;
-    private boolean hasAuth = false;
     private String hook;
-    private String route;
+    private String redirectTo;
     private Map<String, Object> params = new HashMap<>();
 }

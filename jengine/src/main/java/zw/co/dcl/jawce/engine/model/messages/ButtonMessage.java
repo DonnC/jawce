@@ -10,4 +10,5 @@ import java.util.List;
 @Data
 public class ButtonMessage extends BaseInteractiveMessage {
     private List<String> buttons;
+    private MediaMessage header;
 }

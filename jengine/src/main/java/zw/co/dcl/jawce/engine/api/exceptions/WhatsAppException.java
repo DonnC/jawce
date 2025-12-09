@@ -9,8 +9,8 @@ package zw.co.dcl.jawce.engine.api.exceptions;
  * like billable errors or channel exception
  * with detailed error code message
  */
-public class WhatsappException extends BaseEngineException {
-    public WhatsappException(String message) {
+public class WhatsAppException extends BaseEngineException {
+    public WhatsAppException(String message) {
         super(message);
     }
 }

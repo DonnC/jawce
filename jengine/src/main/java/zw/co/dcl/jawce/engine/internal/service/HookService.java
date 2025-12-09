@@ -86,58 +86,130 @@ public class HookService {
         }
     }
 
+//    Hook processReflectiveHook(Hook arg) throws Exception {
+//        // e.g., "com.myapp.MyHookClass.process"
+//        int lastDot = arg.getHook().lastIndexOf('.');
+//        if(lastDot == -1) {
+//            throw new InternalException("Invalid hook path: " + arg.getHook());
+//        }
+//
+//        var classNamePath = arg.getHook().substring(0, lastDot);
+//        var methodName = arg.getHook().substring(lastDot + 1);
+//
+//        Class<?> hookClass;
+//        Object hookObj;
+//
+//        try {
+//            hookClass = Class.forName(classNamePath);
+//
+//            try {
+//                hookObj = this.applicationContext.getBean(hookClass);
+//                log.debug("Loaded hook bean from Spring context: {}", classNamePath);
+//            } catch (BeansException ex) {
+//                log.warn("Spring bean not found, falling back to manual instantiation: {}", classNamePath);
+//                hookObj = createHookInstance(hookClass, arg);
+//            }
+//
+//            var method = hookClass.getDeclaredMethod(methodName, Hook.class);
+//            var response = method.invoke(hookObj, arg);
+//
+//            if(!(response instanceof Hook)) {
+//                throw new InternalException("Reflective hook must return a Hook, but got: " +
+//                        (response == null ? "null" : response.getClass().getName()));
+//            }
+//
+//            return (Hook) response;
+//        } catch (Exception ex) {
+//            log.error("Error during reflective hook execution", ex);
+//            throw ex;
+//        }
+//    }
+
+
     Hook processReflectiveHook(Hook arg) throws Exception {
-        // e.g., "com.myapp.MyHookClass.process"
         int lastDot = arg.getHook().lastIndexOf('.');
-        if(lastDot == -1) {
-            throw new InternalException("Invalid hook path: " + arg.getHook());
-        }
+        if(lastDot == -1) throw new InternalException("Invalid hook path: " + arg.getHook());
 
         var classNamePath = arg.getHook().substring(0, lastDot);
         var methodName = arg.getHook().substring(lastDot + 1);
 
-        Class<?> hookClass;
+        Class<?> hookClass = Class.forName(classNamePath);
         Object hookObj;
 
         try {
-            hookClass = Class.forName(classNamePath);
-
-            try {
-                hookObj = this.applicationContext.getBean(hookClass);
-                log.debug("Loaded hook bean from Spring context: {}", classNamePath);
-            } catch (BeansException ex) {
-                log.warn("Spring bean not found, falling back to manual instantiation: {}", classNamePath);
-                hookObj = createHookInstance(hookClass, arg);
-            }
-
-            var method = hookClass.getDeclaredMethod(methodName, Hook.class);
-            var response = method.invoke(hookObj, arg);
-
-            if(!(response instanceof Hook)) {
-                throw new InternalException("Reflective hook must return a Hook, but got: " +
-                        (response == null ? "null" : response.getClass().getName()));
-            }
-
-            return (Hook) response;
-        } catch (Exception ex) {
-            log.error("Error during reflective hook execution", ex);
-            throw ex;
+            hookObj = this.applicationContext.getBean(hookClass);
+            log.debug("Loaded hook bean from Spring context: {}", classNamePath);
+        } catch (BeansException ex) {
+            log.warn("Spring bean not found, falling back to manual instantiation: {}", classNamePath);
+            hookObj = createHookInstance(hookClass, arg);
         }
+
+        Method method = null;
+        Object response;
+
+        // Try method(Hook)
+        try {
+            method = hookClass.getDeclaredMethod(methodName, Hook.class);
+            method.setAccessible(true);
+            response = method.invoke(hookObj, arg);
+        } catch (NoSuchMethodException e1) {
+            // Try no-arg method
+            try {
+                method = hookClass.getDeclaredMethod(methodName);
+                method.setAccessible(true);
+                response = method.invoke(hookObj);
+            } catch (NoSuchMethodException e2) {
+                throw new InternalException("No suitable method found for hook: " + arg.getHook(), e2);
+            }
+        }
+
+        if(!(response instanceof Hook)) {
+            throw new InternalException("Reflective hook must return a Hook, but got: " +
+                    (response == null ? "null" : response.getClass().getName()));
+        }
+
+        return (Hook) response;
     }
 
+//    Object createHookInstance(Class<?> hookClass, Hook arg) throws Exception {
+//        try {
+//            var ctor = hookClass.getDeclaredConstructor(Hook.class);
+//            return ctor.newInstance(arg);
+//        } catch (NoSuchMethodException e) {
+//            var instance = hookClass.getDeclaredConstructor().newInstance();
+//            try {
+//                var setter = hookClass.getMethod("setHook", Hook.class);
+//                setter.invoke(instance, arg);
+//                return instance;
+//            } catch (NoSuchMethodException nsme) {
+//                throw new InternalException(
+//                        "Hook class must have a constructor or setter accepting Hook: " + hookClass.getName(), nsme);
+//            }
+//        }
+//    }
+
     Object createHookInstance(Class<?> hookClass, Hook arg) throws Exception {
+        // Try constructor(Hook)
         try {
-            var ctor = hookClass.getDeclaredConstructor(Hook.class);
+            Constructor<?> ctor = hookClass.getDeclaredConstructor(Hook.class);
+            ctor.setAccessible(true);
             return ctor.newInstance(arg);
         } catch (NoSuchMethodException e) {
-            var instance = hookClass.getDeclaredConstructor().newInstance();
+            // Try no-arg constructor + setHook(Hook) setter
             try {
-                var setter = hookClass.getMethod("setHookArg", Hook.class);
-                setter.invoke(instance, arg);
-                return instance;
-            } catch (NoSuchMethodException nsme) {
+                Object instance = hookClass.getDeclaredConstructor().newInstance();
+                try {
+                    var setter = hookClass.getMethod("setHook", Hook.class);
+                    setter.invoke(instance, arg);
+                    return instance;
+                } catch (NoSuchMethodException nsme) {
+                    // No setter — but if the hook method accepts Hook as parameter,
+                    // a plain instance is still usable. Return the no-arg instance.
+                    return instance;
+                }
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException ex) {
                 throw new InternalException(
-                        "Hook class must have a constructor or setter accepting Hook: " + hookClass.getName(), nsme);
+                        "Hook class must have a constructor or setter or field accepting Hook: " + hookClass.getName(), ex);
             }
         }
     }

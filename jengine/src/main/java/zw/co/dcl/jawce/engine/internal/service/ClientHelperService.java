@@ -1,16 +1,15 @@
 package zw.co.dcl.jawce.engine.internal.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
+import zw.co.dcl.jawce.engine.api.iface.IClientManager;
+import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.utils.Utils;
-import zw.co.dcl.jawce.engine.api.utils.WhatsappUtils;
+import zw.co.dcl.jawce.engine.api.utils.WhatsAppUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
-import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
-import zw.co.dcl.jawce.engine.api.iface.IClientManager;
-import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 
 @Slf4j
 public class ClientHelperService {
@@ -36,7 +35,7 @@ public class ClientHelperService {
             var stageCode = session.get(requestDto.sessionId(), SessionConstant.CURRENT_STAGE);
             session.save(requestDto.sessionId(), SessionConstant.PREV_STAGE, stageCode);
             session.save(requestDto.sessionId(), SessionConstant.CURRENT_STAGE, requestDto.nextRoute());
-            log.debug("[onSuccess] Current route set to: {}", requestDto.nextRoute());
+            log.debug("[onSuccess{}] Current route set to: {}", this.config.isEmulate() ? "(emulated)" : "", requestDto.nextRoute());
         }
         if(config.isHandleSessionInactivity()) {
             session.save(
@@ -66,12 +65,12 @@ public class ClientHelperService {
     public String sendWhatsAppRequest(WebhookProcessorResult requestDto) {
         try {
             var response = this.clientManager.post(
-                    WhatsappUtils.getUrl(this.whatsAppConfig),
+                    this.config.isEmulate() ? this.config.getEmulatorUrl() : WhatsAppUtils.getUrl(this.whatsAppConfig),
                     requestDto.payload(),
-                    WhatsappUtils.getHeaders(this.whatsAppConfig)
+                    WhatsAppUtils.getHeaders(this.whatsAppConfig)
             );
 
-            if(WhatsappUtils.isValidRequestResponse(response.getBody())) {
+            if(WhatsAppUtils.isValidRequestResponse(response.getBody()) || this.config.isEmulate()) {
                 this.onWhatsappRequestSuccess(requestDto);
                 return response.getBody();
             }
@@ -80,7 +79,7 @@ public class ClientHelperService {
             throw new InternalException("There was a problem. Unsuccessful channel response code");
         } catch (Exception e) {
             this.onRequestError(requestDto.sessionId());
-            throw new InternalException("Failed to process Whatsapp Cloud request", e);
+            throw new InternalException("Failed to process WhatsApp Cloud request", e);
         }
     }
 }
