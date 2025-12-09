@@ -1,5 +1,6 @@
 package zw.co.dcl.jawce.engine.model.abs;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -23,7 +24,7 @@ import java.util.Map;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "kind",
+        property = "type",
         visible = true
 )
 @JsonSubTypes({
@@ -36,10 +37,10 @@ import java.util.Map;
         @JsonSubTypes.Type(value = MediaTemplate.class, name = TemplateType.MEDIA),
         @JsonSubTypes.Type(value = RequestLocationTemplate.class, name = TemplateType.REQUEST_LOCATION),
         @JsonSubTypes.Type(value = TemplateTemplate.class, name = TemplateType.TEMPLATE)
-        // Add all other template types here
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseEngineTemplate implements Serializable {
-    @JsonProperty("kind")
+    @JsonProperty("type")
     private String type;
 
     @JsonSerialize(using = EngineRouteMapSerializer.class)
@@ -51,12 +52,14 @@ public abstract class BaseEngineTemplate implements Serializable {
     private boolean acknowledged = false;
     private boolean authenticated = false;
     private boolean checkpoint = false;
+    private boolean typing = false;
     private String prop;
     private boolean session = true;
     @JsonProperty("transient")
     private boolean isTransient = false;
     @JsonProperty("message-id")
     private String replyMessageId;
+    private String reaction;
 
     // hooks
     private String template;
@@ -68,8 +71,4 @@ public abstract class BaseEngineTemplate implements Serializable {
     private String middleware;
 
     private Map params = new HashMap<>();
-
-    protected Map<String, Object> asPayload(String recipient) {
-        return new HashMap<>();
-    };
 }

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.ResponseException;
-import zw.co.dcl.jawce.engine.api.exceptions.WhatsappException;
+import zw.co.dcl.jawce.engine.api.exceptions.WhatsAppException;
 import zw.co.dcl.jawce.engine.model.core.HookRest;
 import zw.co.dcl.jawce.engine.api.iface.IClientManager;
 
@@ -51,12 +51,12 @@ public class RestTemplateClientManager implements IClientManager {
 
             if(e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 log.error("POST auth error: {}", e.getResponseBodyAsString());
-                throw new WhatsappException("Unauthorized access to WhatsApp. Check credentials");
+                throw new WhatsAppException("Unauthorized access to WhatsApp. Check credentials");
             }
 
             if(e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 log.error("POST bad request: {}", e.getResponseBodyAsString());
-                throw new WhatsappException("Bad request to WhatsApp. Check request payload");
+                throw new WhatsAppException("Bad request to WhatsApp. Check request payload");
             }
 
             throw new InternalException("Failed to process WhatsApp request", e);

@@ -1,5 +1,5 @@
 # Java WhatsApp ChatBot Engine
-A dependency for creating WhatsApp chatbots using a template-driven approach.
+A dependency for creating complete WhatsApp chatbots with ease using a template-driven approach.
 
 ## Features
 - **Template-Driven Design**: By default, you can use YAML | JSON templates for conversational flows. But you can implement your own TemplateStorageManager
@@ -11,15 +11,16 @@ A dependency for creating WhatsApp chatbots using a template-driven approach.
 ## Setup
 For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
 
-> Developed with Java 17
+> Developed with Java 17+ using maven
 
 1. Clone repository
 ```bash
 git clone git@github.com:DonnC/jawce.git
 ```
 2. Install all project maven dependencies
-- Install `jengine` folder dependencies
-- Install dependencies for the `example/jchabot` folder if running the example bot
+- Install main engine dependencies in`jengine` folder
+- Install dependencies for the `example/jchabot` folder
+
 3. Navigate to the example chatbot >`example/jchatbot/src/main/resources/application.yml` properties file 
 and replace configs with your WhatsApp account configs
 

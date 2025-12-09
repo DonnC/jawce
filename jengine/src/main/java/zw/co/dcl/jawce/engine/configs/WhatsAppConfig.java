@@ -11,10 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "whatsapp")
 public class WhatsAppConfig {
-    private String localUrl;
     private String hubToken;
     private String accessToken;
     private String phoneNumberId;
     private String appSecret;
-    private String apiVersion = "v22.0";
+    private String apiVersion = "v24.0";
 }

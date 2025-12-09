@@ -1,5 +1,6 @@
 package zw.co.dcl.jchatbot.service.engine;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,9 @@ public class FileSessionManager implements ISessionManager {
     private final String USER_PROPS_KEY = "jProps";
     private final String SESSION_FILE_EXT = ".session";
 
+    @Getter
     private final Path SESSION_DIR;
+    @Getter
     private final Path GLOBAL_SESSION_FILE;
 
     private FileSessionManager() {

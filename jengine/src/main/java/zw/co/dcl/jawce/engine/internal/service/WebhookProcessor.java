@@ -31,7 +31,10 @@ public class WebhookProcessor extends BaseTemplateProcessor {
     int nestedCallCount = 0;
     List<PreProcessorResult> nestedPreProcessorResults = new ArrayList<>();
 
-    public WebhookProcessor(HookService hookService, ISessionManager sessionManager, ITemplateStorageManager templateStorageManager, JawceConfig config) {
+    public WebhookProcessor(
+            HookService hookService, ISessionManager sessionManager,
+            ITemplateStorageManager templateStorageManager, JawceConfig config
+    ) {
         super(hookService, sessionManager, templateStorageManager, config);
     }
 

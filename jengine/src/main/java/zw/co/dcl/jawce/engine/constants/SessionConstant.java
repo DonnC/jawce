@@ -53,4 +53,8 @@ public class SessionConstant {
 
     // session message history queue
     public final static String SESSION_MESSAGE_HISTORY_KEY = "jMsgHistory";
+
+    // defaults
+    public final static String DEFAULT_WA_USERNAME = "waName";
+    public final static String DEFAULT_WA_MOBILE = "waMobile";
 }

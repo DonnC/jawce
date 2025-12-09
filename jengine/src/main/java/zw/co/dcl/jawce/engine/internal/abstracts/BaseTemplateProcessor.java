@@ -2,13 +2,12 @@ package zw.co.dcl.jawce.engine.internal.abstracts;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
 import zw.co.dcl.jawce.engine.api.utils.SerializeUtils;
 import zw.co.dcl.jawce.engine.api.utils.Utils;
-import zw.co.dcl.jawce.engine.api.utils.WhatsappUtils;
+import zw.co.dcl.jawce.engine.api.utils.WhatsAppUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
@@ -41,7 +40,10 @@ public abstract class BaseTemplateProcessor {
     protected ISessionManager session;
     Map<String, Object> params;
 
-    public BaseTemplateProcessor(HookService hookService, ISessionManager sessionManager, ITemplateStorageManager templateStorageManager, JawceConfig config) {
+    public BaseTemplateProcessor(
+            HookService hookService, ISessionManager sessionManager,
+            ITemplateStorageManager templateStorageManager, JawceConfig config
+    ) {
         this.hookService = hookService;
         this.sessionManager = sessionManager;
         this.templateStorageManager = templateStorageManager;
@@ -56,7 +58,7 @@ public abstract class BaseTemplateProcessor {
 
         // initialize
         this.getCurrentTemplate();
-        this.userInput = WhatsappUtils.getUserInput(message, stage);
+        this.userInput = WhatsAppUtils.getUserInput(message, stage);
         this.processGlobalTriggersOnInput();
         this.checkSessionByPass();
         this.saveCheckpoint();
@@ -143,7 +145,7 @@ public abstract class BaseTemplateProcessor {
             try {
                 processHookParams(null);
                 this.hookArg.setHook(this.template.getRouter());
-                return this.hookService.processHook(this.hookArg).getRoute();
+                return this.hookService.processHook(this.hookArg).getRedirectTo();
             } catch (Exception e) {
                 log.warn("Failed to process dynamic router hook: {}", e.getMessage());
             }
@@ -185,7 +187,7 @@ public abstract class BaseTemplateProcessor {
         this.session.save(this.sessionId, SessionConstant.CURRENT_STAGE, this.stage);
 
         if(trigger.getInnerNextStage() != null) {
-            this.hookArg.setRoute(trigger.getInnerNextStage());
+            this.hookArg.setRedirectTo(trigger.getInnerNextStage());
         }
 
         return true;

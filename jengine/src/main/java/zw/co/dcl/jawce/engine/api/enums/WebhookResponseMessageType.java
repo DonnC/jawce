@@ -5,11 +5,21 @@ public enum WebhookResponseMessageType {
     MEDIA,
     IMAGE,
     DOCUMENT,
+    VIDEO,
+    AUDIO,
+    REACTION,
+    ORDER,
+    STICKER,
     TEXT,
     UNKNOWN, // for currently unsupported msgs
     CTA_BUTTON,
     BUTTON,
     TEMPLATE,
     INTERACTIVE,
-    LOCATION
+    LOCATION,
+
+    // --- inner interactive types
+    INTERACTIVE_LIST,
+    INTERACTIVE_BUTTON,
+    INTERACTIVE_FLOW
 }

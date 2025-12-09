@@ -11,6 +11,7 @@ import zw.co.dcl.jawce.engine.model.abs.BaseInteractiveMessage;
 public class FlowMessage extends BaseInteractiveMessage {
     @JsonProperty("flow-id")
     private String flowId;
+    private String token;
     private boolean draft = true;
     private String name;
     private String button;

@@ -62,17 +62,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     void createInteractivePayload() {
         if(this.isInteractiveTemplate(this.template)) {
             var msg = this.extractInteractiveMessage(this.template);
-            Map<String, Object> data = new HashMap<>(Map.of("body", Map.of("text", msg.getBody())));
-
-            if(msg.getTitle() != null) {
-                data.put("header", Map.of("type", "text", "text", msg.getTitle()));
-            }
-
-            if(msg.getFooter() != null) {
-                data.put("footer", Map.of("text", msg.getFooter()));
-            }
-
-            this.interactivePayloadData = data;
+            this.interactivePayloadData = WhatsAppUtils.getBaseInteractivePayload(msg);
         }
     }
 
@@ -83,7 +73,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
 
     public Map<String, Object> text() {
         var payload = new HashMap<>(
-                WhatsappUtils.getCommonPayload(
+                WhatsAppUtils.getCommonPayload(
                         this.hookArg.getWaUser().waId(),
                         PayloadType.TEXT,
                         this.replyMessageId
@@ -103,7 +93,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> locationRequest() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 this.replyMessageId));
@@ -124,7 +114,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> location() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.LOCATION,
                 this.replyMessageId));
@@ -148,7 +138,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
 
     public Map<String, Object> media() {
         var payload = new HashMap<>(
-                WhatsappUtils.getCommonPayload(
+                WhatsAppUtils.getCommonPayload(
                         this.hookArg.getWaUser().waId(),
                         PayloadType.MEDIA,
                         this.replyMessageId
@@ -177,7 +167,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> button() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -211,7 +201,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> list() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -257,7 +247,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> cta() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 replyMessageId
@@ -286,7 +276,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
     }
 
     public Map<String, Object> flow() {
-        var payload = new HashMap<>(WhatsappUtils.getCommonPayload(
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
                 this.hookArg.getWaUser().waId(),
                 PayloadType.INTERACTIVE,
                 this.replyMessageId
@@ -308,7 +298,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             if(message.isDraft()) params.put("mode", "draft");
 
             params.put("flow_message_version", EngineConstant.CHANNEL_FLOW_VERSION);
-            params.put("flow_token", this.generateFlowToken(this.hookArg.getWaUser().name(), message.getName()));
+            params.put("flow_token", Objects.requireNonNullElseGet(message.getToken(), () -> this.generateFlowToken(this.hookArg.getWaUser().name(), message.getName())));
             params.put("flow_id", message.getFlowId());
             params.put("flow_cta", message.getButton());
             params.put("flow_action", EngineConstant.CHANNEL_SUPPORTED_FLOW_ACTION);

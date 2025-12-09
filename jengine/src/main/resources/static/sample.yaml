@@ -1,9 +1,10 @@
-"ALL_HOOKS":
+"TEMPLATE_HOOKS_FIELDS":
   type: text
   checkpoint: true
   ack: true
   authenticated: true
   transient: true
+  typing: true
   prop: propKey
   router: dynamic-route-hook
   on-receive: "/api/login"

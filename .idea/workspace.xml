@@ -5,10 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/RestTemplateClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/RestTemplateClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/WebhookResponseMessageType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/WebhookResponseMessageType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/exceptions/WhatsappException.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/exceptions/WhatsAppException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/hooks/DefaultHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/CaptureHook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsappUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsAppUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/WhatsAppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/WhatsAppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/ClientHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/ClientHelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ButtonMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,12 +76,20 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testSingletonInstance.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testThreadSafeSingleton.executor&quot;: &quot;Run&quot;,
     &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
@@ -89,6 +116,7 @@
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.JChatbot.executor&quot;: &quot;Run&quot;,
@@ -97,7 +125,8 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;feat/revamp&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -120,7 +149,7 @@
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.JChatbot">
+  <component name="RunManager" selected="Application.JCHATBOT LOCAL">
     <configuration name="JCHATBOT LOCAL" type="Application" factoryName="Application">
       <envs>
         <env name="spring.profiles.active" value="local" />
@@ -141,15 +170,82 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="jengine" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="zw.co.dcl.jawce.engine.Application" />
+    <configuration name="FileSessionManagerTest.testCleanUpDeletesSessionDirectory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jchatbot" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="zw.co.dcl.jawce.engine.*" />
+          <option name="PATTERN" value="zw.co.dcl.jchatbot.service.engine.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="zw.co.dcl.jchatbot.service.engine" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.service.engine.FileSessionManagerTest" />
+      <option name="METHOD_NAME" value="testCleanUpDeletesSessionDirectory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileSessionManagerTest.testGetInstanceDoesNotThrow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jchatbot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zw.co.dcl.jchatbot.service.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="zw.co.dcl.jchatbot.service.engine" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.service.engine.FileSessionManagerTest" />
+      <option name="METHOD_NAME" value="testGetInstanceDoesNotThrow" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileSessionManagerTest.testGlobalSessionFileIsCreated" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jchatbot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zw.co.dcl.jchatbot.service.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="zw.co.dcl.jchatbot.service.engine" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.service.engine.FileSessionManagerTest" />
+      <option name="METHOD_NAME" value="testGlobalSessionFileIsCreated" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileSessionManagerTest.testSessionDirectoryIsCreated" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jchatbot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zw.co.dcl.jchatbot.service.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="zw.co.dcl.jchatbot.service.engine" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.service.engine.FileSessionManagerTest" />
+      <option name="METHOD_NAME" value="testSessionDirectoryIsCreated" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileSessionManagerTest.testThreadSafeSingleton" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jchatbot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zw.co.dcl.jchatbot.service.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="zw.co.dcl.jchatbot.service.engine" />
+      <option name="MAIN_CLASS_NAME" value="zw.co.dcl.jchatbot.service.engine.FileSessionManagerTest" />
+      <option name="METHOD_NAME" value="testThreadSafeSingleton" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -187,22 +283,30 @@
     </configuration>
     <list>
       <item itemvalue="Application.JCHATBOT LOCAL" />
+      <item itemvalue="JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory" />
+      <item itemvalue="JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow" />
+      <item itemvalue="JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated" />
+      <item itemvalue="JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated" />
+      <item itemvalue="JUnit.FileSessionManagerTest.testThreadSafeSingleton" />
       <item itemvalue="Spring Boot.ChatbotApplication" />
       <item itemvalue="Spring Boot.JawceEngineKtApplication" />
       <item itemvalue="Spring Boot.JChatbot" />
-      <item itemvalue="Spring Boot.Application" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.Application" />
+        <item itemvalue="JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory" />
+        <item itemvalue="JUnit.FileSessionManagerTest.testThreadSafeSingleton" />
+        <item itemvalue="JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow" />
+        <item itemvalue="JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated" />
+        <item itemvalue="JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-30f59d01ecdd-cffe25b9f5b3-intellij.indexing.shared.core-IU-253.28294.334" />
+        <option value="bundled-js-predefined-d6986cc7102b-c7e53b3be11b-JavaScript-IU-253.28294.334" />
       </set>
     </attachedChunks>
   </component>
@@ -360,6 +464,14 @@
       <workItem from="1747204448678" duration="6056000" />
       <workItem from="1747312601521" duration="4011000" />
       <workItem from="1747377878750" duration="1040000" />
+      <workItem from="1751966776122" duration="857000" />
+      <workItem from="1752166459810" duration="2203000" />
+      <workItem from="1752216030551" duration="4024000" />
+      <workItem from="1753966135669" duration="54000" />
+      <workItem from="1755167032181" duration="4837000" />
+      <workItem from="1757669500983" duration="863000" />
+      <workItem from="1765289139828" duration="1474000" />
+      <workItem from="1765306203162" duration="7235000" />
     </task>
     <servers />
   </component>
