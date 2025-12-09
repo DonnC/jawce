@@ -1,7 +1,6 @@
 jawce:
-  has-auth: false
-  tag-on-reply: true
   start-menu: "START-MENU"
+  emulate: true
 
 whatsapp:
   hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN
@@ -11,8 +10,7 @@ whatsapp:
 
 server:
   servlet:
-    context-path: "/jawce"
-  port: 8080
+    context-path: "/chatbot"
 
 spring:
   mustache:
