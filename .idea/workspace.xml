@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/ClientHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/ClientHelperService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SupportedMessageType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SupportedMessageType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/MediaMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/MediaMessage.java" afterDir="false" />
-    </list>
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,65 +57,66 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testSingletonInstance.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.FileSessionManagerTest.testThreadSafeSingleton.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.engine [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.engine [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jawce [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jchatbot [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jengine [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jengine [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.kt-engine [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.session [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-vcs.roots.invalid&quot;: &quot;Invalid VCS root mapping&quot;,
-    &quot;Notification.DoNotAsk-vcs.roots.invalid&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.JChatbot.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.JawceEngine.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.JchatbotApplication.executor&quot;: &quot;Run&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/revamp&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/jawce/chatbot&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.uml&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.JCHATBOT LOCAL.executor": "Run",
+    "JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor": "Run",
+    "JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor": "Run",
+    "JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor": "Run",
+    "JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated.executor": "Run",
+    "JUnit.FileSessionManagerTest.testSingletonInstance.executor": "Run",
+    "JUnit.FileSessionManagerTest.testThreadSafeSingleton.executor": "Run",
+    "Maven.chatbot [clean,install].executor": "Run",
+    "Maven.chatbot [clean].executor": "Run",
+    "Maven.engine [clean,install].executor": "Run",
+    "Maven.engine [clean].executor": "Run",
+    "Maven.engine [install].executor": "Run",
+    "Maven.java-engine [clean,install].executor": "Run",
+    "Maven.jawce [clean,install].executor": "Run",
+    "Maven.jawce-java-engine [clean,install].executor": "Run",
+    "Maven.jawce-session [clean,install].executor": "Run",
+    "Maven.jchatbot [clean,install].executor": "Run",
+    "Maven.jchatbot [clean].executor": "Run",
+    "Maven.jengine [clean,install].executor": "Run",
+    "Maven.jengine [clean].executor": "Run",
+    "Maven.jengine [install].executor": "Run",
+    "Maven.jsession [clean,install].executor": "Run",
+    "Maven.kengine [clean,install].executor": "Run",
+    "Maven.kt-engine [clean,install].executor": "Run",
+    "Maven.session [clean,install].executor": "Run",
+    "Notification.DisplayName-DoNotAsk-vcs.roots.invalid": "Invalid VCS root mapping",
+    "Notification.DoNotAsk-vcs.roots.invalid": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ChatbotApplication.executor": "Run",
+    "Spring Boot.JChatbot.executor": "Run",
+    "Spring Boot.JawceEngine.executor": "Run",
+    "Spring Boot.JchatbotApplication.executor": "Run",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feat/revamp",
+    "jdk.selected.JAVA_MODULE": "corretto-17",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.uml",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\jengine\src\main\resources\META-INF\spring" />
@@ -288,8 +281,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+        <option value="bundled-jdk-30f59d01ecdd-cffe25b9f5b3-intellij.indexing.shared.core-IU-253.28294.334" />
+        <option value="bundled-js-predefined-d6986cc7102b-c7e53b3be11b-JavaScript-IU-253.28294.334" />
       </set>
     </attachedChunks>
   </component>
@@ -453,6 +446,7 @@
       <workItem from="1753966135669" duration="54000" />
       <workItem from="1755167032181" duration="4837000" />
       <workItem from="1757669500983" duration="863000" />
+      <workItem from="1765289139828" duration="977000" />
     </task>
     <servers />
   </component>
