@@ -4,6 +4,6 @@ import java.util.Map;
 
 public record UserInput(
         String input,
-        Map<String, Object> additionalData
+        Map<String, Object> data
 ) {
 }

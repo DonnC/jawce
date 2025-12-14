@@ -86,46 +86,6 @@ public class HookService {
         }
     }
 
-//    Hook processReflectiveHook(Hook arg) throws Exception {
-//        // e.g., "com.myapp.MyHookClass.process"
-//        int lastDot = arg.getHook().lastIndexOf('.');
-//        if(lastDot == -1) {
-//            throw new InternalException("Invalid hook path: " + arg.getHook());
-//        }
-//
-//        var classNamePath = arg.getHook().substring(0, lastDot);
-//        var methodName = arg.getHook().substring(lastDot + 1);
-//
-//        Class<?> hookClass;
-//        Object hookObj;
-//
-//        try {
-//            hookClass = Class.forName(classNamePath);
-//
-//            try {
-//                hookObj = this.applicationContext.getBean(hookClass);
-//                log.debug("Loaded hook bean from Spring context: {}", classNamePath);
-//            } catch (BeansException ex) {
-//                log.warn("Spring bean not found, falling back to manual instantiation: {}", classNamePath);
-//                hookObj = createHookInstance(hookClass, arg);
-//            }
-//
-//            var method = hookClass.getDeclaredMethod(methodName, Hook.class);
-//            var response = method.invoke(hookObj, arg);
-//
-//            if(!(response instanceof Hook)) {
-//                throw new InternalException("Reflective hook must return a Hook, but got: " +
-//                        (response == null ? "null" : response.getClass().getName()));
-//            }
-//
-//            return (Hook) response;
-//        } catch (Exception ex) {
-//            log.error("Error during reflective hook execution", ex);
-//            throw ex;
-//        }
-//    }
-
-
     Hook processReflectiveHook(Hook arg) throws Exception {
         int lastDot = arg.getHook().lastIndexOf('.');
         if(lastDot == -1) throw new InternalException("Invalid hook path: " + arg.getHook());
@@ -170,23 +130,6 @@ public class HookService {
 
         return (Hook) response;
     }
-
-//    Object createHookInstance(Class<?> hookClass, Hook arg) throws Exception {
-//        try {
-//            var ctor = hookClass.getDeclaredConstructor(Hook.class);
-//            return ctor.newInstance(arg);
-//        } catch (NoSuchMethodException e) {
-//            var instance = hookClass.getDeclaredConstructor().newInstance();
-//            try {
-//                var setter = hookClass.getMethod("setHook", Hook.class);
-//                setter.invoke(instance, arg);
-//                return instance;
-//            } catch (NoSuchMethodException nsme) {
-//                throw new InternalException(
-//                        "Hook class must have a constructor or setter accepting Hook: " + hookClass.getName(), nsme);
-//            }
-//        }
-//    }
 
     Object createHookInstance(Class<?> hookClass, Hook arg) throws Exception {
         // Try constructor(Hook)

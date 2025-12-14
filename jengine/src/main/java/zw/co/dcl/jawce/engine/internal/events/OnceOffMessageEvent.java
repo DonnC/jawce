@@ -3,6 +3,7 @@ package zw.co.dcl.jawce.engine.internal.events;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
+import zw.co.dcl.jawce.engine.model.core.WaUser;
 
 /**
  * Event class used for handling once-off messaging events within the application.
@@ -25,9 +26,11 @@ import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 @Getter
 public class OnceOffMessageEvent extends ApplicationEvent {
     private final BaseEngineTemplate template;
+    private final WaUser user;
 
-    public OnceOffMessageEvent(Object source, BaseEngineTemplate template) {
+    public OnceOffMessageEvent(Object source, WaUser user, BaseEngineTemplate template) {
         super(source);
+        this.user = user;
         this.template = template;
     }
 }

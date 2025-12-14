@@ -17,8 +17,9 @@ import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
 import zw.co.dcl.jawce.engine.internal.events.OnceOffHookEvent;
+import zw.co.dcl.jawce.engine.internal.events.OnceOffMessageEvent;
 import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
-import zw.co.dcl.jawce.engine.internal.service.ClientHelperService;
+import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.model.core.Hook;
 import zw.co.dcl.jawce.engine.model.core.WaUser;
@@ -33,7 +34,7 @@ public class Worker {
     final ApplicationEventPublisher eventPublisher;
     final WhatsAppConfig waConfig;
     final JawceConfig jawceConfig;
-    final ClientHelperService service;
+    final WhatsAppHelperService service;
     final WebhookProcessor webhookProcessor;
     ISessionManager session;
 
@@ -41,13 +42,13 @@ public class Worker {
             ApplicationEventPublisher eventPublisher,
             WhatsAppConfig whatsAppConfig,
             JawceConfig jawceConfig,
-            ClientHelperService clientHelperService,
+            WhatsAppHelperService whatsAppHelperService,
             WebhookProcessor webhookProcessor,
             ISessionManager sessionManager) {
         this.eventPublisher = eventPublisher;
         this.waConfig = whatsAppConfig;
         this.jawceConfig = jawceConfig;
-        this.service = clientHelperService;
+        this.service = whatsAppHelperService;
         this.webhookProcessor = webhookProcessor;
         this.session = sessionManager;
     }
@@ -95,7 +96,7 @@ public class Worker {
         var user = userOpt.get();
         var sessionId = user.waId();
         var message = WhatsAppUtils.extractMessage(webhookPayload);
-        var messageType = WhatsAppUtils.isValidSupportedMessageType(message);
+        var responseStructure = WhatsAppUtils.getResponseStructure(message);
         this.session = this.session.session(sessionId);
 
         if(this.jawceConfig.isHandleSessionQueue()) {
@@ -131,7 +132,7 @@ public class Worker {
         }
         // --- end
 
-        return Optional.of(new Webhook(user, messageType, message));
+        return Optional.of(new Webhook(user, responseStructure));
     }
 
     @SneakyThrows
@@ -156,12 +157,40 @@ public class Worker {
                 btn,
                 hook,
                 null,
-                null
+                null,
+                this.jawceConfig.isTagOnReply()
         );
 
         var payload = new PayloadGenerator(messageRequest).generate();
         var resultPayload = new WebhookProcessorResult(payload, null, button.getRecipient(), false);
         this.service.sendWhatsAppRequest(resultPayload);
+    }
+
+    public void processOnceOffMessage(OnceOffMessageEvent event) {
+        try {
+            var hook = new Hook();
+            hook.setSession(this.session.session(event.getUser().waId()));
+            hook.setSessionId(event.getUser().waId());
+            hook.setWaUser(event.getUser());
+
+            var messageRequest = new PayloadGeneratorDto(
+                    event.getTemplate(),
+                    hook,
+                    null,
+                    null,
+                    false
+            );
+
+            var payload = new PayloadGenerator(messageRequest).generate();
+            var resultPayload = new WebhookProcessorResult(payload, null, event.getUser().waId(), false);
+           var response = this.service.sendWhatsAppRequest(resultPayload);
+
+           log.info("Once-off-message result: {}", WhatsAppUtils.isValidRequestResponse(response));
+        }
+
+        catch(Exception e) {
+            log.error("Error processing once off message", e);
+        }
     }
 
     public int verifyHubToken(String mode, String challenge, String token) {
@@ -177,8 +206,9 @@ public class Worker {
 
             try {
                 var result = this.webhookProcessor.process(message);
-                this.service.sendWhatsAppRequest(result);
+                var response = this.service.sendWhatsAppRequest(result);
                 session.save(message.user().waId(), SessionConstant.CURRENT_MSG_ID_KEY, message.user().msgId());
+                log.debug("Webhook process response result: {} for msg: {}", WhatsAppUtils.isValidRequestResponse(response), message.user().msgId());
             } catch (HookException e) {
                 log.error("Hook processing failed: {}", e.getMessage());
 
@@ -248,6 +278,11 @@ public class Worker {
                 MDC.remove(EngineConstant.MDC_WA_NAME_KEY);
             }
         });
+    }
+
+    @EventListener
+    public void handleMessageEvent(OnceOffMessageEvent event) {
+        this.processOnceOffMessage(event);
     }
 
     @EventListener

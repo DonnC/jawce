@@ -8,6 +8,7 @@ public record PayloadGeneratorDto(
         BaseEngineTemplate template,
         Hook hookArg,
         String stage,
-        HookService hookService
+        HookService hookService,
+        boolean globalTagOnReply
 ) {
 }

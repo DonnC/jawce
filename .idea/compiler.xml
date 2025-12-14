@@ -7,7 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="jchatbot" />
+        <module name="ehailing" />
       </profile>
       <profile name="Annotation profile for jengine" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -19,6 +19,15 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
         </processorPath>
         <module name="jengine" />
+      </profile>
+      <profile name="Annotation profile for server" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,12 +41,13 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ehailing" options="-parameters" />
       <module name="jawce-engine-kt" options="-parameters" />
-      <module name="jchatbot" options="-parameters" />
       <module name="jengine" options="-parameters" />
       <module name="jsession" options="-parameters" />
       <module name="kchatbot" options="-parameters" />
       <module name="kengine" options="-parameters" />
+      <module name="server" options="-parameters" />
       <module name="session" options="-parameters" />
     </option>
   </component>

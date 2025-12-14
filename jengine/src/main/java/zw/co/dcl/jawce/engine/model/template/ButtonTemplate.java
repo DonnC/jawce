@@ -14,5 +14,4 @@ public class ButtonTemplate extends BaseEngineTemplate {
     public ButtonTemplate() {
         this.setType(TemplateType.BUTTON);
     }
-
 }

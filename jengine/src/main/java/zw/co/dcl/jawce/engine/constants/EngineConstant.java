@@ -1,7 +1,7 @@
 package zw.co.dcl.jawce.engine.constants;
 
 public class EngineConstant {
-    public static final String SESSION_ID_HEADER_KEY = "X-JAWCE-SESSION-ID";
+    public static final String SESSION_ID_HEADER_KEY = "X-WA-ID";
     public static final String MDC_WA_ID_KEY = "waId";
     public static final String MDC_WA_NAME_KEY = "waName";
 
@@ -17,6 +17,7 @@ public class EngineConstant {
     public final static String CHANNEL_FLOW_VERSION = "3";
     public final static String CHANNEL_SUPPORTED_FLOW_ACTION = "navigate";
     public final static String CHANNEL_MESSAGE_SUFFIX = "/messages";
+    public final static String CHANNEL_MEDIA_SUFFIX = "/media";
 
     // --- default
     public final static String BTN_RETRY = "Retry";

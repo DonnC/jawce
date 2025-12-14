@@ -1,0 +1,21 @@
+jawce:
+  start-menu: "START-MENU"
+  emulate: true
+
+whatsapp:
+  hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN
+  access-token: REPLACE-WITH-ACCESS-TOKEN
+  phone-number-id: REPLACE-WITH-PHONE-NUMBER-ID
+  app-secret: YOUR-APPLICATION-SECRET
+
+server:
+  servlet:
+    context-path: "/chatbot"
+
+  port: 8000
+
+spring:
+  mustache:
+    check-template-location: false
+  application:
+    name: "ehailing-chatbot"

@@ -12,6 +12,7 @@ import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,11 @@ public class SerializeUtils {
                 });
             }
 
+            if(object instanceof byte[] content) {
+                return objectMapper.readValue(content, Map.class);
+            }
+
+
             String json = objectMapper.writeValueAsString(object);
             return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
             });
@@ -57,6 +63,10 @@ public class SerializeUtils {
 
     static public String toJsonString(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
+    }
+
+    static public byte[] toByteArray(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(object);
     }
 
     static public JsonNode readStringAsTree(String data) throws JsonProcessingException {
