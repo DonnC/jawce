@@ -49,37 +49,18 @@ public class WhatsAppUtils {
             Map.entry("nfm_reply", MessageTypeEnum.INTERACTIVE_FLOW)
     );
 
-    public static Optional<WaUser> getUser(Map<String, Object> webhookPayload, int webhookTtl) {
-        if(isRequestErrorMessage(webhookPayload)) {
-            throw new WhatsAppException(webhookPayload.toString());
-        }
+    public static Optional<WaUser> getUser(Map<String, Object> webhookPayload) {
         if(!isValidWebhookMessage(webhookPayload)) {
-            throw new InternalException("invalid channel message received");
+            log.warn("WhatsApp invalid webhook message received: {}", webhookPayload);
+            return Optional.empty();
         }
 
-        if(hasChannelMsgObject(webhookPayload)) {
-            var msgData = extractMessage(webhookPayload);
+        WaUser waUser = computeUser(webhookPayload);
 
-            var responseStructure = getResponseStructure(msgData);
-            if(responseStructure.type().equals(MessageTypeEnum.UNSUPPORTED)) {
-                throw new InternalException("unsupported message response");
-            }
+        MDC.put(EngineConstant.MDC_WA_ID_KEY, waUser.waId());
+        MDC.put(EngineConstant.MDC_WA_NAME_KEY, waUser.name());
 
-            WaUser waUser = computeUser(webhookPayload);
-
-            MDC.put(EngineConstant.MDC_WA_ID_KEY, waUser.waId());
-            MDC.put(EngineConstant.MDC_WA_NAME_KEY, waUser.name());
-
-            if(isOldWebhook(waUser.timestamp(), webhookTtl)) {
-                log.warn("Old webhook received: {}. Discarded!", convertTimestamp(waUser.timestamp()));
-                return Optional.empty();
-            }
-
-            return Optional.of(waUser);
-        }
-
-        log.warn("No message obj, ignoring..");
-        return Optional.empty();
+        return Optional.of(waUser);
     }
 
     public static String getMediaIdUrl(WhatsAppConfig config, String mediaId) {
@@ -199,8 +180,13 @@ public class WhatsAppUtils {
         return false;
     }
 
-    public static ResponseStructure getResponseStructure(Map<String, Object> message) {
-        log.info("GET RESPONSE STRUCTURE RECEIVED MESSAGE: {}", message);
+    public static ResponseStructure getResponseStructure(Map<String, Object> payload, boolean extractMessage) {
+        Map<String, Object> message = new HashMap<>(payload);
+
+        if(extractMessage) {
+            message = extractMessage(payload);
+        }
+
         if(!message.containsKey("type")) return new ResponseStructure(MessageTypeEnum.UNSUPPORTED, null);
 
         var messageType = message.get("type").toString().toLowerCase();
@@ -226,8 +212,6 @@ public class WhatsAppUtils {
 
             return new ResponseStructure(type, (Map) message.get("interactive"));
         }
-
-        log.info("FOUND SUPPORTED MESSAGE MAPPED: {} >>> {}", type, message.get(messageType));
 
         return new ResponseStructure(type, (Map) message.get(messageType));
     }
@@ -315,15 +299,20 @@ public class WhatsAppUtils {
     }
 
     public static Map<String, Object> extractMessage(Map<String, Object> map) {
-        var entries = (List<Map<String, Object>>) map.get("entry");
-        for (Map<String, Object> entry : entries) {
-            var changes = (List<Map<String, Object>>) entry.get("changes");
-            for (Map<String, Object> change : changes) {
-                var value = (Map<String, Object>) change.get("value");
-                var messages = (List<Map<String, Object>>) value.get("messages");
-                if(!messages.isEmpty()) return messages.get(0);
+        if(hasChannelMsgObject(map)) {
+            var entries = (List<Map<String, Object>>) map.get("entry");
+            for (Map<String, Object> entry : entries) {
+                var changes = (List<Map<String, Object>>) entry.get("changes");
+                for (Map<String, Object> change : changes) {
+                    var value = (Map<String, Object>) change.get("value");
+                    var messages = (List<Map<String, Object>>) value.get("messages");
+                    if(!messages.isEmpty()) return messages.get(0);
+                }
             }
+            return new HashMap<>();
         }
+
+        log.warn("No WhatsApp channel message object found.");
         return new HashMap<>();
     }
 

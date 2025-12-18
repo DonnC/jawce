@@ -12,6 +12,7 @@ import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import zw.co.dcl.jawce.engine.api.exceptions.WhatsAppException;
 import zw.co.dcl.jawce.engine.api.utils.SerializeUtils;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
@@ -32,9 +33,8 @@ import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
+@Service
 public class WhatsAppFlowService {
-
-
     private final WhatsAppConfig config;
     private PrivateKey privateKey;
 

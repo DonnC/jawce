@@ -1,0 +1,81 @@
+"START-MENU":
+  type: button
+  message:
+    title: Todo
+    body: "Hi `{{ s.waName }}`, Let's get started creating today's tasks"
+    footer: jawce
+    buttons:
+      - Tasks
+      - GitHub
+      - Live Support
+  routes:
+    "tasks": "TASKS-MENU"
+    "github": "DEVELOPER-GITHUB"
+    "live support": "LIVE-CHAT"
+
+"DEVELOPER-GITHUB":
+  type: cta
+  message:
+    title: "WCE"
+    body: "Checkout jawce repository. You are welcome to star, fork, share, donate or contribute 😀"
+    url: "https://github.com/DonnC/jawce"
+    button: "Github"
+  routes:
+    "re:.*": "START-MENU"
+
+"LIVE-CHAT":
+  type: text
+  template: "org.dcl.jawce.server.hook.LiveSupportHookService.enable"
+  message: "{{ message }}"
+  routes:
+    "re:.*": "START-MENU"
+
+"HELP-MENU":
+  type: button
+  message:
+    title: Help
+    body: |
+      This is a simple help section
+      
+      - This chatbot enables you to manage your day by viewing your Tasks or TODO list.
+      - You are also able to chat live with an Agent via Live Support
+      🙂
+    footer: jawce
+    buttons:
+      - Menu
+  routes:
+    "menu": "START-MENU"
+
+"TASKS-MENU":
+  type: text
+  message: |
+      Let's get your day organized.
+      
+      > Select an option below
+    
+      1. Create task
+      2. View tasks
+      3. Help
+      4. Menu
+  routes:
+    "1": "CREATE-TASK"
+    "2": "VIEW-TASKS"
+    "3": "HELP-MENU"
+    "4": "START-MENU"
+
+"CREATE-TASK":
+  type: text
+  reaction: "✍🏼"
+  typing: true
+  on-receive: "org.dcl.jawce.server.hook.TaskHookService.newTask"
+  message: "Kindly provide your next task name?"
+  routes:
+    "re:.*": "TASKS-MENU"
+
+"VIEW-TASKS":
+  type: text
+  typing: true
+  template: "org.dcl.jawce.server.hook.TaskHookService.fetchTasks"
+  message: "{{ message }}"
+  routes:
+    "re:.*": "TASKS-MENU"

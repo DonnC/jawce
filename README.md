@@ -19,13 +19,15 @@ git clone git@github.com:DonnC/jawce.git
 ```
 2. Install all project maven dependencies
 - Install main engine dependencies in`jengine` folder
-- Install dependencies for the `example/jchabot` folder
+- Install dependencies for the examples in the `example/` folder
 
-3. Navigate to the example chatbot >`example/jchatbot/src/main/resources/application.yml` properties file 
+3. Navigate to the example chatbot >`example/ehailing/src/main/resources/application.yml` properties file 
 and replace configs with your WhatsApp account configs
 
+> Checkout the complete local [WhatsApp Chatbot Emulator](https://github.com/DonnC/wce-emulator.git) tool!
+
 ### Engine dependency
-> Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/example/jchatbot) for a quick getting started template
+> Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/example/ehailing) for a quick getting started template
 
 To include the jengine in your own project.
 
@@ -37,7 +39,7 @@ In your `pom.xml` dependencies add the following
 <dependency>
     <groupId>zw.co.dcl.jawce</groupId>
     <artifactId>jengine</artifactId>
-    <version>1.0.0</version>
+    <version>LATEST-VERSION</version>
     <scope>compile</scope>
 </dependency>
 ```

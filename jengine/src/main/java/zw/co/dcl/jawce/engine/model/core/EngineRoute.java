@@ -1,6 +1,9 @@
 package zw.co.dcl.jawce.engine.model.core;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Common trigger<br>
@@ -15,9 +18,13 @@ import lombok.Data;
  */
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EngineRoute {
     private String userInput;
     private String nextStage;
+    @Builder.Default
     private boolean isRegex = true;
 
     // for inner route

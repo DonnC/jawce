@@ -5,64 +5,80 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/controller/WhatsAppFlowController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/WhatsAppFlowConstant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppFlowService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/FlowEndpointPayload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/FlowEndpointResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ResponseStructure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/OnWhatsAppMessageEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/component/ChatWebSocketHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/configs/EngineConfigs.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/configs/FilterConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/configs/WebSocketConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/constant/ChatStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/constant/Constant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/constant/MessageType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/constant/SenderType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/controller/WebhookController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/hook/LiveSupportHookService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/hook/TaskHookService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/LiveModeCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/WebSocketMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/WebSocketPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/entity/Chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/entity/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/model/entity/Task.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/repository/ChatRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/repository/MessageRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/repository/TaskRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/service/LsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/service/engine/FileSessionManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/service/engine/RestTemplateClientManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/java/org/dcl/jawce/server/service/engine/YmlJsonTemplateStorageManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/application-local.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/templates/menu.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/templates/report.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/triggers/triggers.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/mvnw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/JChatbot.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/EhailingApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/EngineConfigs.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/configs/EngineConfigs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/configs/FilterConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/configs/FilterConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/controller/WebhookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/controller/WebhookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/hooks/CaptureHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/hooks/CaptureHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/WebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/service/WebhookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/FileSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/service/engine/FileSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/RestTemplateClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/service/engine/RestTemplateClientManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/service/engine/YmlJsonTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/service/engine/YmlJsonTemplateStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/java/zw/co/dcl/jchatbot/util/Util.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/templates/report.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/report.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/main/resources/triggers/triggers.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/triggers/triggers.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/test/java/zw/co/dcl/jchatbot/JChatbotTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/test/java/zw/co/dcl/ehailing/EhailingApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/jchatbot/src/test/java/zw/co/dcl/jchatbot/service/engine/FileSessionManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/test/java/zw/co/dcl/ehailing/service/engine/FileSessionManagerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/live-support/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/live-support/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/live-support/server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/dto/PayloadGeneratorDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/dto/PayloadGeneratorDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/WebhookIntrMsgType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/InteractiveTypeEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/WebhookResponseMessageType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/enums/MessageTypeEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/iface/IClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/iface/IClientManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/PayloadGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/SerializeUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/SerializeUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsAppUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/utils/WhatsAppUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/WhatsAppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/WhatsAppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/EngineConstant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/UserInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/UserInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/Webhook.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/Webhook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/events/OnceOffMessageEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/events/OnceOffMessageEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/ClientHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SupportedMessageType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppFlowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppFlowService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseHook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseInteractiveMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseInteractiveMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseTemplateMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseTemplateMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/EngineRoute.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/EngineRoute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/Hook.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/Hook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/HookRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/core/HookRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ListSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ListSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ResponseStructure.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/ResponseStructure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SectionRowItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SectionRowItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ButtonMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ButtonMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/CatalogMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/CatalogMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/CtaMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/CtaMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/FlowMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/FlowMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ListMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/ListMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/LocationMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/LocationMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/MediaMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/MediaMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/TemplateMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/messages/TemplateMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ButtonTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/CtaTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/DynamicTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/DynamicTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/FlowTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/FlowTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ListTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/ListTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/LocationTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/LocationTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/MediaTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/MediaTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/RequestLocationTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/RequestLocationTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/TemplateTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/TemplateTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/TextTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/template/TextTemplate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +93,8 @@
         <option value="Kotlin Class" />
         <option value="Interface" />
         <option value="Record" />
+        <option value="Enum" />
+        <option value="com.intellij.jpb.JpaRepository" />
         <option value="Class" />
       </list>
     </option>
@@ -127,6 +145,7 @@
   &quot;keyToString&quot;: {
     &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
     &quot;Application.LOCAL CONFIG.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LOCAL LS CONFIG.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor&quot;: &quot;Run&quot;,
@@ -170,7 +189,7 @@
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce/example/live-support/server/src/main/java/org/dcl/jawce/server&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -186,6 +205,11 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\wce\jawce\example\live-support\server\src\main\java\org\dcl\jawce\server" />
+      <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\wce\jawce\example\live-support\server\src\main\resources" />
+      <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\wce\jawce\example\live-support\server\src\main\java\org\dcl\jawce\server\service" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\jengine\src\main\resources\META-INF\spring" />
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\example" />
@@ -193,13 +217,33 @@
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\jawce\chatbot\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.LOCAL CONFIG">
-    <configuration name="LOCAL CONFIG" type="Application" factoryName="Application">
+  <component name="RunManager" selected="Application.LOCAL LS CONFIG">
+    <configuration name="LOCAL EHAILING CONFIG" type="Application" factoryName="Application">
       <envs>
         <env name="spring.profiles.active" value="local" />
       </envs>
       <option name="MAIN_CLASS_NAME" value="zw.co.dcl.ehailing.EhailingApplication" />
       <module name="ehailing" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LOCAL LS CONFIG" type="Application" factoryName="Application">
+      <envs>
+        <env name="spring.profiles.active" value="local" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="org.dcl.jawce.server.ServerApplication" />
+      <module name="server" />
       <extension name="net.ashald.envfile">
         <option name="IS_ENABLED" value="false" />
         <option name="IS_SUBST" value="false" />
@@ -340,7 +384,8 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.LOCAL CONFIG" />
+      <item itemvalue="Application.LOCAL EHAILING CONFIG" />
+      <item itemvalue="Application.LOCAL LS CONFIG" />
       <item itemvalue="JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory" />
       <item itemvalue="JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow" />
       <item itemvalue="JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated" />
@@ -538,11 +583,18 @@
       <workItem from="1765519462991" duration="11240000" />
       <workItem from="1765635143303" duration="4282000" />
       <workItem from="1765648792893" duration="13084000" />
+      <workItem from="1765728097813" duration="51798000" />
+      <workItem from="1765980146584" duration="2485000" />
+      <workItem from="1766043514598" duration="2756000" />
+      <workItem from="1766047365809" duration="12065000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.db" />
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ID_ORDER">

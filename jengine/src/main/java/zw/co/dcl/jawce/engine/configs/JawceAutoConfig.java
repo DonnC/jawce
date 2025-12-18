@@ -13,7 +13,6 @@ import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
-import zw.co.dcl.jawce.engine.internal.service.WhatsAppFlowService;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 
 @Configuration
@@ -21,7 +20,7 @@ import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 @EnableConfigurationProperties({WhatsAppConfig.class, JawceConfig.class, TemplateStorageProperties.class})
 public class JawceAutoConfig {
     @Bean
-    public WhatsAppHelperService clientHelperService(
+    public WhatsAppHelperService whatsAppHelperService(
             IClientManager clientManager,
             ISessionManager sessionManager,
             JawceConfig jawceConfig,
@@ -30,10 +29,10 @@ public class JawceAutoConfig {
         return new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
     }
 
-    @Bean
-    public WhatsAppFlowService whatsAppFlowService(WhatsAppConfig whatsAppConfig) {
-        return new WhatsAppFlowService(whatsAppConfig);
-    }
+//    @Bean
+//    public WhatsAppFlowService whatsAppFlowService(WhatsAppConfig whatsAppConfig) {
+//        return new WhatsAppFlowService(whatsAppConfig);
+//    }
 
     @Bean
     @ConditionalOnMissingBean

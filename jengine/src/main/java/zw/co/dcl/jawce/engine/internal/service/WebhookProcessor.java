@@ -213,7 +213,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
             nextStageTemplate = latest.template();
         }
 
-        log.info("Final next stage: {} ", nextStage);
+        log.debug("Final next stage: {} ", nextStage);
         return new PreProcessorResult(nextStage, nextStageTemplate);
     }
 
