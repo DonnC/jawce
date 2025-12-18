@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import zw.co.dcl.jawce.engine.constants.TemplateType;
 import zw.co.dcl.jawce.engine.internal.mappers.EngineRouteDeserializer;
 import zw.co.dcl.jawce.engine.internal.mappers.EngineRouteMapSerializer;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
+@SuperBuilder
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -41,7 +44,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseEngineTemplate implements Serializable {
     @JsonProperty("type")
-    private String type;
+    protected String type;
 
     @JsonSerialize(using = EngineRouteMapSerializer.class)
     @JsonDeserialize(using = EngineRouteDeserializer.class)
@@ -49,13 +52,19 @@ public abstract class BaseEngineTemplate implements Serializable {
 
     // attr
     @JsonProperty("ack")
+    @Builder.Default
     private boolean acknowledged = false;
+    @Builder.Default
     private boolean authenticated = false;
+    @Builder.Default
     private boolean checkpoint = false;
+    @Builder.Default
     private boolean typing = false;
     private String prop;
+    @Builder.Default
     private boolean session = true;
     @JsonProperty("transient")
+    @Builder.Default
     private boolean isTransient = false;
     @JsonProperty("message-id")
     private String replyMessageId;
@@ -70,5 +79,6 @@ public abstract class BaseEngineTemplate implements Serializable {
     private String router;
     private String middleware;
 
+    @Builder.Default
     private Map params = new HashMap<>();
 }

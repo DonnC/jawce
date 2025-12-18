@@ -33,9 +33,10 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
     public WebhookProcessor(
             HookService hookService, ISessionManager sessionManager,
-            ITemplateStorageManager templateStorageManager, JawceConfig config
+            ITemplateStorageManager templateStorageManager, JawceConfig config,
+            WhatsAppHelperService helperService
     ) {
-        super(hookService, sessionManager, templateStorageManager, config);
+        super(hookService, sessionManager, templateStorageManager, config, helperService);
     }
 
     /**
@@ -100,10 +101,10 @@ public class WebhookProcessor extends BaseTemplateProcessor {
     String getNextRoute() {
         if(this.isFirstTime) return this.stage;
         if(hasInteractionActivityExpired()) {
-            throw new SessionInactivityException("You have been inactive for a while, to secure your account, kindly login again");
+            throw new SessionInactivityException("You have been inactive for a while, let's start afresh");
         }
 
-        var checkpoint = this.session.get(this.sessionId, SessionConstant.SESSION_LATEST_CHECKPOINT_KEY);
+        var checkpoint = this.session.get(this.sessionId, SessionConstant.SESSION_CHECKPOINT_KEY);
 
         var hasRetryGlobalRoute = new AtomicBoolean(false);
 
@@ -114,6 +115,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         });
 
         boolean gotoCheckpoint = !hasRetryGlobalRoute.get()
+                && this.userInput.input() != null
                 && this.userInput.input().equalsIgnoreCase(EngineConstant.BTN_RETRY)
                 && checkpoint != null
                 && this.session.get(this.sessionId, SessionConstant.SESSION_DYNAMIC_RETRY_KEY) != null
@@ -127,6 +129,10 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         if(this.isFromTrigger) return this.stage;
 
         log.debug("Current stage: {} | template: {}", this.stage, this.template);
+
+        // if its 1 of the unprocessable templates return, just take the next route
+        var isUnprocessable = Utils.isUnprocessableRoute(this.template);
+        if(isUnprocessable) return this.template.getRoutes().get(0).getNextStage();
 
         // get the next stage, from defined template routes
         for (EngineRoute trigger : this.template.getRoutes()) {
@@ -151,20 +157,15 @@ public class WebhookProcessor extends BaseTemplateProcessor {
     boolean hasInteractionActivityExpired() {
         if(!this.getConfig().isHandleSessionInactivity() || !this.template.isSession()) return false;
 
-        var authData = this.session.get(this.sessionId, SessionConstant.AUTH_SET_KEY, Boolean.class);
         var lastActive = this.session.get(this.sessionId, SessionConstant.LAST_ACTIVITY_KEY, String.class);
 
-        if(authData != null) {
-            return Utils.hasInteractionExpired(lastActive, this.getConfig().getSessionTtlMins());
-        }
-
-        return false;
+        return Utils.hasInteractionExpired(lastActive, this.getConfig().getSessionTtlMins());
     }
 
     void authenticate(BaseEngineTemplate template) {
         if(template.isAuthenticated()) {
             if(this.session.get(this.sessionId, SessionConstant.AUTH_SET_KEY) == null) {
-                throw new SessionExpiredException("Your session has expired. Kindly login again to access our Services");
+                throw new SessionExpiredException("You are logged out or your session has expired. Kindly login again to access our Services");
             }
         }
     }
@@ -178,6 +179,8 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         BaseEngineTemplate nextStageTemplate;
         String nextStage;
 
+        // this here is some messed up logic. I forgot what it does, all i know it works
+        // i will get back to it in the future and document it
         if(hasDynamicTemplateBody(SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY)) {
             nextStage = EngineConstant.DYNAMIC_BODY_STAGE_KEY;
             nextStageTemplate = SerializeUtils.toTemplate(this.session.get(this.sessionId, SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY, Map.class));
@@ -202,6 +205,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
             this.authenticate(nextStageTemplate);
         }
+        // --- end
 
         if(!nestedPreProcessorResults.isEmpty()) {
             var latest = nestedPreProcessorResults.get(0);
@@ -209,7 +213,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
             nextStageTemplate = latest.template();
         }
 
-        log.info("Final next stage: {} ", nextStage);
+        log.debug("Final next stage: {} ", nextStage);
         return new PreProcessorResult(nextStage, nextStageTemplate);
     }
 
@@ -227,7 +231,8 @@ public class WebhookProcessor extends BaseTemplateProcessor {
                 nextTemplate,
                 hookArg,
                 nextStage,
-                this.getHookService()
+                this.getHookService(),
+                this.config.isTagOnReply()
         );
 
         var payload = new PayloadGenerator(messageRequest).generate();

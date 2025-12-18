@@ -13,6 +13,7 @@ import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.internal.dto.UserInput;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
+import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
@@ -26,8 +27,9 @@ import java.util.Map;
 public abstract class BaseTemplateProcessor {
     protected final HookService hookService;
     protected final ISessionManager sessionManager;
-   protected final ITemplateStorageManager templateStorageManager;
-   protected final JawceConfig config;
+    protected final ITemplateStorageManager templateStorageManager;
+    protected final JawceConfig config;
+    protected final WhatsAppHelperService helperService;
 
     protected Webhook message;
     protected BaseEngineTemplate template;
@@ -42,12 +44,14 @@ public abstract class BaseTemplateProcessor {
 
     public BaseTemplateProcessor(
             HookService hookService, ISessionManager sessionManager,
-            ITemplateStorageManager templateStorageManager, JawceConfig config
+            ITemplateStorageManager templateStorageManager, JawceConfig config,
+            WhatsAppHelperService helperService
     ) {
         this.hookService = hookService;
         this.sessionManager = sessionManager;
         this.templateStorageManager = templateStorageManager;
         this.config = config;
+        this.helperService = helperService;
     }
 
     protected void setup(Webhook message) {
@@ -58,10 +62,13 @@ public abstract class BaseTemplateProcessor {
 
         // initialize
         this.getCurrentTemplate();
-        this.userInput = WhatsAppUtils.getUserInput(message, stage);
+        this.userInput = WhatsAppUtils.getUserInput(message.response());
         this.processGlobalTriggersOnInput();
         this.checkSessionByPass();
         this.saveCheckpoint();
+
+        // show indicators
+        this.showMessageIndicators();
 
         // init Hook
         var arg = new Hook();
@@ -69,17 +76,32 @@ public abstract class BaseTemplateProcessor {
         arg.setSession(this.session);
         arg.setWaUser(message.user());
         arg.setUserInput(this.userInput.input());
-        arg.setAdditionalData(this.userInput.additionalData());
+        arg.setAdditionalData(this.userInput.data());
         this.hookArg = arg;
     }
 
-    private void saveCheckpoint() {
-        if(this.template.isCheckpoint()) {
-            this.session.save(this.sessionId, SessionConstant.SESSION_LATEST_CHECKPOINT_KEY, stage);
+    void showMessageIndicators() {
+        // show typing or reaction
+        try {
+            if(this.template.getReaction() != null) {
+                this.helperService.sendReaction(this.message.user().waId(), this.template.getReaction(), this.message.user().msgId());
+            }
+
+            if(this.template.isTyping()) {
+                this.helperService.showTypingIndicator(this.message.user().msgId());
+            }
+        } catch (Exception e) {
+            log.warn("Failed to show message indicators: {}", e.getMessage());
         }
     }
 
-    private void checkSessionByPass() {
+    void saveCheckpoint() {
+        if(this.template.isCheckpoint()) {
+            this.session.save(this.sessionId, SessionConstant.SESSION_CHECKPOINT_KEY, stage);
+        }
+    }
+
+    void checkSessionByPass() {
         if(!this.template.isSession()) {
             this.isFromTrigger = false;
             this.session.save(this.sessionId, SessionConstant.CURRENT_STAGE, this.stage);
@@ -163,17 +185,19 @@ public abstract class BaseTemplateProcessor {
 
         if(this.session.get(sessionId, SessionConstant.CURRENT_MSG_ID_KEY) == null) {
 //            this.session.clear();
-            throw new InternalException("Ambiguous old webhook response. MsgId is null, skipping..");
+            throw new InternalException("Ambiguous old webhook response, skipping..");
         }
     }
 
     boolean hasTriggered(EngineRoute trigger) {
-        boolean shouldTrigger;
+        boolean shouldTrigger = false;
 
         if(trigger.isRegex()) {
             shouldTrigger = Utils.isRegexPatternMatch(trigger.getUserInput(), this.userInput.input());
         } else {
-            shouldTrigger = this.userInput.input().equalsIgnoreCase(trigger.getUserInput());
+            if(this.userInput.input() != null) {
+                shouldTrigger = this.userInput.input().equalsIgnoreCase(trigger.getUserInput());
+            }
         }
 
         if(!shouldTrigger) return false;
@@ -207,8 +231,16 @@ public abstract class BaseTemplateProcessor {
      * a fire-and-forget approach
      * If an error happens, ignore
      */
-    void bluetick() {
-        // TODO: implement bluetick logic
+    void ack_message() {
+        try {
+            boolean canMarkAsRead = this.config.isReadReceipts() || this.template.isAcknowledged();
+
+            if(canMarkAsRead) {
+                this.helperService.markAsRead(this.message.user().msgId());
+            }
+        } catch (Exception e) {
+            log.warn("Failed to acknowledge template message: {}", e.getMessage());
+        }
     }
 
     void processHookParams(BaseEngineTemplate newTemplate) {
@@ -230,7 +262,7 @@ public abstract class BaseTemplateProcessor {
         return (boolean) tpl.getParams().getOrDefault(EngineConstant.DYNAMIC_LAST_TEMPLATE_PARAM, false);
     }
 
-    private void processHook(String hook) throws Exception {
+    void processHook(String hook) throws Exception {
         if(hook != null) {
             this.hookArg.setHook(hook);
             this.hookService.processHook(this.hookArg);
@@ -242,7 +274,7 @@ public abstract class BaseTemplateProcessor {
      * from channel webhook
      */
     protected void processPostHooks() throws Exception {
-        this.bluetick();
+        this.ack_message();
         processHookParams(null);
         this.processHook(this.template.getOnReceive());
         this.processHook(this.template.getMiddleware());

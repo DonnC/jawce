@@ -12,6 +12,7 @@ By contributing, you're helping improve a robust tool designed for building What
 Ensure you have the following installed before contributing:
 - Java 17
 - An active [TEST] WhatsApp Cloud API setup with the necessary tokens and configurations.
+- Or use WhatsApp ChatBot emulator tool https://github.com/DonnC/wce-emulator.git
 
 ### Setting Up the Project
 1. Fork the repository on GitHub.

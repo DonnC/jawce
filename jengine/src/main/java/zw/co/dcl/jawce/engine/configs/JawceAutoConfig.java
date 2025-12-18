@@ -11,23 +11,28 @@ import zw.co.dcl.jawce.engine.api.Worker;
 import zw.co.dcl.jawce.engine.api.iface.IClientManager;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
-import zw.co.dcl.jawce.engine.internal.service.ClientHelperService;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
+import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 
 @Configuration
 @AutoConfiguration
 @EnableConfigurationProperties({WhatsAppConfig.class, JawceConfig.class, TemplateStorageProperties.class})
 public class JawceAutoConfig {
     @Bean
-    public ClientHelperService clientHelperService(
+    public WhatsAppHelperService whatsAppHelperService(
             IClientManager clientManager,
             ISessionManager sessionManager,
             JawceConfig jawceConfig,
             WhatsAppConfig whatsAppConfig
     ) {
-        return new ClientHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        return new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
     }
+
+//    @Bean
+//    public WhatsAppFlowService whatsAppFlowService(WhatsAppConfig whatsAppConfig) {
+//        return new WhatsAppFlowService(whatsAppConfig);
+//    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -44,9 +49,10 @@ public class JawceAutoConfig {
             HookService hookService,
             ISessionManager sessionManager,
             ITemplateStorageManager templateStorageManager,
-            JawceConfig jawceConfig
+            JawceConfig jawceConfig,
+            WhatsAppHelperService whatsAppHelperService
     ) {
-        return new WebhookProcessor(hookService, sessionManager, templateStorageManager, jawceConfig);
+        return new WebhookProcessor(hookService, sessionManager, templateStorageManager, jawceConfig, whatsAppHelperService);
     }
 
     @Bean
@@ -54,10 +60,10 @@ public class JawceAutoConfig {
             ApplicationEventPublisher publisher,
             WhatsAppConfig whatsAppConfig,
             JawceConfig jawceConfig,
-            ClientHelperService clientHelperService,
+            WhatsAppHelperService whatsAppHelperService,
             WebhookProcessor webhookProcessor,
             ISessionManager sessionManager
     ) {
-        return new Worker(publisher, whatsAppConfig, jawceConfig, clientHelperService, webhookProcessor, sessionManager);
+        return new Worker(publisher, whatsAppConfig, jawceConfig, whatsAppHelperService, webhookProcessor, sessionManager);
     }
 }

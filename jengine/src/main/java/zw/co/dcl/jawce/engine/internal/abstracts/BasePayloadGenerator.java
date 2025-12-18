@@ -27,7 +27,7 @@ public abstract class BasePayloadGenerator {
         this.template = dto.template();
         this.hookArg = dto.hookArg();
         this.stage = dto.stage();
-        this.replyMessageId = dto.template().getReplyMessageId();
+        this.replyMessageId = dto.globalTagOnReply() ? dto.hookArg().getWaUser().msgId() : dto.template().getReplyMessageId();
         this.validator();
         this.processTemplate();
     }
@@ -73,7 +73,7 @@ public abstract class BasePayloadGenerator {
 
     protected void validator() {
         if(this.template.getType() == null) {
-            throw new InternalException("type not found in template");
+            throw new InternalException("response not found in template");
         }
     }
 }

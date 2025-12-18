@@ -16,4 +16,9 @@ public class WhatsAppConfig {
     private String phoneNumberId;
     private String appSecret;
     private String apiVersion = "v24.0";
+
+    // flow endpoint
+    private String privateKeyPemPath;
+    private String privateKeyPassword;
+
 }

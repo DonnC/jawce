@@ -1,6 +1,7 @@
 package zw.co.dcl.jawce.engine.api.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,6 @@ import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,20 +28,34 @@ public class SerializeUtils {
         return objectMapper.convertValue(fromObj, type);
     }
 
+    static public <T> T castValue(String jsonString, Class<T> type) {
+        try {
+            return objectMapper.readValue(jsonString, type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     static public Map<String, Object> toMap(Object object) {
         try {
-            objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            objectMapper.configure(JsonWriteFeature.ESCAPE_NON_ASCII.mappedFeature(), true)
+                    .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
             if(object instanceof String content) {
                 return objectMapper.readValue(content, new TypeReference<Map<String, Object>>() {
                 });
             }
 
+            if(object instanceof byte[] content) {
+                return objectMapper.readValue(content, Map.class);
+            }
+
+            // For arbitrary objects, serialize first
             String json = objectMapper.writeValueAsString(object);
             return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
             });
         } catch (Exception e) {
-            logger.warn("[ENGINE] failed to convert obj to map: {}", e.getMessage());
+            logger.warn("[ENGINE] failed to convert obj to map. Object: {}: {}", object, e.getMessage());
             return new HashMap<>();
         }
     }
@@ -57,6 +71,10 @@ public class SerializeUtils {
 
     static public String toJsonString(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
+    }
+
+    static public byte[] toByteArray(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(object);
     }
 
     static public JsonNode readStringAsTree(String data) throws JsonProcessingException {

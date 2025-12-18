@@ -19,3 +19,8 @@
 * Added example custom triggers
 * Fixed triggers not working (@)
 * Fixed CTA button correct payload creation
+
+## Dec 2025
+* Complete engine revamp
+* Implemented auto engine beans config
+* Comes with defaults and fully working examples

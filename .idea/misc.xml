@@ -18,6 +18,8 @@
         <option value="$PROJECT_DIR$/example/jchatbot/pom.xml" />
         <option value="$PROJECT_DIR$/jsession/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/example/ehailing/pom.xml" />
+        <option value="$PROJECT_DIR$/example/live-support/server/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -22,7 +22,6 @@ public class SessionConstant {
     public final static String DYNAMIC_CURRENT_TEMPLATE_BODY_KEY = "jCurrentDynamic";
     public final static String DYNAMIC_NEXT_TEMPLATE_BODY_KEY = "jPrevDynamic";
 
-
     public final static String LAST_ACTIVITY_KEY = "jLastActive";
 
     /**
@@ -42,7 +41,7 @@ public class SessionConstant {
      * Use case: When an exception is encountered and you send a retry message
      * the flow to retry will be added to this key in session
      */
-    public final static String SESSION_LATEST_CHECKPOINT_KEY = "jCheckpoint";
+    public final static String SESSION_CHECKPOINT_KEY = "jCheckpoint";
 
     /**
      * if its an error message with retry button, set this key in session

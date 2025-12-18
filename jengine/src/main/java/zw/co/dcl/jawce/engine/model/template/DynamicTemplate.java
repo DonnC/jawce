@@ -1,16 +1,16 @@
 package zw.co.dcl.jawce.engine.model.template;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import zw.co.dcl.jawce.engine.constants.TemplateType;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DynamicTemplate extends BaseEngineTemplate {
     private String message;
-
-    public DynamicTemplate() {
-        this.setType(TemplateType.DYNAMIC);
-    }
+    private final String type = TemplateType.DYNAMIC;
 }

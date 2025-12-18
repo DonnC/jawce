@@ -1,0 +1,36 @@
+jawce:
+  start-menu: "START-MENU"
+  emulate: true
+
+whatsapp:
+  hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN
+  access-token: REPLACE-WITH-ACCESS-TOKEN
+  phone-number-id: REPLACE-WITH-PHONE-NUMBER-ID
+  app-secret: YOUR-APPLICATION-SECRET
+
+server:
+  servlet:
+    context-path: "/chatbot"
+  port: 8000
+
+spring:
+  mustache:
+    check-template-location: false
+  application:
+    name: "jawce-ls-chatbot"
+
+  datasource:
+    url: "jdbc:h2:file:./jawcedb;DB_CLOSE_ON_EXIT=FALSE"
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

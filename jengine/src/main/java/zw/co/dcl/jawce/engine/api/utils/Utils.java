@@ -2,7 +2,9 @@ package zw.co.dcl.jawce.engine.api.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
+import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.dto.ShortcutVar;
+import zw.co.dcl.jawce.engine.model.template.*;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -57,7 +59,7 @@ public class Utils {
     }
 
     public static ShortcutVar parseShortcutVar(String input) {
-        // Split the input on the colon (:) to determine if a class type is provided
+        // Split the input on the colon (:) to determine if a class response is provided
         String[] parts = input.split(":");
 
         var name = extractName(parts[0]);
@@ -103,7 +105,18 @@ public class Utils {
     }
 
     public static boolean isRegexPatternMatch(String regexPattern, String text) {
+        if(regexPattern == null || text == null) return false;
         var p = regexPattern.replaceAll(EngineConstant.TPL_REGEX_PLACEHOLDER_KEY, "").trim();
         return Pattern.compile(p).matcher(text).find();
+    }
+
+    // --- response structure
+
+    public static boolean isUnprocessableRoute(BaseEngineTemplate template) {
+        return template instanceof RequestLocationTemplate
+                || template instanceof FlowTemplate
+                || template instanceof MediaTemplate
+                || template instanceof TemplateTemplate
+                || template instanceof CtaTemplate;
     }
 }

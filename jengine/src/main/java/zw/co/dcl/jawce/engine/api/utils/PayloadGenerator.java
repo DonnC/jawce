@@ -89,7 +89,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> locationRequest() {
@@ -110,7 +110,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> location() {
@@ -133,7 +133,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> media() {
@@ -163,7 +163,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> button() {
@@ -197,7 +197,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> list() {
@@ -243,7 +243,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> cta() {
@@ -272,7 +272,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> flow() {
@@ -316,7 +316,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             return payload;
         }
 
-        throw new InternalException("Invalid template type");
+        throw new InternalException("Invalid template response");
     }
 
     public Map<String, Object> generate() {
@@ -329,7 +329,7 @@ public class PayloadGenerator extends BasePayloadGenerator {
             case TemplateType.LIST -> this.list();
             case TemplateType.MEDIA, TemplateType.DOCUMENT, TemplateType.IMAGE -> this.media();
             case TemplateType.REQUEST_LOCATION -> this.locationRequest();
-            default -> throw new InternalException("specified template type not supported for stage: " + this.stage);
+            default -> throw new InternalException("specified template response not supported for stage: " + this.stage);
         };
     }
 }
