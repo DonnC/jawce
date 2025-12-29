@@ -29,11 +29,14 @@ public class LsService {
     }
 
     private Long hasActiveLiveModeChatId(WaUser waUser) {
-        String cacheString = this.sessionManager.session(waUser.waId()).get(waUser.waId(), Constant.LIVE_MODE_CACHE_KEY, String.class);
+        String sessionId = waUser.waId();
+        String cachedLsFlag = this.sessionManager
+                .session(sessionId)
+                .get(sessionId, Constant.LIVE_MODE_CACHE_KEY, String.class);
 
-        if(cacheString == null) return null;
+        if(cachedLsFlag == null) return null;
 
-        LiveModeCache liveModeCache = SerializeUtils.castValue(cacheString, LiveModeCache.class);
+        LiveModeCache liveModeCache = SerializeUtils.castValue(cachedLsFlag, LiveModeCache.class);
 
         return liveModeCache.getActive() ? liveModeCache.getChatId() : null;
     }
@@ -46,6 +49,14 @@ public class LsService {
      * First check if user live mode session is active
      * If active, delegate processing to the live mode chat handler
      * else, let the automated bot handle it.
+     * <p>
+     * This approach can be used for almost anything
+     * <p>
+     * 1. Live Support
+     * <p>
+     * 2. AI Agent
+     * <p>
+     * 3. Anything along those lines
      *
      * @param payload WhatsApp webhook payload
      * @return String Acknowledge webhook

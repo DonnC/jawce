@@ -20,5 +20,4 @@ public class WhatsAppConfig {
     // flow endpoint
     private String privateKeyPemPath;
     private String privateKeyPassword;
-
 }
