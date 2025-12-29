@@ -3,10 +3,12 @@ A dependency for creating complete WhatsApp chatbots with ease using a template-
 
 ## Features
 - **Template-Driven Design**: By default, you can use YAML | JSON templates for conversational flows. But you can implement your own TemplateStorageManager
-- **Hooks for Business Logic**: Attach Java classes / RESTful endpoints to process messages or actions.
-- Abstracts the API for WhatsApp Cloud.
+- **Hooks for Business Logic**: Attach Java classes / spring beans / RESTful endpoints to process messages or actions.
+- Abstracts the API for WhatsApp Cloud: focus on your core chatbot functions.
 - Supports all official WhatsApp message types including Flows
 - Supports dynamic messages with placeholders.
+- Auto configs via properties file
+- Event driven architecture with Spring Events
 
 ## Setup
 For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder

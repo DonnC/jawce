@@ -20,7 +20,7 @@ public class JawceConfig {
     private long debounceTimeoutMs = 3000;
     private int webhookTimestampThresholdSecs = 10;
     private String startMenu;
-    private String restHookAuthToken;
+    private String restHookAuthToken=null;
     private String restHookBaseUrl;
     private String emulatorUrl = "http://localhost:3001/send-to-emulator";
 
