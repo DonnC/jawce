@@ -1,11 +1,10 @@
-package zw.co.dcl.ehailing.service.engine;
+package zw.co.dcl.jawce.engine.defaults;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.utils.SerializeUtils;
+import zw.co.dcl.jawce.engine.configs.FileSessionProperties;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,65 +14,50 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * A file-based session manager that uses synchronized methods
- * <p>
- * each phone number becomes the file name with .sessions ext
- * <p>
- * all global data are saved in the global.sessions file
+ * Basic file-backed session manager intended as a default/reference implementation.
+ *
+ * Applications can replace this by providing their own ISessionManager bean.
  */
 @Slf4j
 public class FileSessionManager implements ISessionManager {
-    private static volatile FileSessionManager instance;
-    private final String USER_PROPS_KEY = "jProps";
-    private final String SESSION_FILE_EXT = ".session";
+    private static final String USER_PROPS_KEY = "jProps";
+    private static final String SESSION_FILE_EXT = ".session";
 
     @Getter
-    private final Path SESSION_DIR;
+    private final Path sessionDir;
     @Getter
-    private final Path GLOBAL_SESSION_FILE;
+    private final Path globalSessionFile;
 
-    private FileSessionManager() {
+    public FileSessionManager(FileSessionProperties properties) {
         try {
-            this.SESSION_DIR = Paths.get("./.session").toAbsolutePath().normalize();
-            Files.createDirectories(this.SESSION_DIR);
-            var GLOBAL_SESSION_FILE_NAME = "global" + SESSION_FILE_EXT;
-            this.GLOBAL_SESSION_FILE = this.SESSION_DIR.resolve(GLOBAL_SESSION_FILE_NAME).toAbsolutePath().normalize();
-            createFileIfNotExist(GLOBAL_SESSION_FILE.toFile());
-            log.info("File based session manager initialized!");
+            this.sessionDir = Paths.get(properties.getDir()).toAbsolutePath().normalize();
+            Files.createDirectories(this.sessionDir);
+            this.globalSessionFile = this.sessionDir.resolve("global" + SESSION_FILE_EXT).toAbsolutePath().normalize();
+            createFileIfNotExist(globalSessionFile.toFile());
+            log.info("File session manager initialized at {}", this.sessionDir);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot create sessions directory: " + e.getMessage());
+            throw new RuntimeException("Cannot create session directory: " + e.getMessage(), e);
         }
-    }
-
-    // Method to get the Singleton instance
-    public static FileSessionManager getInstance() {
-        if(instance == null) {
-            synchronized (FileSessionManager.class) {
-                if(instance == null) {
-                    instance = new FileSessionManager();
-                }
-            }
-        }
-        return instance;
     }
 
     private Path getUserSessionFile(String sessionId) {
-        return this.SESSION_DIR.resolve(sessionId + SESSION_FILE_EXT).toAbsolutePath().normalize();
+        return this.sessionDir.resolve(sessionId + SESSION_FILE_EXT).toAbsolutePath().normalize();
     }
 
     private void createFileIfNotExist(File file) {
-        if(!file.exists()) {
+        if (!file.exists()) {
             SerializeUtils.writeToFile(file, new HashMap<>());
         }
     }
 
     @Override
     public ISessionManager session(String sessionId) {
-        if(sessionId == null) return this;
+        if (sessionId == null) {
+            return this;
+        }
 
         var userFile = getUserSessionFile(sessionId).toFile();
         createFileIfNotExist(userFile);
-
         return this;
     }
 
@@ -94,7 +78,7 @@ public class FileSessionManager implements ISessionManager {
         var sessionData = loadSessionData(sessionId);
         var props = (Map<String, Object>) sessionData.get(USER_PROPS_KEY);
 
-        if(props == null) {
+        if (props == null) {
             props = new HashMap<>();
         }
 
@@ -108,7 +92,7 @@ public class FileSessionManager implements ISessionManager {
         try {
             var sessionData = loadSessionData(sessionId);
             var props = (Map<String, Object>) sessionData.get(USER_PROPS_KEY);
-            if(props != null && props.containsKey(propKey)) {
+            if (props != null && props.containsKey(propKey)) {
                 props.remove(propKey);
                 sessionData.put(USER_PROPS_KEY, props);
                 saveSessionData(sessionId, sessionData);
@@ -125,7 +109,7 @@ public class FileSessionManager implements ISessionManager {
         try {
             var sessionData = loadSessionData(sessionId);
             var props = (Map<String, Object>) sessionData.get(USER_PROPS_KEY);
-            return (props != null) ? props.get(propKey) : null;
+            return props != null ? props.get(propKey) : null;
         } catch (Exception e) {
             return null;
         }
@@ -134,7 +118,7 @@ public class FileSessionManager implements ISessionManager {
     @Override
     public <T> T getFromProps(String sessionId, String propKey, Class<T> propType) {
         Object propValue = getFromProps(sessionId, propKey);
-        return (propValue != null) ? propType.cast(propValue) : null;
+        return propValue != null ? propType.cast(propValue) : null;
     }
 
     @Override
@@ -182,14 +166,14 @@ public class FileSessionManager implements ISessionManager {
 
     @Override
     public void clear(String sessionId, List<String> retain) {
-        List<String> retainKeys = new ArrayList<>(retain);
-
-        if(retainKeys.isEmpty()) return;
+        if (retain.isEmpty()) {
+            return;
+        }
 
         List<String> keysToEvict = new ArrayList<>();
 
         fetchAll(sessionId).forEach((k, v) -> {
-            if(!retainKeys.contains(k)) {
+            if (!retain.contains(k)) {
                 keysToEvict.add(k);
             }
         });
@@ -214,19 +198,19 @@ public class FileSessionManager implements ISessionManager {
     }
 
     private synchronized Map<String, Object> loadSessionData(String sessionId) {
-        var sessionPath = sessionId == null ? GLOBAL_SESSION_FILE : getUserSessionFile(sessionId);
+        var sessionPath = sessionId == null ? globalSessionFile : getUserSessionFile(sessionId);
         return SerializeUtils.readMapFromFile(sessionPath.toFile());
     }
 
     private synchronized void saveSessionData(String sessionId, Map<String, Object> sessionData) {
-        var sessionPath = sessionId == null ? GLOBAL_SESSION_FILE : getUserSessionFile(sessionId);
+        var sessionPath = sessionId == null ? globalSessionFile : getUserSessionFile(sessionId);
         SerializeUtils.writeToFile(sessionPath.toFile(), sessionData);
     }
 
     public void cleanUp() {
         try {
-            SerializeUtils.deleteDirectoryRecursively(this.SESSION_DIR);
-            log.info("File manager directory deleted");
+            SerializeUtils.deleteDirectoryRecursively(this.sessionDir);
+            log.info("File session directory deleted");
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete file session folder", e);
         }

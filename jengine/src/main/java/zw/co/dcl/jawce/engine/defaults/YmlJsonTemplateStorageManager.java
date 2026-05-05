@@ -1,4 +1,4 @@
-package org.dcl.jawce.server.service.engine;
+package zw.co.dcl.jawce.engine.defaults;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
 import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
@@ -26,18 +25,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
-
 /**
- * A default storage manager that is based on YAML / JSON templates
- * <p>
- * The manager reads all template & trigger yaml / json files in a directory path provided
- * <p>
+ * Basic YAML/JSON template storage manager intended as a default/reference implementation.
+ *
+ * Applications can replace this by providing their own ITemplateStorageManager bean.
  */
 @Slf4j
-@Service
 public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
-    private static final Map<String, BaseEngineTemplate> templates = new ConcurrentHashMap<>();
-    private static final List<EngineRoute> triggers = new CopyOnWriteArrayList<>();
+    private final Map<String, BaseEngineTemplate> templates = new ConcurrentHashMap<>();
+    private final List<EngineRoute> triggers = new CopyOnWriteArrayList<>();
     private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final TemplateStorageProperties properties;
@@ -45,9 +41,6 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     public YmlJsonTemplateStorageManager(TemplateStorageProperties properties) {
         this.properties = properties;
         this.loadTemplates();
-
-        templates.forEach((key, template) -> log.debug("{} -> {}", key, template.getClass().getSimpleName()));
-
         this.loadTriggers();
         log.info("Template storage manager initialized with templates: {} and triggers: {}", templates.size(), triggers.size());
     }
@@ -74,11 +67,11 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     public void loadTemplates() {
         var pathDir = this.properties.getTemplatesPath();
         Assert.notNull(pathDir, "Directory is null");
+        templates.clear();
 
         Map<String, BaseEngineTemplate> loaded = new ConcurrentHashMap<>();
 
-        if(pathDir.startsWith("classpath:")) {
-            log.warn("Loading classpath resources from {}", pathDir);
+        if (pathDir.startsWith("classpath:")) {
             String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml,json}";
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
@@ -93,13 +86,12 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
             } catch (IOException e) {
                 throw new RuntimeException("Failed to load classpath resources from " + pathDir, e);
             }
-
         } else {
-            log.warn("Loading external disk resources from {}", pathDir);
             Path folderDir = Paths.get(pathDir);
-            if(!Files.exists(folderDir) || !Files.isDirectory(folderDir)) {
+            if (!Files.exists(folderDir) || !Files.isDirectory(folderDir)) {
                 throw new IllegalStateException("Directory does not exist: " + folderDir);
             }
+
             try (Stream<Path> paths = Files.walk(folderDir)) {
                 paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml") || p.toString().endsWith(".json"))
                         .forEach(p -> {
@@ -114,32 +106,31 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
             }
         }
 
-        log.warn("Loaded {} templates from {}", loaded.size(), pathDir);
-
         templates.putAll(loaded);
+        log.info("Loaded {} templates from {}", loaded.size(), pathDir);
     }
 
     Map<String, BaseEngineTemplate> parseInput(InputStream in, String filename) throws IOException {
-        if(filename.endsWith(".json")) {
-            return jsonMapper.readValue(in, new TypeReference<>() {
-            });
-        } else if(filename.endsWith(".yaml") || filename.endsWith(".yml")) {
-            return yamlMapper.readValue(in, new TypeReference<>() {
-            });
-        } else {
-            throw new IllegalArgumentException("Unsupported file response: " + filename);
+        if (filename.endsWith(".json")) {
+            return jsonMapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {});
         }
+
+        if (filename.endsWith(".yaml") || filename.endsWith(".yml")) {
+            return yamlMapper.readValue(in, new TypeReference<Map<String, BaseEngineTemplate>>() {});
+        }
+
+        throw new IllegalArgumentException("Unsupported file type: " + filename);
     }
 
     @Override
     public void loadTriggers() {
         var pathDir = this.properties.getTriggersPath();
         Assert.notNull(pathDir, "Directory is null");
+        triggers.clear();
 
         Map<String, Object> map = new ConcurrentHashMap<>();
 
-        if(pathDir.startsWith("classpath:")) {
-            log.warn("Loading triggers classpath resources from {}", pathDir);
+        if (pathDir.startsWith("classpath:")) {
             String pattern = "classpath*:" + pathDir.substring("classpath:".length()) + "/**/*.{yml,yaml,json}";
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
@@ -148,7 +139,7 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
 
                 for (Resource res : resources) {
                     try (InputStream in = res.getInputStream()) {
-                        if(res.getFilename().endsWith(".json")) {
+                        if (res.getFilename().endsWith(".json")) {
                             map.putAll(jsonMapper.readValue(in, Map.class));
                         } else {
                             map.putAll(yamlMapper.readValue(in, Map.class));
@@ -158,18 +149,17 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
             } catch (IOException e) {
                 throw new RuntimeException("Failed to load classpath resources from " + pathDir, e);
             }
-
         } else {
-            log.warn("Loading external disk triggers resources from {}", pathDir);
             Path folderDir = Paths.get(pathDir);
-            if(!Files.exists(folderDir) || !Files.isDirectory(folderDir)) {
+            if (!Files.exists(folderDir) || !Files.isDirectory(folderDir)) {
                 throw new IllegalStateException("Directory does not exist: " + folderDir);
             }
+
             try (Stream<Path> paths = Files.walk(folderDir)) {
                 paths.filter(p -> p.toString().endsWith(".yml") || p.toString().endsWith(".yaml") || p.toString().endsWith(".json"))
                         .forEach(p -> {
                             try (InputStream in = Files.newInputStream(p)) {
-                                if(p.toString().endsWith(".json")) {
+                                if (p.toString().endsWith(".json")) {
                                     map.putAll(jsonMapper.readValue(in, Map.class));
                                 } else {
                                     map.putAll(yamlMapper.readValue(in, Map.class));
@@ -183,9 +173,8 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
             }
         }
 
-        log.warn("Loaded {} triggers from {}", map.size(), pathDir);
-
         this.parseTriggerMapToRoutes(map);
+        log.info("Loaded {} triggers from {}", map.size(), pathDir);
     }
 
     @Override

@@ -46,7 +46,6 @@ public class LiveSupportHookService {
         String message = "Connecting you to an Agent. Please wait...";
 
         try {
-            // TODO: check if live mode flag exists in user session
             Chat chat;
 
             var chatResult = chatRepository.findByCustomerPhoneAndStatus(

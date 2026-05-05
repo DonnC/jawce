@@ -1,9 +1,8 @@
-package org.dcl.jawce.server.service.engine;
+package zw.co.dcl.jawce.engine.defaults;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
@@ -33,7 +32,6 @@ public class RestTemplateClientManager implements IClientManager {
         try {
             var response = this.request(url, new HttpEntity<>(arg, headers), HttpMethod.POST, String.class);
             log.debug("HookRest response: {}", response.getStatusCode());
-
             return response;
         } catch (Exception e) {
             log.error("HookRest call exception: {} | msg: {}", e.getClass().getSimpleName(), e.getMessage());
@@ -50,12 +48,12 @@ public class RestTemplateClientManager implements IClientManager {
         } catch (HttpClientErrorException e) {
             log.error("Request exception: {}", e.getMessage());
 
-            if(e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+            if (e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 log.error("POST auth error: {}", e.getResponseBodyAsString());
                 throw new WhatsAppException("Unauthorized access to WhatsApp. Check credentials");
             }
 
-            if(e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+            if (e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 log.error("POST bad request: {}", e.getResponseBodyAsString());
                 throw new WhatsAppException("Bad request to WhatsApp. Check request payload");
             }

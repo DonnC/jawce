@@ -4,6 +4,7 @@ A dependency for creating complete WhatsApp chatbots with ease using a template-
 ## Features
 - **Template-Driven Design**: By default, you can use YAML | JSON templates for conversational flows. But you can implement your own TemplateStorageManager
 - **Hooks for Business Logic**: Attach Java classes / spring beans / RESTful endpoints to process messages or actions.
+- Ships with basic default implementations for file sessions, YAML/JSON template loading, and `RestTemplate`-based HTTP client wiring. Override them by providing your own interface beans.
 - Abstracts the API for WhatsApp Cloud: focus on your core chatbot functions.
 - Supports all official WhatsApp message types including Flows
 - Supports dynamic messages with placeholders.
@@ -55,6 +56,11 @@ Checkout the `example` project for a starting point
 ## Documentation
 
 Visit the [official documentation](https://docs.page/donnc/wce) for a detailed guide.
+
+For a source-based comparison of how this Spring Boot port maps to the original Python engine, see [docs/project-findings.md](./docs/project-findings.md).
+For the Java-first evolution plan, including template portability and enterprise considerations, see [docs/implementation-plan.md](./docs/implementation-plan.md).
+For migration-oriented authoring guidance, see [docs/template-compatibility.md](./docs/template-compatibility.md).
+For the current message support view, see [docs/message-support-matrix.md](./docs/message-support-matrix.md).
 
 ## Contributing
 

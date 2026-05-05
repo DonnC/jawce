@@ -11,6 +11,7 @@ public class EngineConstant {
     //    --- dynamic
     public final static String DYNAMIC_LAST_TEMPLATE_PARAM = "DTPL_LAST_STAGE";
     public final static String DYNAMIC_BODY_STAGE_KEY = "ENGINE_DYNAMIC_BODY_STAGE";
+    public final static String WHATSAPP_TEMPLATE_KEY = "templates";
 
     //    https://graph.facebook.com/{{Version}}/{{Phone-Number-ID}}/messages
     public final static String CHANNEL_BASE_URL = "https://graph.facebook.com/";

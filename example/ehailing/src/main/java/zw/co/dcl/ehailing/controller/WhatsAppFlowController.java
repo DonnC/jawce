@@ -1,6 +1,7 @@
 package zw.co.dcl.ehailing.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@ConditionalOnBean(WhatsAppFlowService.class)
 @RequestMapping("/whatsapp/flow")
 public class WhatsAppFlowController {
     private final WhatsAppFlowService flowService;
@@ -38,8 +40,6 @@ public class WhatsAppFlowController {
             // 2. Inspect payload and build response payload map
             FlowEndpointPayload flowPayload = cfg.payload();
 
-            // TODO: verify response action
-
             // first check if it's a ping request, respond immediately
             if(flowPayload.getAction().equals(WhatsAppFlowConstant.PING_FLOW_ACTION)) {
                 responsePayload = WhatsAppFlowConstant.PING_PAYLOAD;
@@ -47,7 +47,6 @@ public class WhatsAppFlowController {
 
             // check if there was an error
             else if(flowPayload.getData().containsKey("error") && flowPayload.getData().containsKey("error_message")) {
-                // TODO: analyze flow endpoint error received and ack error
                 String error = flowPayload.getData().get("error_message").toString();
                 log.error("Flow endpoint error: {}", error);
 

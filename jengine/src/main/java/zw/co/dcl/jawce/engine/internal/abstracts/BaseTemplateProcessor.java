@@ -56,6 +56,8 @@ public abstract class BaseTemplateProcessor {
 
     protected void setup(Webhook message) {
         this.params = new HashMap<>();
+        this.isFirstTime = false;
+        this.isFromTrigger = false;
         this.message = message;
         this.sessionId = message.user().waId();
         this.session = this.sessionManager.session(this.sessionId);

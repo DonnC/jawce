@@ -4,7 +4,13 @@ Example chatbots powered by `jawce`
 ## Setup
 Before running, make sure bot config in `/src/main/resources/application.yml` are configured properly
 
-If using `FileSessionManager` you may delete old session data by deleting the `.session` folder
+The examples now rely on `jawce` default implementations for:
+
+- file-backed sessions,
+- YAML or JSON template loading,
+- `RestTemplate`-based client wiring.
+
+If using the default file session manager, you may delete old session data by deleting the `.session` folder.
 
 
 ## Quick Run

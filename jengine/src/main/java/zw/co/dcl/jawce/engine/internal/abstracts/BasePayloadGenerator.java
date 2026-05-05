@@ -11,6 +11,7 @@ import zw.co.dcl.jawce.engine.internal.service.RenderProcessor;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.Hook;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -21,6 +22,7 @@ public abstract class BasePayloadGenerator {
     protected Hook hookArg;
     protected String replyMessageId;
     protected PayloadGeneratorDto dto;
+    protected Map<String, Object> lastRenderPayload = new HashMap<>();
 
     public BasePayloadGenerator(PayloadGeneratorDto dto) {
         this.dto = dto;
@@ -41,6 +43,10 @@ public abstract class BasePayloadGenerator {
             var result = this.dto.hookService().processHook(this.hookArg);
 
             if(result.getTemplateDynamicBody() != null) {
+                this.lastRenderPayload = result.getTemplateDynamicBody().getRenderPayload() == null
+                        ? new HashMap<>()
+                        : result.getTemplateDynamicBody().getRenderPayload();
+
                 if(result.getTemplateDynamicBody().getRenderPayload() != null) {
                     var renderResult = renderer.renderTemplate(SerializeUtils.fromTemplate(this.template), result.getTemplateDynamicBody().getRenderPayload());
                     this.template = SerializeUtils.toTemplate(renderResult);

@@ -222,6 +222,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Message")
                                 .buttons(List.of(EngineConstant.BTN_RETRY))
                                 .message(e.getMessage())
@@ -232,6 +234,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Message")
                                 .buttons(List.of(EngineConstant.BTN_RETRY, EngineConstant.BTN_REPORT))
                                 .message("Failed to process your message")
@@ -242,6 +246,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Message")
                                 .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
                                 .message("%s.\n\n%s".formatted(e.getError().message(), "You may click the button to return to Menu"))
@@ -252,6 +258,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Message")
                                 .buttons(List.of(EngineConstant.BTN_MENU))
                                 .message("Could not process request\n\n_AMB Err_")
@@ -265,6 +273,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Security Check 🔐")
                                 .footer("Session Expired")
                                 .buttons(List.of(EngineConstant.BTN_MENU))
@@ -276,6 +286,8 @@ public class Worker {
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
+                                .recipient(message.user().waId())
+                                .messageId(message.user().msgId())
                                 .title("Message")
                                 .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
                                 .message("Something went wrong. Please try again later.")

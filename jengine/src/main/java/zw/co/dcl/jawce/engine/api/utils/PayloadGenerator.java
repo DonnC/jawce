@@ -25,8 +25,6 @@ public class PayloadGenerator extends BasePayloadGenerator {
     boolean isInteractiveTemplate(BaseEngineTemplate template) {
         return template instanceof ButtonTemplate
                 || template instanceof FlowTemplate
-                || template instanceof LocationTemplate
-                || template instanceof TemplateTemplate
                 || template instanceof ListTemplate
                 || template instanceof CtaTemplate;
     }
@@ -37,14 +35,6 @@ public class PayloadGenerator extends BasePayloadGenerator {
         }
 
         if(template instanceof FlowTemplate tpl) {
-            return tpl.getMessage();
-        }
-
-        if(template instanceof LocationTemplate tpl) {
-            return tpl.getMessage();
-        }
-
-        if(template instanceof TemplateTemplate tpl) {
             return tpl.getMessage();
         }
 
@@ -130,6 +120,30 @@ public class PayloadGenerator extends BasePayloadGenerator {
 
             payload.put(PayloadType.LOCATION.name().toLowerCase(), locPayload);
 
+            return payload;
+        }
+
+        throw new InternalException("Invalid template response");
+    }
+
+    public Map<String, Object> template() {
+        var payload = new HashMap<>(WhatsAppUtils.getCommonPayload(
+                this.hookArg.getWaUser().waId(),
+                PayloadType.TEMPLATE,
+                this.replyMessageId
+        ));
+
+        if(this.template instanceof TemplateTemplate templateMessage) {
+            var message = templateMessage.getMessage();
+            Map<String, Object> templatePayload = new HashMap<>();
+            templatePayload.put("name", message.getName());
+            templatePayload.put("language", Map.of("code", message.getLanguage()));
+            templatePayload.put(
+                    "components",
+                    this.lastRenderPayload.getOrDefault(EngineConstant.WHATSAPP_TEMPLATE_KEY, new ArrayList<>())
+            );
+
+            payload.put("template", templatePayload);
             return payload;
         }
 
@@ -327,6 +341,8 @@ public class PayloadGenerator extends BasePayloadGenerator {
             case TemplateType.BUTTON -> this.button();
             case TemplateType.FLOW -> this.flow();
             case TemplateType.LIST -> this.list();
+            case TemplateType.LOCATION -> this.location();
+            case TemplateType.TEMPLATE -> this.template();
             case TemplateType.MEDIA, TemplateType.DOCUMENT, TemplateType.IMAGE -> this.media();
             case TemplateType.REQUEST_LOCATION -> this.locationRequest();
             default -> throw new InternalException("specified template response not supported for stage: " + this.stage);

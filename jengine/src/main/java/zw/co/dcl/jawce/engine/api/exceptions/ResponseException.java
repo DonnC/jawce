@@ -13,9 +13,11 @@ public class ResponseException extends BaseEngineException {
 
     public ResponseException(ResponseError error) {
         super(error.message());
+        this.error = error;
     }
 
     public ResponseException(ResponseError error, Throwable cause) {
         super(error.message(), cause);
+        this.error = error;
     }
 }
