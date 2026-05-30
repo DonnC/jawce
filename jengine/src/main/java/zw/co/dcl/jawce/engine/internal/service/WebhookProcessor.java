@@ -225,7 +225,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         var nextTemplate = results.template();
         var nextStage = results.stage();
 
-        this.processPreHooks(nextTemplate);
+        nextTemplate = this.processPreHooks(nextTemplate);
 
         var messageRequest = new PayloadGeneratorDto(
                 nextTemplate,

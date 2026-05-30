@@ -71,6 +71,13 @@ class WorkerEngineFlowTest {
                         "    \"routes\": {\n" +
                         "      \"re:.*\": \"START-MENU\"\n" +
                         "    }\n" +
+                        "  },\n" +
+                        "  \"GITHUB-PROFILE\": {\n" +
+                        "    \"type\": \"text\",\n" +
+                        "    \"message\": \"Github profile\",\n" +
+                        "    \"routes\": {\n" +
+                        "      \"re:.*\": \"START-MENU\"\n" +
+                        "    }\n" +
                         "  }\n" +
                         "}\n"
         );

@@ -61,6 +61,11 @@ For a source-based comparison of how this Spring Boot port maps to the original 
 For the Java-first evolution plan, including template portability and enterprise considerations, see [docs/implementation-plan.md](./docs/implementation-plan.md).
 For migration-oriented authoring guidance, see [docs/template-compatibility.md](./docs/template-compatibility.md).
 For the current message support view, see [docs/message-support-matrix.md](./docs/message-support-matrix.md).
+For practical dynamic rendering patterns, see [docs/dynamic-rendering.md](./docs/dynamic-rendering.md).
+For router-hook usage and backend-driven payment/biller flow design, see [docs/router-hook-and-backend-driven-flows.md](./docs/router-hook-and-backend-driven-flows.md).
+For advanced backend-built outbound templates, see [docs/advanced-dynamic-template-handling.md](./docs/advanced-dynamic-template-handling.md).
+For the most important current engine improvement areas, see [docs/engine-improvement-areas.md](./docs/engine-improvement-areas.md).
+For a step-by-step explanation of router redirects and a booking-bot walkthrough, see [docs/router-hook-walkthrough.md](./docs/router-hook-walkthrough.md).
 
 ## Contributing
 

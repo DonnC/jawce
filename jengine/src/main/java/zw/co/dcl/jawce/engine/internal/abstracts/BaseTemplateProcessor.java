@@ -264,11 +264,13 @@ public abstract class BaseTemplateProcessor {
         return (boolean) tpl.getParams().getOrDefault(EngineConstant.DYNAMIC_LAST_TEMPLATE_PARAM, false);
     }
 
-    void processHook(String hook) throws Exception {
+    protected Hook processHook(String hook) throws Exception {
         if(hook != null) {
             this.hookArg.setHook(hook);
-            this.hookService.processHook(this.hookArg);
+            return this.hookService.processHook(this.hookArg);
         }
+
+        return this.hookArg;
     }
 
     /**
@@ -278,8 +280,8 @@ public abstract class BaseTemplateProcessor {
     protected void processPostHooks() throws Exception {
         this.ack_message();
         processHookParams(null);
-        this.processHook(this.template.getOnReceive());
-        this.processHook(this.template.getMiddleware());
+        this.hookArg = this.processHook(this.template.getOnReceive());
+        this.hookArg = this.processHook(this.template.getMiddleware());
         this.saveProp();
     }
 
@@ -287,8 +289,18 @@ public abstract class BaseTemplateProcessor {
      * hooks to process before message response is generated
      * and send back to channel for user
      */
-    protected void processPreHooks(BaseEngineTemplate nextTemplate) throws Exception {
+    protected BaseEngineTemplate processPreHooks(BaseEngineTemplate nextTemplate) throws Exception {
         processHookParams(nextTemplate);
-        this.processHook(nextTemplate.getOnGenerate());
+        Hook hookResult = this.processHook(nextTemplate.getOnGenerate());
+        this.hookArg = hookResult;
+
+        if(hookResult != null
+                && hookResult.getTemplateDynamicBody() != null
+                && hookResult.getTemplateDynamicBody().getTemplate() != null
+        ) {
+            return hookResult.getTemplateDynamicBody().getTemplate();
+        }
+
+        return nextTemplate;
     }
 }

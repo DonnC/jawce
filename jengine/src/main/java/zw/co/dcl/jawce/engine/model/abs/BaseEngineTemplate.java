@@ -36,6 +36,7 @@ import java.util.Map;
         @JsonSubTypes.Type(value = CtaTemplate.class, name = TemplateType.CTA_BUTTON),
         @JsonSubTypes.Type(value = DynamicTemplate.class, name = TemplateType.DYNAMIC),
         @JsonSubTypes.Type(value = FlowTemplate.class, name = TemplateType.FLOW),
+        @JsonSubTypes.Type(value = ListTemplate.class, name = TemplateType.LIST),
         @JsonSubTypes.Type(value = LocationTemplate.class, name = TemplateType.LOCATION),
         @JsonSubTypes.Type(value = MediaTemplate.class, name = TemplateType.MEDIA),
         @JsonSubTypes.Type(value = RequestLocationTemplate.class, name = TemplateType.REQUEST_LOCATION),

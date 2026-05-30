@@ -60,6 +60,13 @@
     "accept": "RIDE-COMMENT"
     "counter offer": "RIDE-COUNTER-OFFER"
 
+"RIDE-COUNTER-OFFER":
+  type: text
+  prop: counterOffer
+  message: "Share your counter offer amount"
+  routes:
+    "re:.*": "CONFIRM-OFFER"
+
 "RIDE-COMMENT":
   type: text
   prop: rideComment
@@ -95,4 +102,4 @@
     buttons:
       - Report
   routes:
-    "rate": "REPORT"
+    "report": "REPORT"

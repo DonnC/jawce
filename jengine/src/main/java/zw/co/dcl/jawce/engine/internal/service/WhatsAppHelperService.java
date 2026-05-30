@@ -66,17 +66,14 @@ public class WhatsAppHelperService {
 
     void onRequestError(String sessionId) {
         var session = this.sessionManager.session(sessionId);
-        if(session.get(sessionId, SessionConstant.PREV_STAGE)
-                .toString()
-                .equalsIgnoreCase(config.getStartMenu()) ||
-                session.get(sessionId, SessionConstant.CURRENT_STAGE)
-                        .toString()
-                        .equalsIgnoreCase(config.getStartMenu())
-        ) {
+        var currentStage = session.get(sessionId, SessionConstant.CURRENT_STAGE, String.class);
+        var previousStage = session.get(sessionId, SessionConstant.PREV_STAGE, String.class);
+
+        if(currentStage == null || currentStage.equalsIgnoreCase(config.getStartMenu())) {
             log.warn("WhatsApp request exception - clearing session");
             session.clear(sessionId);
         } else {
-            session.save(sessionId, SessionConstant.CURRENT_STAGE, session.get(sessionId, SessionConstant.PREV_STAGE));
+            session.save(sessionId, SessionConstant.CURRENT_STAGE, previousStage);
         }
     }
 
