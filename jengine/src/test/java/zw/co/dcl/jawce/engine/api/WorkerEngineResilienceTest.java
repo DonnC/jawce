@@ -10,6 +10,7 @@ import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
@@ -160,8 +161,11 @@ class WorkerEngineResilienceTest {
         this.clientManager = new EngineTestSupport.RecordingClientManager();
         this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
 
-        HookService hookService = new HookService(clientManager, jawceConfig, new StaticApplicationContext());
-        YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties);
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.refresh();
+        FlowHookRegistry flowHookRegistry = new FlowHookRegistry(applicationContext);
+        HookService hookService = new HookService(clientManager, jawceConfig, applicationContext, flowHookRegistry);
+        YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties, flowHookRegistry);
         WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
         WebhookProcessor webhookProcessor = new WebhookProcessor(
                 hookService,

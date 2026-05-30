@@ -16,6 +16,7 @@ import zw.co.dcl.jawce.engine.defaults.FileSessionManager;
 import zw.co.dcl.jawce.engine.defaults.NoOpHistoryManager;
 import zw.co.dcl.jawce.engine.defaults.RestTemplateClientManager;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
 import zw.co.dcl.jawce.engine.internal.service.HistoryEventListener;
 import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
@@ -70,6 +71,7 @@ class JawceAutoConfigTest {
                     assertInstanceOf(RestTemplateClientManager.class, context.getBean(IClientManager.class));
                     assertInstanceOf(NoOpHistoryManager.class, context.getBean(IHistoryManager.class));
                     assertInstanceOf(YmlJsonTemplateStorageManager.class, context.getBean(ITemplateStorageManager.class));
+                    assertNotNull(context.getBean(FlowHookRegistry.class));
                     assertNotNull(context.getBean(HistoryEventPublisher.class));
                     assertNotNull(context.getBean(HistoryEventListener.class));
                     assertNotNull(context.getBean(HookService.class));

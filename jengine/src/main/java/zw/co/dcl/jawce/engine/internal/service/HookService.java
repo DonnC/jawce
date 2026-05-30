@@ -35,12 +35,19 @@ public class HookService {
     final IClientManager client;
     final JawceConfig config;
     final ApplicationContext applicationContext;
+    final FlowHookRegistry flowHookRegistry;
     final ConcurrentHashMap<String, ReflectiveHookPlan> reflectiveHookPlans = new ConcurrentHashMap<>();
 
-    public HookService(IClientManager client, JawceConfig config, ApplicationContext applicationContext) {
+    public HookService(
+            IClientManager client,
+            JawceConfig config,
+            ApplicationContext applicationContext,
+            FlowHookRegistry flowHookRegistry
+    ) {
         this.client = client;
         this.config = config;
         this.applicationContext = applicationContext;
+        this.flowHookRegistry = flowHookRegistry;
     }
 
     boolean isRestHook(String hookName) {
@@ -215,7 +222,19 @@ public class HookService {
         return this.reflectiveHookPlans.size();
     }
 
-    public Hook processHook(Hook arg) throws Exception {
+    Hook processNamedHook(Hook arg, HookExecutionType executionType) throws Exception {
+        var namedHook = executionType == null
+                ? this.flowHookRegistry.findAny(arg.getHook())
+                : this.flowHookRegistry.find(executionType, arg.getHook());
+
+        if(namedHook.isEmpty()) {
+            return null;
+        }
+
+        return namedHook.get().invoke(arg);
+    }
+
+    public Hook processHook(Hook arg, HookExecutionType executionType) throws Exception {
         log.debug("PROCESSING HOOK ARG: {}", arg);
         log.debug("PROCESSING HOOK: {}", arg.getHook());
 
@@ -223,7 +242,16 @@ public class HookService {
             return this.processRestHook(arg);
         }
 
+        Hook namedResult = this.processNamedHook(arg, executionType);
+        if(namedResult != null) {
+            return namedResult;
+        }
+
         return this.processReflectiveHook(arg);
+    }
+
+    public Hook processHook(Hook arg) throws Exception {
+        return this.processHook(arg, null);
     }
 
     @EventListener
@@ -231,7 +259,7 @@ public class HookService {
         log.debug("PROCESSING ONCE OFF HOOK: {}", event.getArg().getHook());
 
         try {
-            this.processHook(event.getArg());
+            this.processHook(event.getArg(), HookExecutionType.GENERIC);
         } catch (Exception e) {
             log.debug("OnceOffHookEvent processing failed: {}", e.getMessage());
         }

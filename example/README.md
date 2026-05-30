@@ -10,6 +10,12 @@ The examples now rely on `jawce` default implementations for:
 - YAML or JSON template loading,
 - `RestTemplate`-based client wiring.
 
+The `ehailing` example also uses the newer named-hook approach:
+
+- templates reference stable hook names
+- Spring beans expose the hook logic
+- `jawce` resolves and validates the hook at startup
+
 If using the default file session manager, you may delete old session data by deleting the `.session` folder.
 
 

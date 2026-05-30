@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import zw.co.dcl.jawce.engine.api.dto.PayloadGeneratorDto;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
+import zw.co.dcl.jawce.engine.internal.service.HookExecutionType;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.model.core.Hook;
 import zw.co.dcl.jawce.engine.model.core.WaUser;
@@ -67,7 +68,7 @@ class PayloadGeneratorTest {
                         .build())
                 .build();
 
-        Mockito.when(hookService.processHook(Mockito.any(Hook.class))).thenReturn(hookResult);
+        Mockito.when(hookService.processHook(Mockito.any(Hook.class), Mockito.eq(HookExecutionType.TEMPLATE))).thenReturn(hookResult);
 
         Hook hook = Hook.builder()
                 .waUser(new WaUser("Test User", "263771234567", "wamid-2", 1L))

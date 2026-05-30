@@ -10,6 +10,8 @@ import org.springframework.util.Assert;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
 import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
+import zw.co.dcl.jawce.engine.internal.service.HookExecutionType;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.messages.*;
@@ -42,9 +44,15 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final TemplateStorageProperties properties;
+    private final FlowHookRegistry flowHookRegistry;
 
     public YmlJsonTemplateStorageManager(TemplateStorageProperties properties) {
+        this(properties, null);
+    }
+
+    public YmlJsonTemplateStorageManager(TemplateStorageProperties properties, FlowHookRegistry flowHookRegistry) {
         this.properties = properties;
+        this.flowHookRegistry = flowHookRegistry;
         this.loadTemplates();
         this.loadTriggers();
         log.info("Template storage manager initialized with templates: {} and triggers: {}", templates.size(), triggers.size());
@@ -255,21 +263,32 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     }
 
     void validateHooks(String stage, BaseEngineTemplate template) {
-        for (String hook : Arrays.asList(template.getOnReceive(), template.getOnGenerate(), template.getRouter(), template.getMiddleware(), template.getTemplate())) {
-            if (hook != null) {
-                validateHookPath(stage, hook);
-            }
-        }
+        validateHookPath(stage, template.getOnReceive(), HookExecutionType.RECEIVE);
+        validateHookPath(stage, template.getOnGenerate(), HookExecutionType.GENERATE);
+        validateHookPath(stage, template.getRouter(), HookExecutionType.ROUTER);
+        validateHookPath(stage, template.getMiddleware(), HookExecutionType.MIDDLEWARE);
+        validateHookPath(stage, template.getTemplate(), HookExecutionType.TEMPLATE);
     }
 
-    void validateHookPath(String stage, String hookPath) {
+    void validateHookPath(String stage, String hookPath, HookExecutionType hookType) {
+        if(hookPath == null) {
+            return;
+        }
+
         String lower = hookPath.toLowerCase();
         if (lower.startsWith("/") || lower.startsWith("http://") || lower.startsWith("https://")) {
             return;
         }
 
+        if(this.flowHookRegistry != null && this.flowHookRegistry.hasHook(hookType, hookPath)) {
+            return;
+        }
+
         int lastDot = hookPath.lastIndexOf('.');
         if (lastDot <= 0 || lastDot == hookPath.length() - 1) {
+            if(this.flowHookRegistry != null) {
+                throw new InternalException("Invalid hook for stage " + stage + ": " + hookPath);
+            }
             throw new InternalException("Invalid hook for stage " + stage + ": " + hookPath);
         }
 

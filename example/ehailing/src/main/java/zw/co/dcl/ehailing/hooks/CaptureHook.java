@@ -1,13 +1,15 @@
 package zw.co.dcl.ehailing.hooks;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import zw.co.dcl.jawce.engine.api.annotation.FlowHookType;
+import zw.co.dcl.jawce.engine.api.annotation.NamedFlowHook;
 import zw.co.dcl.jawce.engine.model.core.Hook;
-import zw.co.dcl.jawce.engine.model.dto.TemplateDynamicBody;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
+@Service
 public class CaptureHook {
     /**
      * Simulate capturing user ride request
@@ -15,6 +17,7 @@ public class CaptureHook {
      * @param arg: Hook passed by the engine
      * @return updated Hook
      */
+    @NamedFlowHook(value = "captureRideRequest", type = FlowHookType.RECEIVE)
     public Hook capture(Hook arg) {
         log.debug("[capture] Received hook arg: {}", arg);
         log.debug("[capture] User selected the: `{}` option", arg.getUserInput());

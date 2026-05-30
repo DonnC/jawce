@@ -76,7 +76,7 @@
 
 "CONFIRM-OFFER":
   type: button
-  on-receive: "zw.co.dcl.ehailing.hooks.CaptureHook.capture"
+  on-receive: "captureRideRequest"
   typing: true
   message:
     title: PickDrive Ride

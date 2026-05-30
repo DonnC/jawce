@@ -9,10 +9,12 @@ import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.support.EngineTestSupport;
+import zw.co.dcl.jawce.engine.support.NamedHookBeans;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -145,7 +147,74 @@ class WorkerEngineHooksTest {
         assertEquals("REPORT", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
     }
 
+    @Test
+    void namedTypedHooksCanBeResolvedWithoutReflectionSyntax() throws Exception {
+        Path templatesDir = Files.createDirectories(tempDir.resolve("named-templates"));
+        Path triggersDir = Files.createDirectories(tempDir.resolve("named-triggers"));
+
+        Files.writeString(
+                templatesDir.resolve("templates.yaml"),
+                "\"START-MENU\":\n" +
+                        "  type: button\n" +
+                        "  on-receive: namedReceive\n" +
+                        "  message:\n" +
+                        "    title: Start\n" +
+                        "    body: Choose\n" +
+                        "    buttons:\n" +
+                        "      - Continue\n" +
+                        "      - Template\n" +
+                        "  routes:\n" +
+                        "    \"continue\": \"NEXT-STAGE\"\n" +
+                        "    \"template\": \"TEMPLATE-STAGE\"\n" +
+                        "\n" +
+                        "\"NEXT-STAGE\":\n" +
+                        "  type: text\n" +
+                        "  on-generate: namedGenerate\n" +
+                        "  message: Hello {{ name }}\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"START-MENU\"\n" +
+                        "\n" +
+                        "\"TEMPLATE-STAGE\":\n" +
+                        "  type: text\n" +
+                        "  template: namedTemplate\n" +
+                        "  message: Hello {{ name }}\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"START-MENU\"\n" +
+                        "\n"
+        );
+        Files.writeString(
+                triggersDir.resolve("triggers.yaml"),
+                "\"START-MENU\": \"re:(?i)^(start|hi|hie|menu|hello)$\"\n"
+        );
+
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerSingleton("namedReceiveHook", NamedHookBeans.NamedReceiveHook.class);
+        applicationContext.registerSingleton("namedGenerateHook", NamedHookBeans.NamedGenerateHook.class);
+        applicationContext.registerSingleton("namedTemplateHook", NamedHookBeans.NamedTemplateHook.class);
+        applicationContext.refresh();
+
+        worker = createWorker(templatesDir, triggersDir, false, applicationContext);
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-1"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("continue", "wamid-2"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        assertEquals("text", payload.get("type"));
+        assertEquals("Hello Named", EngineTestSupport.childMap(payload, "text").get("body"));
+        assertEquals(List.of("named_receive", "named_receive"), sessionManager.getGlobal("events", List.class));
+
+        worker = createWorker(templatesDir, triggersDir, false, applicationContext);
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-3"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("template", "wamid-4"));
+        Map<String, Object> templatePayload = clientManager.lastSentPayload();
+        assertEquals("Hello NamedTemplate", EngineTestSupport.childMap(templatePayload, "text").get("body"));
+    }
+
     private Worker createWorker(Path templatesDir, Path triggersDir, boolean emulate) {
+        return createWorker(templatesDir, triggersDir, emulate, null);
+    }
+
+    private Worker createWorker(Path templatesDir, Path triggersDir, boolean emulate, StaticApplicationContext applicationContext) {
         TemplateStorageProperties storageProperties = new TemplateStorageProperties();
         storageProperties.setTemplatesPath(templatesDir.toString());
         storageProperties.setTriggersPath(triggersDir.toString());
@@ -166,8 +235,14 @@ class WorkerEngineHooksTest {
         this.clientManager = new EngineTestSupport.RecordingClientManager();
         this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
 
-        HookService hookService = new HookService(clientManager, jawceConfig, new StaticApplicationContext());
-        YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties);
+        StaticApplicationContext appContext = applicationContext == null ? new StaticApplicationContext() : applicationContext;
+        if(!appContext.isActive()) {
+            appContext.refresh();
+        }
+
+        FlowHookRegistry flowHookRegistry = new FlowHookRegistry(appContext);
+        HookService hookService = new HookService(clientManager, jawceConfig, appContext, flowHookRegistry);
+        YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties, flowHookRegistry);
         WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
         WebhookProcessor webhookProcessor = new WebhookProcessor(
                 hookService,

@@ -13,6 +13,10 @@ import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.internal.dto.UserInput;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
+import zw.co.dcl.jawce.engine.internal.dto.GenerateHookResult;
+import zw.co.dcl.jawce.engine.internal.dto.HookResultMapper;
+import zw.co.dcl.jawce.engine.internal.service.HookExecutionType;
+import zw.co.dcl.jawce.engine.internal.service.RenderProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
@@ -168,8 +172,9 @@ public abstract class BaseTemplateProcessor {
         if(this.template.getRouter() != null) {
             try {
                 processHookParams(null);
-                this.hookArg.setHook(this.template.getRouter());
-                return this.hookService.processHook(this.hookArg).getRedirectTo();
+                Hook routerHook = this.processHook(this.template.getRouter(), HookExecutionType.ROUTER);
+                this.hookArg = HookResultMapper.merge(routerHook, this.hookArg);
+                return HookResultMapper.redirectTo(this.hookArg);
             } catch (Exception e) {
                 log.warn("Failed to process dynamic router hook: {}", e.getMessage());
             }
@@ -264,10 +269,10 @@ public abstract class BaseTemplateProcessor {
         return (boolean) tpl.getParams().getOrDefault(EngineConstant.DYNAMIC_LAST_TEMPLATE_PARAM, false);
     }
 
-    protected Hook processHook(String hook) throws Exception {
+    protected Hook processHook(String hook, HookExecutionType hookExecutionType) throws Exception {
         if(hook != null) {
             this.hookArg.setHook(hook);
-            return this.hookService.processHook(this.hookArg);
+            return this.hookService.processHook(this.hookArg, hookExecutionType);
         }
 
         return this.hookArg;
@@ -280,8 +285,14 @@ public abstract class BaseTemplateProcessor {
     protected void processPostHooks() throws Exception {
         this.ack_message();
         processHookParams(null);
-        this.hookArg = this.processHook(this.template.getOnReceive());
-        this.hookArg = this.processHook(this.template.getMiddleware());
+        this.hookArg = HookResultMapper.merge(
+                this.processHook(this.template.getOnReceive(), HookExecutionType.RECEIVE),
+                this.hookArg
+        );
+        this.hookArg = HookResultMapper.merge(
+                this.processHook(this.template.getMiddleware(), HookExecutionType.MIDDLEWARE),
+                this.hookArg
+        );
         this.saveProp();
     }
 
@@ -291,14 +302,21 @@ public abstract class BaseTemplateProcessor {
      */
     protected BaseEngineTemplate processPreHooks(BaseEngineTemplate nextTemplate) throws Exception {
         processHookParams(nextTemplate);
-        Hook hookResult = this.processHook(nextTemplate.getOnGenerate());
-        this.hookArg = hookResult;
+        Hook hookResult = this.processHook(nextTemplate.getOnGenerate(), HookExecutionType.GENERATE);
+        this.hookArg = HookResultMapper.merge(hookResult, this.hookArg);
+        GenerateHookResult generateHookResult = HookResultMapper.toGenerateResult(this.hookArg);
 
-        if(hookResult != null
-                && hookResult.getTemplateDynamicBody() != null
-                && hookResult.getTemplateDynamicBody().getTemplate() != null
-        ) {
-            return hookResult.getTemplateDynamicBody().getTemplate();
+        if(generateHookResult.hasTemplateOverride()) {
+            return generateHookResult.templateOverride();
+        }
+
+        if(generateHookResult.hasRenderPayload()) {
+            var renderer = new RenderProcessor();
+            var renderResult = renderer.renderTemplate(
+                    SerializeUtils.fromTemplate(nextTemplate),
+                    generateHookResult.renderPayload()
+            );
+            return SerializeUtils.toTemplate(renderResult);
         }
 
         return nextTemplate;

@@ -2,9 +2,12 @@ package zw.co.dcl.jawce.engine.defaults;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.context.support.StaticApplicationContext;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
 import zw.co.dcl.jawce.engine.model.template.ListTemplate;
+import zw.co.dcl.jawce.engine.support.NamedHookBeans;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -144,6 +147,55 @@ class YmlJsonTemplateStorageManagerValidationTest {
         );
 
         YmlJsonTemplateStorageManager manager = new YmlJsonTemplateStorageManager(properties);
+
+        assertTrue(manager.exists("START-MENU"));
+    }
+
+    @Test
+    void validatesNamedHooksAgainstRegistry() throws Exception {
+        TemplateStorageProperties properties = propertiesFor(
+                """
+                "START-MENU":
+                  type: text
+                  on-receive: namedReceive
+                  on-generate: namedGenerate
+                  message: "Hello {{ name }}"
+                  routes:
+                    "re:.*": "START-MENU"
+                """,
+                "{}"
+        );
+
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerSingleton("namedReceiveHook", NamedHookBeans.NamedReceiveHook.class);
+        applicationContext.registerSingleton("namedGenerateHook", NamedHookBeans.NamedGenerateHook.class);
+        applicationContext.refresh();
+
+        YmlJsonTemplateStorageManager manager = new YmlJsonTemplateStorageManager(properties, new FlowHookRegistry(applicationContext));
+
+        assertTrue(manager.exists("START-MENU"));
+    }
+
+    @Test
+    void validatesNamedMethodHooksAgainstRegistry() throws Exception {
+        TemplateStorageProperties properties = propertiesFor(
+                """
+                "START-MENU":
+                  type: text
+                  on-receive: methodReceive
+                  router: methodRouter
+                  message: "Hello"
+                  routes:
+                    "re:.*": "START-MENU"
+                """,
+                "{}"
+        );
+
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerSingleton("namedMethodHooks", NamedHookBeans.NamedMethodHooks.class);
+        applicationContext.refresh();
+
+        YmlJsonTemplateStorageManager manager = new YmlJsonTemplateStorageManager(properties, new FlowHookRegistry(applicationContext));
 
         assertTrue(manager.exists("START-MENU"));
     }

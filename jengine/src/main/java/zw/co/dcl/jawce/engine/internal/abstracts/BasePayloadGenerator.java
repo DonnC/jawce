@@ -7,6 +7,9 @@ import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.exceptions.TemplateRenderException;
 import zw.co.dcl.jawce.engine.api.utils.SerializeUtils;
 import zw.co.dcl.jawce.engine.constants.TemplateType;
+import zw.co.dcl.jawce.engine.internal.dto.GenerateHookResult;
+import zw.co.dcl.jawce.engine.internal.dto.HookResultMapper;
+import zw.co.dcl.jawce.engine.internal.service.HookExecutionType;
 import zw.co.dcl.jawce.engine.internal.service.RenderProcessor;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.Hook;
@@ -40,19 +43,23 @@ public abstract class BasePayloadGenerator {
 
             Assert.notNull(this.hookArg.getSession(), "hook session object is null");
 
-            var result = this.dto.hookService().processHook(this.hookArg);
+            var result = this.dto.hookService().processHook(this.hookArg, HookExecutionType.TEMPLATE);
+            GenerateHookResult templateHookResult = HookResultMapper.toGenerateResult(result);
+            this.hookArg = HookResultMapper.merge(result, this.hookArg);
 
-            if(result.getTemplateDynamicBody() != null) {
-                this.lastRenderPayload = result.getTemplateDynamicBody().getRenderPayload() == null
-                        ? new HashMap<>()
-                        : result.getTemplateDynamicBody().getRenderPayload();
+            if(templateHookResult.hasRenderPayload() || templateHookResult.hasFlowPayload()) {
+                this.lastRenderPayload = templateHookResult.hasRenderPayload()
+                        ? new HashMap<>(templateHookResult.renderPayload())
+                        : new HashMap<>();
 
-                if(result.getTemplateDynamicBody().getRenderPayload() != null) {
-                    var renderResult = renderer.renderTemplate(SerializeUtils.fromTemplate(this.template), result.getTemplateDynamicBody().getRenderPayload());
+                if(templateHookResult.hasRenderPayload()) {
+                    var renderResult = renderer.renderTemplate(SerializeUtils.fromTemplate(this.template), templateHookResult.renderPayload());
                     this.template = SerializeUtils.toTemplate(renderResult);
                 }
 
-                return result.getTemplateDynamicBody().getFlowPayload();
+                return templateHookResult.hasFlowPayload()
+                        ? new HashMap<>(templateHookResult.flowPayload())
+                        : null;
             }
         } catch (TemplateRenderException e) {
             throw e;

@@ -22,6 +22,7 @@ import zw.co.dcl.jawce.engine.defaults.RestTemplateClientManager;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
 import zw.co.dcl.jawce.engine.internal.service.HistoryEventListener;
 import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
+import zw.co.dcl.jawce.engine.internal.service.FlowHookRegistry;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
@@ -54,8 +55,11 @@ public class JawceAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITemplateStorageManager.class)
-    public ITemplateStorageManager templateStorageManager(TemplateStorageProperties templateStorageProperties) {
-        return new YmlJsonTemplateStorageManager(templateStorageProperties);
+    public ITemplateStorageManager templateStorageManager(
+            TemplateStorageProperties templateStorageProperties,
+            FlowHookRegistry flowHookRegistry
+    ) {
+        return new YmlJsonTemplateStorageManager(templateStorageProperties, flowHookRegistry);
     }
 
     @Bean
@@ -113,12 +117,19 @@ public class JawceAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
+    public FlowHookRegistry flowHookRegistry(ApplicationContext applicationContext) {
+        return new FlowHookRegistry(applicationContext);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public HookService hookService(
             IClientManager clientManager,
             JawceConfig jawceConfig,
-            ApplicationContext applicationContext
+            ApplicationContext applicationContext,
+            FlowHookRegistry flowHookRegistry
     ) {
-        return new HookService(clientManager, jawceConfig, applicationContext);
+        return new HookService(clientManager, jawceConfig, applicationContext, flowHookRegistry);
     }
 
     @Bean

@@ -12,10 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class HookServiceCachingTest {
     @Test
     void cachesReflectivePlanForManualHooks() throws Exception {
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.refresh();
         HookService hookService = new HookService(
                 new EngineTestSupport.RecordingClientManager(),
                 new JawceConfig(),
-                new StaticApplicationContext()
+                applicationContext,
+                new FlowHookRegistry(applicationContext)
         );
 
         Hook hook = new Hook();
@@ -36,7 +39,8 @@ class HookServiceCachingTest {
         HookService hookService = new HookService(
                 new EngineTestSupport.RecordingClientManager(),
                 new JawceConfig(),
-                applicationContext
+                applicationContext,
+                new FlowHookRegistry(applicationContext)
         );
 
         Hook hook = new Hook();
