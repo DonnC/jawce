@@ -27,6 +27,7 @@ class WhatsAppHelperServiceTest {
     private EngineTestSupport.InMemorySessionManager sessionManager;
     private JawceConfig jawceConfig;
     private WhatsAppConfig whatsAppConfig;
+    private EngineTestSupport.CollectingEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
@@ -37,12 +38,13 @@ class WhatsAppHelperServiceTest {
         this.whatsAppConfig = new WhatsAppConfig();
         this.whatsAppConfig.setAccessToken("access-token");
         this.whatsAppConfig.setPhoneNumberId("phone-id");
+        this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
     }
 
     @Test
     void successfulRequestAdvancesSessionAndUpdatesLastActivity() {
         FakeClientManager clientManager = new FakeClientManager(ResponseEntity.ok(validChannelResponse()));
-        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
 
         sessionManager.save("263771234567", SessionConstant.CURRENT_STAGE, "START-MENU");
         service.sendWhatsAppRequest(new WebhookProcessorResult(
@@ -60,7 +62,7 @@ class WhatsAppHelperServiceTest {
     @Test
     void failedRequestRollsBackToPreviousStage() {
         FakeClientManager clientManager = new FakeClientManager(new RuntimeException("boom"));
-        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
 
         sessionManager.save("263771234567", SessionConstant.PREV_STAGE, "START-MENU");
         sessionManager.save("263771234567", SessionConstant.CURRENT_STAGE, "REPORT");
@@ -78,7 +80,7 @@ class WhatsAppHelperServiceTest {
     @Test
     void failedRequestOnStartStageClearsSession() {
         FakeClientManager clientManager = new FakeClientManager(new RuntimeException("boom"));
-        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
 
         sessionManager.save("263771234567", SessionConstant.PREV_STAGE, "START-MENU");
         sessionManager.save("263771234567", SessionConstant.CURRENT_STAGE, "START-MENU");
@@ -97,7 +99,7 @@ class WhatsAppHelperServiceTest {
     @Test
     void successfulRequestWithoutSessionHandlingStillRecordsLastActivity() {
         FakeClientManager clientManager = new FakeClientManager(ResponseEntity.ok(validChannelResponse()));
-        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService service = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
 
         service.sendWhatsAppRequest(new WebhookProcessorResult(
                 Map.of("type", "reaction"),

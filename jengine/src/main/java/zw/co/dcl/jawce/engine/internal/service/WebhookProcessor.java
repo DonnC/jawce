@@ -21,6 +21,8 @@ import zw.co.dcl.jawce.engine.internal.dto.Webhook;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
+import zw.co.dcl.jawce.engine.model.history.ChatHistoryEvent;
+import zw.co.dcl.jawce.engine.model.history.HistoryEventType;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,13 +32,55 @@ public class WebhookProcessor extends BaseTemplateProcessor {
     final int MAX_NESTED_CALLS = 5;
     int nestedCallCount = 0;
     List<PreProcessorResult> nestedPreProcessorResults = new ArrayList<>();
+    private final HistoryEventPublisher historyEventPublisher;
 
     public WebhookProcessor(
             HookService hookService, ISessionManager sessionManager,
             ITemplateStorageManager templateStorageManager, JawceConfig config,
-            WhatsAppHelperService helperService
+            WhatsAppHelperService helperService,
+            HistoryEventPublisher historyEventPublisher
     ) {
         super(hookService, sessionManager, templateStorageManager, config, helperService);
+        this.historyEventPublisher = historyEventPublisher;
+    }
+
+    void publishStageResolved(String currentStage, String nextStage, BaseEngineTemplate nextTemplate) {
+        this.historyEventPublisher.publish(ChatHistoryEvent.builder()
+                .timestamp(Utils.currentSystemDate().toString())
+                .type(HistoryEventType.STAGE_RESOLVED)
+                .direction("system")
+                .sessionId(this.sessionId)
+                .waId(this.message.user().waId())
+                .messageId(this.message.user().msgId())
+                .stage(currentStage)
+                .nextStage(nextStage)
+                .templateType(nextTemplate.getType())
+                .detail("Resolved next stage")
+                .metadata(Map.of(
+                        "firstTime", this.isFirstTime,
+                        "fromTrigger", this.isFromTrigger
+                ))
+                .build());
+    }
+
+    void publishOutboundGenerated(String nextStage, BaseEngineTemplate nextTemplate, Map<String, Object> payload) {
+        this.historyEventPublisher.publish(ChatHistoryEvent.builder()
+                .timestamp(Utils.currentSystemDate().toString())
+                .type(HistoryEventType.OUTBOUND_GENERATED)
+                .direction("outbound")
+                .sessionId(this.sessionId)
+                .waId(this.message.user().waId())
+                .messageId(this.message.user().msgId())
+                .stage(this.stage)
+                .nextStage(nextStage)
+                .templateType(nextTemplate.getType())
+                .detail("Generated outbound payload")
+                .payload(payload)
+                .metadata(Map.of(
+                        "firstTime", this.isFirstTime,
+                        "fromTrigger", this.isFromTrigger
+                ))
+                .build());
     }
 
     /**
@@ -224,8 +268,10 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         var results = this.preProcessor();
         var nextTemplate = results.template();
         var nextStage = results.stage();
+        var currentStage = this.stage;
 
         nextTemplate = this.processPreHooks(nextTemplate);
+        this.publishStageResolved(currentStage, nextStage, nextTemplate);
 
         var messageRequest = new PayloadGeneratorDto(
                 nextTemplate,
@@ -237,6 +283,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
         var payload = new PayloadGenerator(messageRequest).generate();
         payload = processShortcutTemplateVariables(payload);
+        this.publishOutboundGenerated(nextStage, nextTemplate, payload);
 
         nestedCallCount = 0;
         this.isFromTrigger = false;

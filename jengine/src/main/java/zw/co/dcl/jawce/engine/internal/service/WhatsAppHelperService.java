@@ -17,6 +17,8 @@ import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
+import zw.co.dcl.jawce.engine.model.history.ChatHistoryEvent;
+import zw.co.dcl.jawce.engine.model.history.HistoryEventType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,15 +35,18 @@ public class WhatsAppHelperService {
     private final ISessionManager sessionManager;
     private final JawceConfig config;
     private final WhatsAppConfig whatsAppConfig;
+    private final HistoryEventPublisher historyEventPublisher;
 
     public WhatsAppHelperService(
             IClientManager clientManager, ISessionManager sessionManager,
-            JawceConfig config, WhatsAppConfig whatsAppConfig
+            JawceConfig config, WhatsAppConfig whatsAppConfig,
+            HistoryEventPublisher historyEventPublisher
     ) {
         this.clientManager = clientManager;
         this.sessionManager = sessionManager;
         this.config = config;
         this.whatsAppConfig = whatsAppConfig;
+        this.historyEventPublisher = historyEventPublisher;
     }
 
     void onWhatsappRequestSuccess(WebhookProcessorResult requestDto) {
@@ -65,6 +70,8 @@ public class WhatsAppHelperService {
     }
 
     void onRequestError(String sessionId) {
+        if(sessionId == null) return;
+
         var session = this.sessionManager.session(sessionId);
         var currentStage = session.get(sessionId, SessionConstant.CURRENT_STAGE, String.class);
         var previousStage = session.get(sessionId, SessionConstant.PREV_STAGE, String.class);
@@ -87,6 +94,20 @@ public class WhatsAppHelperService {
 
             if(WhatsAppUtils.isValidRequestResponse(response.getBody()) || this.config.isEmulate()) {
                 this.onWhatsappRequestSuccess(requestDto);
+                this.historyEventPublisher.publish(ChatHistoryEvent.builder()
+                        .timestamp(Utils.currentSystemDate().toString())
+                        .type(HistoryEventType.OUTBOUND_SENT)
+                        .direction("outbound")
+                        .sessionId(requestDto.sessionId())
+                        .waId(requestDto.payload().getOrDefault("to", "").toString())
+                        .nextStage(requestDto.nextRoute())
+                        .success(true)
+                        .payload(requestDto.payload())
+                        .metadata(Map.of(
+                                "handleSession", requestDto.handleSession(),
+                                "response", response.getBody()
+                        ))
+                        .build());
                 return response.getBody();
             }
 
@@ -94,6 +115,21 @@ public class WhatsAppHelperService {
             throw new InternalException("There was a problem. Unsuccessful channel response code");
         } catch (Exception e) {
             this.onRequestError(requestDto.sessionId());
+            this.historyEventPublisher.publish(ChatHistoryEvent.builder()
+                    .timestamp(Utils.currentSystemDate().toString())
+                    .type(HistoryEventType.OUTBOUND_FAILED)
+                    .direction("outbound")
+                    .sessionId(requestDto.sessionId())
+                    .waId(requestDto.payload().getOrDefault("to", "").toString())
+                    .nextStage(requestDto.nextRoute())
+                    .success(false)
+                    .detail(e.getMessage())
+                    .payload(requestDto.payload())
+                    .metadata(Map.of(
+                            "handleSession", requestDto.handleSession(),
+                            "errorType", e.getClass().getSimpleName()
+                    ))
+                    .build());
             throw new InternalException("Failed to process WhatsApp Cloud request", e);
         }
     }

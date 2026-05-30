@@ -1,6 +1,13 @@
 jawce:
   start-menu: "START-MENU"
   emulate: true
+  history:
+    file-enabled: true
+    dir: "./.history"
+    file-prefix: "ehailing-history"
+    max-file-size-bytes: 2097152
+    max-files: 10
+    executor-threads: 1
 
 whatsapp:
   hub-token: REPLACE-WITH-YOUR-WEBHOOK-VERIFICATION-TOKEN

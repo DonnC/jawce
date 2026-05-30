@@ -3,7 +3,6 @@ package zw.co.dcl.jawce.engine.api;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.StaticApplicationContext;
 import zw.co.dcl.jawce.engine.api.utils.Utils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
@@ -31,6 +30,7 @@ class WorkerEngineResilienceTest {
 
     private EngineTestSupport.InMemorySessionManager sessionManager;
     private EngineTestSupport.RecordingClientManager clientManager;
+    private EngineTestSupport.CollectingEventPublisher eventPublisher;
     private Path templatesDir;
     private Path triggersDir;
 
@@ -158,27 +158,27 @@ class WorkerEngineResilienceTest {
 
         this.sessionManager = new EngineTestSupport.InMemorySessionManager();
         this.clientManager = new EngineTestSupport.RecordingClientManager();
+        this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
 
         HookService hookService = new HookService(clientManager, jawceConfig, new StaticApplicationContext());
         YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties);
-        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
         WebhookProcessor webhookProcessor = new WebhookProcessor(
                 hookService,
                 sessionManager,
                 templateStorageManager,
                 jawceConfig,
-                whatsAppHelperService
+                whatsAppHelperService,
+                eventPublisher.historyEventPublisher()
         );
-        ApplicationEventPublisher publisher = event -> {
-        };
-
         return new Worker(
-                publisher,
+                eventPublisher,
                 whatsAppConfig,
                 jawceConfig,
                 whatsAppHelperService,
                 webhookProcessor,
-                sessionManager
+                sessionManager,
+                eventPublisher.historyEventPublisher()
         );
     }
 }

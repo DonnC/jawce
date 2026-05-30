@@ -1,12 +1,15 @@
 package zw.co.dcl.jawce.engine.support;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import zw.co.dcl.jawce.engine.api.iface.IClientManager;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
+import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
 import zw.co.dcl.jawce.engine.model.core.HookRest;
+import zw.co.dcl.jawce.engine.model.history.ChatHistoryEvent;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -136,6 +139,26 @@ public final class EngineTestSupport {
 
         public int sentCount() {
             return sentPayloads.size();
+        }
+    }
+
+    public static class CollectingEventPublisher implements ApplicationEventPublisher {
+        private final List<Object> events = new ArrayList<>();
+
+        @Override
+        public void publishEvent(Object event) {
+            events.add(event);
+        }
+
+        public List<ChatHistoryEvent> historyEvents() {
+            return events.stream()
+                    .filter(ChatHistoryEvent.class::isInstance)
+                    .map(ChatHistoryEvent.class::cast)
+                    .toList();
+        }
+
+        public HistoryEventPublisher historyEventPublisher() {
+            return new HistoryEventPublisher(this);
         }
     }
 

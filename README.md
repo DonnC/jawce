@@ -66,6 +66,9 @@ For router-hook usage and backend-driven payment/biller flow design, see [docs/r
 For advanced backend-built outbound templates, see [docs/advanced-dynamic-template-handling.md](./docs/advanced-dynamic-template-handling.md).
 For the most important current engine improvement areas, see [docs/engine-improvement-areas.md](./docs/engine-improvement-areas.md).
 For a step-by-step explanation of router redirects and a booking-bot walkthrough, see [docs/router-hook-walkthrough.md](./docs/router-hook-walkthrough.md).
+For load-testing guidance and high-load performance notes, see [docs/stress-testing-and-performance.md](./docs/stress-testing-and-performance.md).
+For the recommended `jawce` history-interface design, see [docs/history-interface-approach.md](./docs/history-interface-approach.md).
+For the implemented history feature, configuration, and file-rotation behavior, see [docs/history-feature.md](./docs/history-feature.md).
 
 ## Contributing
 

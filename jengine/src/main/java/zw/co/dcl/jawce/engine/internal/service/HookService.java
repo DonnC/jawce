@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -34,6 +35,7 @@ public class HookService {
     final IClientManager client;
     final JawceConfig config;
     final ApplicationContext applicationContext;
+    final ConcurrentHashMap<String, ReflectiveHookPlan> reflectiveHookPlans = new ConcurrentHashMap<>();
 
     public HookService(IClientManager client, JawceConfig config, ApplicationContext applicationContext) {
         this.client = client;
@@ -87,41 +89,9 @@ public class HookService {
     }
 
     Hook processReflectiveHook(Hook arg) throws Exception {
-        int lastDot = arg.getHook().lastIndexOf('.');
-        if(lastDot == -1) throw new InternalException("Invalid hook path: " + arg.getHook());
-
-        var classNamePath = arg.getHook().substring(0, lastDot);
-        var methodName = arg.getHook().substring(lastDot + 1);
-
-        Class<?> hookClass = Class.forName(classNamePath);
-        Object hookObj;
-
-        try {
-            hookObj = this.applicationContext.getBean(hookClass);
-            log.debug("Loaded hook bean from Spring context: {}", classNamePath);
-        } catch (BeansException ex) {
-            log.warn("Spring bean not found, falling back to manual instantiation: {}", classNamePath);
-            hookObj = createHookInstance(hookClass, arg);
-        }
-
-        Method method = null;
-        Object response;
-
-        // Try method(Hook)
-        try {
-            method = hookClass.getDeclaredMethod(methodName, Hook.class);
-            method.setAccessible(true);
-            response = method.invoke(hookObj, arg);
-        } catch (NoSuchMethodException e1) {
-            // Try no-arg method
-            try {
-                method = hookClass.getDeclaredMethod(methodName);
-                method.setAccessible(true);
-                response = method.invoke(hookObj);
-            } catch (NoSuchMethodException e2) {
-                throw new InternalException("No suitable method found for hook: " + arg.getHook(), e2);
-            }
-        }
+        ReflectiveHookPlan plan = this.reflectiveHookPlans.computeIfAbsent(arg.getHook(), this::buildReflectiveHookPlan);
+        Object hookObj = plan.instantiate(this.applicationContext, arg);
+        Object response = plan.invoke(hookObj, arg);
 
         if(!(response instanceof Hook)) {
             throw new InternalException("Reflective hook must return a Hook, but got: " +
@@ -157,6 +127,94 @@ public class HookService {
         }
     }
 
+    ReflectiveHookPlan buildReflectiveHookPlan(String hookPath) {
+        try {
+            int lastDot = hookPath.lastIndexOf('.');
+            if(lastDot == -1) throw new InternalException("Invalid hook path: " + hookPath);
+
+            var classNamePath = hookPath.substring(0, lastDot);
+            var methodName = hookPath.substring(lastDot + 1);
+
+            Class<?> hookClass = Class.forName(classNamePath);
+            boolean springManaged = isSpringManaged(hookClass);
+            Method hookMethod = resolveHookMethod(hookClass, methodName, hookPath);
+            HookMethodKind methodKind = hookMethod.getParameterCount() == 1 ? HookMethodKind.HOOK_ARG : HookMethodKind.NO_ARG;
+
+            Constructor<?> hookCtor = null;
+            Method setter = null;
+            ManualInstantiationKind instantiationKind = ManualInstantiationKind.NONE;
+
+            if(!springManaged) {
+                try {
+                    hookCtor = hookClass.getDeclaredConstructor(Hook.class);
+                    hookCtor.setAccessible(true);
+                    instantiationKind = ManualInstantiationKind.CONSTRUCTOR_WITH_HOOK;
+                } catch (NoSuchMethodException e) {
+                    try {
+                        hookCtor = hookClass.getDeclaredConstructor();
+                        hookCtor.setAccessible(true);
+                        try {
+                            setter = hookClass.getMethod("setHook", Hook.class);
+                            setter.setAccessible(true);
+                            instantiationKind = ManualInstantiationKind.NO_ARG_WITH_SETTER;
+                        } catch (NoSuchMethodException ignored) {
+                            instantiationKind = ManualInstantiationKind.NO_ARG_ONLY;
+                        }
+                    } catch (NoSuchMethodException ex) {
+                        throw new InternalException(
+                                "Hook class must have a constructor or setter or field accepting Hook: " + hookClass.getName(), ex);
+                    }
+                }
+            }
+
+            return new ReflectiveHookPlan(
+                    hookPath,
+                    hookClass,
+                    springManaged,
+                    hookMethod,
+                    methodKind,
+                    hookCtor,
+                    setter,
+                    instantiationKind
+            );
+        } catch (InternalException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InternalException("Failed to build hook plan for " + hookPath, e);
+        }
+    }
+
+    Method resolveHookMethod(Class<?> hookClass, String methodName, String hookPath) {
+        try {
+            Method method = hookClass.getDeclaredMethod(methodName, Hook.class);
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException e1) {
+            try {
+                Method method = hookClass.getDeclaredMethod(methodName);
+                method.setAccessible(true);
+                return method;
+            } catch (NoSuchMethodException e2) {
+                throw new InternalException("No suitable method found for hook: " + hookPath, e2);
+            }
+        }
+    }
+
+    boolean isSpringManaged(Class<?> hookClass) {
+        try {
+            this.applicationContext.getBean(hookClass);
+            log.debug("Loaded hook bean plan from Spring context: {}", hookClass.getName());
+            return true;
+        } catch (BeansException ex) {
+            log.warn("Spring bean not found, falling back to manual instantiation: {}", hookClass.getName());
+            return false;
+        }
+    }
+
+    int reflectiveHookPlanCacheSize() {
+        return this.reflectiveHookPlans.size();
+    }
+
     public Hook processHook(Hook arg) throws Exception {
         log.debug("PROCESSING HOOK ARG: {}", arg);
         log.debug("PROCESSING HOOK: {}", arg.getHook());
@@ -176,6 +234,53 @@ public class HookService {
             this.processHook(event.getArg());
         } catch (Exception e) {
             log.debug("OnceOffHookEvent processing failed: {}", e.getMessage());
+        }
+    }
+
+    enum HookMethodKind {
+        HOOK_ARG,
+        NO_ARG
+    }
+
+    enum ManualInstantiationKind {
+        NONE,
+        CONSTRUCTOR_WITH_HOOK,
+        NO_ARG_WITH_SETTER,
+        NO_ARG_ONLY
+    }
+
+    record ReflectiveHookPlan(
+            String hookPath,
+            Class<?> hookClass,
+            boolean springManaged,
+            Method method,
+            HookMethodKind methodKind,
+            Constructor<?> constructor,
+            Method setter,
+            ManualInstantiationKind instantiationKind
+    ) {
+        Object instantiate(ApplicationContext applicationContext, Hook arg) throws Exception {
+            if(this.springManaged) {
+                return applicationContext.getBean(this.hookClass);
+            }
+
+            return switch (this.instantiationKind) {
+                case CONSTRUCTOR_WITH_HOOK -> this.constructor.newInstance(arg);
+                case NO_ARG_WITH_SETTER -> {
+                    Object instance = this.constructor.newInstance();
+                    this.setter.invoke(instance, arg);
+                    yield instance;
+                }
+                case NO_ARG_ONLY -> this.constructor.newInstance();
+                case NONE -> throw new InternalException("No instantiation strategy found for hook: " + this.hookPath);
+            };
+        }
+
+        Object invoke(Object hookObj, Hook arg) throws Exception {
+            if(this.methodKind == HookMethodKind.HOOK_ARG) {
+                return this.method.invoke(hookObj, arg);
+            }
+            return this.method.invoke(hookObj);
         }
     }
 }

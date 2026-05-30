@@ -3,7 +3,6 @@ package zw.co.dcl.jawce.engine.api;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +19,7 @@ import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.model.core.HookRest;
+import zw.co.dcl.jawce.engine.support.EngineTestSupport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +40,7 @@ class WorkerEngineFlowTest {
     private InMemorySessionManager sessionManager;
     private RecordingClientManager clientManager;
     private Worker worker;
+    private EngineTestSupport.CollectingEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -105,27 +106,27 @@ class WorkerEngineFlowTest {
 
         this.sessionManager = new InMemorySessionManager();
         this.clientManager = new RecordingClientManager();
+        this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
 
         HookService hookService = new HookService(clientManager, jawceConfig, new StaticApplicationContext());
         YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties);
-        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig);
+        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
         WebhookProcessor webhookProcessor = new WebhookProcessor(
                 hookService,
                 sessionManager,
                 templateStorageManager,
                 jawceConfig,
-                whatsAppHelperService
+                whatsAppHelperService,
+                eventPublisher.historyEventPublisher()
         );
-        ApplicationEventPublisher publisher = event -> {
-        };
-
         this.worker = new Worker(
-                publisher,
+                eventPublisher,
                 whatsAppConfig,
                 jawceConfig,
                 whatsAppHelperService,
                 webhookProcessor,
-                sessionManager
+                sessionManager,
+                eventPublisher.historyEventPublisher()
         );
     }
 

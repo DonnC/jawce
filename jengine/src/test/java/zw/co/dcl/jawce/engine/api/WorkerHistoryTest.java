@@ -3,34 +3,32 @@ package zw.co.dcl.jawce.engine.api;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.support.StaticApplicationContext;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.TemplateStorageProperties;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
-import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
+import zw.co.dcl.jawce.engine.model.history.HistoryEventType;
 import zw.co.dcl.jawce.engine.support.EngineTestSupport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class WorkerEngineDynamicTemplateTest {
+class WorkerHistoryTest {
     @TempDir
     Path tempDir;
 
     private EngineTestSupport.InMemorySessionManager sessionManager;
     private EngineTestSupport.RecordingClientManager clientManager;
-    private Worker worker;
     private EngineTestSupport.CollectingEventPublisher eventPublisher;
+    private Worker worker;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -38,21 +36,23 @@ class WorkerEngineDynamicTemplateTest {
         Path triggersDir = Files.createDirectories(tempDir.resolve("triggers"));
 
         Files.writeString(
-                templatesDir.resolve("dynamic.yaml"),
+                templatesDir.resolve("templates.yaml"),
                 "\"START-MENU\":\n" +
-                        "  type: text\n" +
-                        "  on-generate: \"zw.co.dcl.jawce.engine.support.TestHooks.renderDynamicAccountSelector\"\n" +
-                        "  message: \"placeholder\"\n" +
+                        "  type: button\n" +
+                        "  message:\n" +
+                        "    title: Start\n" +
+                        "    body: Choose\n" +
+                        "    buttons:\n" +
+                        "      - Button1\n" +
                         "  routes:\n" +
-                        "    \"re:.*\": \"DONE\"\n" +
+                        "    \"button1\": \"REPORT\"\n" +
                         "\n" +
-                        "\"DONE\":\n" +
+                        "\"REPORT\":\n" +
                         "  type: text\n" +
-                        "  message: \"Done\"\n" +
+                        "  message: Report stage\n" +
                         "  routes:\n" +
                         "    \"re:.*\": \"START-MENU\"\n"
         );
-
         Files.writeString(
                 triggersDir.resolve("triggers.yaml"),
                 "\"START-MENU\": \"re:(?i)^(start|hi|hello)$\"\n"
@@ -80,7 +80,13 @@ class WorkerEngineDynamicTemplateTest {
 
         HookService hookService = new HookService(clientManager, jawceConfig, new StaticApplicationContext());
         YmlJsonTemplateStorageManager templateStorageManager = new YmlJsonTemplateStorageManager(storageProperties);
-        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(clientManager, sessionManager, jawceConfig, whatsAppConfig, eventPublisher.historyEventPublisher());
+        WhatsAppHelperService whatsAppHelperService = new WhatsAppHelperService(
+                clientManager,
+                sessionManager,
+                jawceConfig,
+                whatsAppConfig,
+                eventPublisher.historyEventPublisher()
+        );
         WebhookProcessor webhookProcessor = new WebhookProcessor(
                 hookService,
                 sessionManager,
@@ -89,6 +95,7 @@ class WorkerEngineDynamicTemplateTest {
                 whatsAppHelperService,
                 eventPublisher.historyEventPublisher()
         );
+
         this.worker = new Worker(
                 eventPublisher,
                 whatsAppConfig,
@@ -101,53 +108,32 @@ class WorkerEngineDynamicTemplateTest {
     }
 
     @Test
-    void onGenerateCanReplaceOutgoingTemplateWithButtons() {
-        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque"));
+    void successfulFlowPublishesInboundStageAndOutboundHistory() {
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-1"));
 
-        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-buttons"));
+        List<HistoryEventType> eventTypes = eventPublisher.historyEvents().stream()
+                .map(event -> event.getType())
+                .toList();
 
-        Map<String, Object> payload = clientManager.lastSentPayload();
-        Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
-        Map<String, Object> action = EngineTestSupport.childMap(interactive, "action");
-        List<?> buttons = (List<?>) action.get("buttons");
-
-        assertEquals("interactive", payload.get("type"));
-        assertEquals("button", interactive.get("type"));
-        assertEquals(2, buttons.size());
-        assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
-    }
-
-    @Test
-    void onGenerateCanReplaceOutgoingTemplateWithList() {
-        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque", "USD", "Business"));
-
-        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-list"));
-
-        Map<String, Object> payload = clientManager.lastSentPayload();
-        Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
-        Map<String, Object> action = EngineTestSupport.childMap(interactive, "action");
-        List<?> sections = (List<?>) action.get("sections");
-
-        assertEquals("interactive", payload.get("type"));
-        assertEquals("list", interactive.get("type"));
-        assertEquals("Accounts", action.get("button"));
-        assertEquals(1, sections.size());
-    }
-
-    @Test
-    void onGenerateCanReplaceOutgoingTemplateWithText() {
-        sessionManager.saveGlobal(
-                "accounts",
-                List.of("A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11")
+        assertEquals(
+                List.of(
+                        HistoryEventType.INBOUND_RECEIVED,
+                        HistoryEventType.STAGE_RESOLVED,
+                        HistoryEventType.OUTBOUND_GENERATED,
+                        HistoryEventType.OUTBOUND_SENT
+                ),
+                eventTypes
         );
+    }
 
-        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-text"));
+    @Test
+    void duplicateInboundPublishesSkipHistory() {
+        var payload = EngineTestSupport.textWebhook("hello", "wamid-dup");
 
-        Map<String, Object> payload = clientManager.lastSentPayload();
-        String body = EngineTestSupport.childMap(payload, "text").get("body").toString();
+        worker.processWebhook(payload);
+        worker.processWebhook(payload);
 
-        assertEquals("text", payload.get("type"));
-        assertTrue(body.contains("1. A1"));
-        assertTrue(body.contains("11. A11"));
+        assertTrue(eventPublisher.historyEvents().stream()
+                .anyMatch(event -> event.getType() == HistoryEventType.INBOUND_SKIPPED_DUPLICATE));
     }
 }

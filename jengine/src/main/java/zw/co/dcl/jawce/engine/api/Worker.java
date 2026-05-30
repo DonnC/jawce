@@ -19,11 +19,14 @@ import zw.co.dcl.jawce.engine.internal.dto.Webhook;
 import zw.co.dcl.jawce.engine.internal.events.OnceOffHookEvent;
 import zw.co.dcl.jawce.engine.internal.events.OnceOffMessageEvent;
 import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
+import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.model.core.Hook;
 import zw.co.dcl.jawce.engine.model.core.WaUser;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
+import zw.co.dcl.jawce.engine.model.history.ChatHistoryEvent;
+import zw.co.dcl.jawce.engine.model.history.HistoryEventType;
 import zw.co.dcl.jawce.engine.model.messages.ButtonMessage;
 import zw.co.dcl.jawce.engine.model.template.ButtonTemplate;
 
@@ -36,6 +39,7 @@ public class Worker {
     final JawceConfig jawceConfig;
     final WhatsAppHelperService service;
     final WebhookProcessor webhookProcessor;
+    final HistoryEventPublisher historyEventPublisher;
     ISessionManager session;
 
     public Worker(
@@ -44,13 +48,43 @@ public class Worker {
             JawceConfig jawceConfig,
             WhatsAppHelperService whatsAppHelperService,
             WebhookProcessor webhookProcessor,
-            ISessionManager sessionManager) {
+            ISessionManager sessionManager,
+            HistoryEventPublisher historyEventPublisher) {
         this.eventPublisher = eventPublisher;
         this.waConfig = whatsAppConfig;
         this.jawceConfig = jawceConfig;
         this.service = whatsAppHelperService;
         this.webhookProcessor = webhookProcessor;
         this.session = sessionManager;
+        this.historyEventPublisher = historyEventPublisher;
+    }
+
+    ChatHistoryEvent.ChatHistoryEventBuilder userEventBuilder(WaUser user, HistoryEventType type) {
+        return ChatHistoryEvent.builder()
+                .timestamp(zw.co.dcl.jawce.engine.api.utils.Utils.currentSystemDate().toString())
+                .type(type)
+                .sessionId(user.waId())
+                .waId(user.waId())
+                .messageId(user.msgId());
+    }
+
+    void publishInboundEvent(WaUser user, HistoryEventType type, String detail, Map<String, Object> payload, Map<String, Object> metadata) {
+        var builder = userEventBuilder(user, type)
+                .direction("inbound")
+                .detail(detail)
+                .payload(payload == null ? Map.of() : payload)
+                .metadata(metadata == null ? Map.of() : metadata);
+        this.historyEventPublisher.publish(builder.build());
+    }
+
+    void publishEngineError(WaUser user, String stage, Exception e) {
+        this.historyEventPublisher.publish(userEventBuilder(user, HistoryEventType.ENGINE_ERROR)
+                .direction("system")
+                .stage(stage)
+                .success(false)
+                .detail(e.getMessage())
+                .metadata(Map.of("errorType", e.getClass().getSimpleName()))
+                .build());
     }
 
     Set<String> getMessageQueue(WaUser user) {
@@ -103,6 +137,13 @@ public class Worker {
 
         if(webhookTtl > 0 && WhatsAppUtils.isOldWebhook(user.timestamp(), webhookTtl)) {
             log.warn("Old webhook received: {}. Discarded!", WhatsAppUtils.convertTimestamp(user.timestamp()));
+            publishInboundEvent(
+                    user,
+                    HistoryEventType.INBOUND_SKIPPED_STALE,
+                    "Old webhook discarded",
+                    webhookPayload,
+                    Map.of("thresholdSecs", webhookTtl)
+            );
             return Optional.empty();
         }
 
@@ -113,6 +154,13 @@ public class Worker {
         if(this.jawceConfig.isHandleSessionQueue()) {
             if(this.getMessageQueue(user).contains(user.msgId())) {
                 log.warn("Duplicate message found: {}. Skipping..", message);
+                publishInboundEvent(
+                        user,
+                        HistoryEventType.INBOUND_SKIPPED_DUPLICATE,
+                        "Duplicate inbound message skipped",
+                        message,
+                        Map.of("responseType", responseStructure.type().name())
+                );
                 return Optional.empty();
             }
         }
@@ -126,6 +174,13 @@ public class Worker {
             this.session.save(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, currentTime);
         } else {
             log.warn("Message ignored due to debounce..");
+            publishInboundEvent(
+                    user,
+                    HistoryEventType.INBOUND_SKIPPED_DEBOUNCE,
+                    "Inbound message ignored due to debounce",
+                    message,
+                    Map.of("debounceTimeoutMs", debounceTime)
+            );
             return Optional.empty();
         }
 
@@ -142,6 +197,14 @@ public class Worker {
             this.session.save(sessionId, SessionConstant.DEFAULT_WA_MOBILE, user.waId());
         }
         // --- end
+
+        publishInboundEvent(
+                user,
+                HistoryEventType.INBOUND_RECEIVED,
+                "Inbound webhook accepted",
+                message,
+                Map.of("responseType", responseStructure.type().name())
+        );
 
         return Optional.of(new Webhook(user, responseStructure));
     }
@@ -173,6 +236,18 @@ public class Worker {
 
         var payload = new PayloadGenerator(messageRequest).generate();
         var resultPayload = new WebhookProcessorResult(payload, null, button.getRecipient(), false);
+        this.historyEventPublisher.publish(ChatHistoryEvent.builder()
+                .timestamp(zw.co.dcl.jawce.engine.api.utils.Utils.currentSystemDate().toString())
+                .type(HistoryEventType.OUTBOUND_GENERATED)
+                .direction("outbound")
+                .sessionId(button.getRecipient())
+                .waId(button.getRecipient())
+                .messageId(button.getMessageId())
+                .templateType(btn.getType())
+                .detail("Generated quick button fallback")
+                .payload(payload)
+                .metadata(Map.of("source", "quick-button"))
+                .build());
         this.service.sendWhatsAppRequest(resultPayload);
     }
 
@@ -193,6 +268,13 @@ public class Worker {
 
             var payload = new PayloadGenerator(messageRequest).generate();
             var resultPayload = new WebhookProcessorResult(payload, null, event.getUser().waId(), false);
+            this.historyEventPublisher.publish(userEventBuilder(event.getUser(), HistoryEventType.OUTBOUND_GENERATED)
+                    .direction("outbound")
+                    .templateType(event.getTemplate().getType())
+                    .detail("Generated once-off outbound message")
+                    .payload(payload)
+                    .metadata(Map.of("source", "once-off"))
+                    .build());
             var response = this.service.sendWhatsAppRequest(resultPayload);
 
             log.info("Once-off-message result: {}", WhatsAppUtils.isValidRequestResponse(response));
@@ -219,6 +301,7 @@ public class Worker {
                 log.debug("Webhook process response result: {} for msg: {}", WhatsAppUtils.isValidRequestResponse(response), message.user().msgId());
             } catch (HookException e) {
                 log.error("Hook processing failed: {}", e.getMessage());
+                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
@@ -231,6 +314,7 @@ public class Worker {
                 );
             } catch (TemplateRenderException e) {
                 log.error("Template render failed: {}", e.getMessage());
+                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
@@ -243,6 +327,7 @@ public class Worker {
                 );
             } catch (ResponseException e) {
                 log.error("Engine response exception: {}", e.getError());
+                publishEngineError(message.user(), e.getError().stage(), e);
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
@@ -255,6 +340,7 @@ public class Worker {
                 );
             } catch (UserSessionValidationException e) {
                 log.error("User session validation failed: {}", e.getMessage());
+                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()
@@ -268,6 +354,7 @@ public class Worker {
 
             } catch (SessionExpiredException | SessionInactivityException e) {
                 log.error("Session expired / inactive, clearing user session..");
+                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
 
                 session.clear(message.user().waId());
 
@@ -283,6 +370,7 @@ public class Worker {
                 );
             } catch (Exception e) {
                 log.error("Engine failed to process webhook: {}", e.getMessage(), e);
+                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
 
                 this.sendQuickButtonMessage(
                         QuickBtnTemplate.builder()

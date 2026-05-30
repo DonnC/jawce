@@ -1,0 +1,13 @@
+package zw.co.dcl.jawce.engine.model.history;
+
+public enum HistoryEventType {
+    INBOUND_RECEIVED,
+    INBOUND_SKIPPED_DUPLICATE,
+    INBOUND_SKIPPED_STALE,
+    INBOUND_SKIPPED_DEBOUNCE,
+    STAGE_RESOLVED,
+    OUTBOUND_GENERATED,
+    OUTBOUND_SENT,
+    OUTBOUND_FAILED,
+    ENGINE_ERROR
+}

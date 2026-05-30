@@ -5,16 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/docs/hook-new-approach.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/live-support/server/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/example/live-support/server/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SectionRowItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/SectionRowItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineFlowTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineFlowTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfigTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfigTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/EngineTestSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/EngineTestSupport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +77,65 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0" />
+      <entry key="S30" value="1.000000005580559" />
+      <entry key="S60" value="1.0001492468326272" />
+      <entry key="M2" value="1.0244267964768674" />
+      <entry key="M5" value="1.5204209181506931" />
+      <entry key="M10" value="2.4427886767751135" />
+      <entry key="M15" value="3.026846140202402" />
+      <entry key="M30" value="3.8473435516668455" />
+      <entry key="H1" value="4.374813690066867" />
+      <entry key="H2" value="4.6741329257410955" />
+      <entry key="H4" value="4.833605503629948" />
+      <entry key="D1" value="4.971774302916937" />
+      <entry key="W1" value="4.995955509535419" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9330329915368074" />
+      <entry key="MS500" value="0.9862327044933592" />
+      <entry key="S2" value="0.9965402628278678" />
+      <entry key="S5" value="0.9986146661010289" />
+      <entry key="S10" value="0.9993070929904525" />
+      <entry key="S30" value="0.9997689832010047" />
+      <entry key="S60" value="1.0000335994124103" />
+      <entry key="M2" value="1.0243581285059864" />
+      <entry key="M5" value="1.5203032809686632" />
+      <entry key="M10" value="2.4426453518943796" />
+      <entry key="M15" value="3.026714798686326" />
+      <entry key="M30" value="3.847252693853983" />
+      <entry key="H1" value="4.374760154274421" />
+      <entry key="H2" value="4.674103856095949" />
+      <entry key="H4" value="4.833590355428327" />
+      <entry key="D1" value="4.97177168962485" />
+      <entry key="W1" value="4.995955133992783" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0

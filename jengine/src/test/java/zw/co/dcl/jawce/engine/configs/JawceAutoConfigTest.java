@@ -8,11 +8,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import zw.co.dcl.jawce.engine.api.Worker;
 import zw.co.dcl.jawce.engine.api.iface.IClientManager;
+import zw.co.dcl.jawce.engine.api.iface.IHistoryManager;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
 import zw.co.dcl.jawce.engine.api.iface.ITemplateStorageManager;
+import zw.co.dcl.jawce.engine.defaults.FileHistoryManager;
 import zw.co.dcl.jawce.engine.defaults.FileSessionManager;
+import zw.co.dcl.jawce.engine.defaults.NoOpHistoryManager;
 import zw.co.dcl.jawce.engine.defaults.RestTemplateClientManager;
 import zw.co.dcl.jawce.engine.defaults.YmlJsonTemplateStorageManager;
+import zw.co.dcl.jawce.engine.internal.service.HistoryEventListener;
+import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
 import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 
@@ -59,10 +64,14 @@ class JawceAutoConfigTest {
                 .run(context -> {
                     assertNotNull(context.getBean(ISessionManager.class));
                     assertNotNull(context.getBean(IClientManager.class));
+                    assertNotNull(context.getBean(IHistoryManager.class));
                     assertNotNull(context.getBean(ITemplateStorageManager.class));
                     assertInstanceOf(FileSessionManager.class, context.getBean(ISessionManager.class));
                     assertInstanceOf(RestTemplateClientManager.class, context.getBean(IClientManager.class));
+                    assertInstanceOf(NoOpHistoryManager.class, context.getBean(IHistoryManager.class));
                     assertInstanceOf(YmlJsonTemplateStorageManager.class, context.getBean(ITemplateStorageManager.class));
+                    assertNotNull(context.getBean(HistoryEventPublisher.class));
+                    assertNotNull(context.getBean(HistoryEventListener.class));
                     assertNotNull(context.getBean(HookService.class));
                     assertNotNull(context.getBean(WebhookProcessor.class));
                     assertNotNull(context.getBean(Worker.class));
@@ -99,6 +108,37 @@ class JawceAutoConfigTest {
                 .run(context -> {
                     assertInstanceOf(CustomSessionManager.class, context.getBean(ISessionManager.class));
                 });
+    }
+
+    @Test
+    void autoConfigCanEnableBundledFileHistoryManager() throws Exception {
+        Path templatesDir = Files.createDirectories(tempDir.resolve("history-templates"));
+        Path triggersDir = Files.createDirectories(tempDir.resolve("history-triggers"));
+        Path historyDir = tempDir.resolve("history-store");
+
+        Files.writeString(
+                templatesDir.resolve("templates.yaml"),
+                "\"START-MENU\":\n" +
+                        "  type: text\n" +
+                        "  message: \"Hello\"\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"START-MENU\"\n"
+        );
+        Files.writeString(triggersDir.resolve("triggers.yaml"), "{}\n");
+
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(JawceAutoConfig.class))
+                .withPropertyValues(
+                        "jawce.start-menu=START-MENU",
+                        "whatsapp.hub-token=test-token",
+                        "whatsapp.access-token=test-access",
+                        "whatsapp.phone-number-id=test-phone",
+                        "jawce.history.file-enabled=true",
+                        "jawce.history.dir=" + historyDir,
+                        "template.storage.templates-path=" + templatesDir,
+                        "template.storage.triggers-path=" + triggersDir
+                )
+                .run(context -> assertInstanceOf(FileHistoryManager.class, context.getBean(IHistoryManager.class)));
     }
 
     @Configuration
