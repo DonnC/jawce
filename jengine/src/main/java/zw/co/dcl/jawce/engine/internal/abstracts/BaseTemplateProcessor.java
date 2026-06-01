@@ -190,6 +190,10 @@ public abstract class BaseTemplateProcessor {
             }
         }
 
+        if(this.isFirstTime) {
+            return;
+        }
+
         if(this.session.get(sessionId, SessionConstant.CURRENT_MSG_ID_KEY) == null) {
 //            this.session.clear();
             throw new InternalException("Ambiguous old webhook response, skipping..");

@@ -70,6 +70,8 @@ For load-testing guidance and high-load performance notes, see [docs/stress-test
 For the recommended `jawce` history-interface design, see [docs/history-interface-approach.md](./docs/history-interface-approach.md).
 For the implemented history feature, configuration, and file-rotation behavior, see [docs/history-feature.md](./docs/history-feature.md).
 For the preferred named-hook model, typed hook contracts, and method-backed named hooks, see [docs/named-hooks.md](./docs/named-hooks.md).
+For an honest multi-industry assessment of where `jawce` is strong, weak, and how it can improve as a chatbot backbone, see [docs/industry-chatbot-assessment.md](./docs/industry-chatbot-assessment.md).
+For an engine-only roadmap focused on fixing core orchestration weaknesses inside `jengine`, see [docs/core-engine-strategy.md](./docs/core-engine-strategy.md).
 
 ## Contributing
 

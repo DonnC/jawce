@@ -144,6 +144,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
      */
     String getNextRoute() {
         if(this.isFirstTime) return this.stage;
+        if(this.isFromTrigger) return this.stage;
         if(hasInteractionActivityExpired()) {
             throw new SessionInactivityException("You have been inactive for a while, let's start afresh");
         }
@@ -169,8 +170,6 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
         var hasDynamicRoute = getDynamicRouterRoute();
         if(hasDynamicRoute != null) return hasDynamicRoute;
-
-        if(this.isFromTrigger) return this.stage;
 
         log.debug("Current stage: {} | template: {}", this.stage, this.template);
 

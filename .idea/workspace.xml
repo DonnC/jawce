@@ -4,28 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/hooks/CaptureHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/hooks/CaptureHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BasePayloadGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineFlowTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineFlowTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerHistoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerHistoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/utils/PayloadGeneratorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/utils/PayloadGeneratorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfigTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/configs/JawceAutoConfigTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManagerValidationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManagerValidationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceCachingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceCachingTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

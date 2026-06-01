@@ -139,6 +139,47 @@ class WorkerEngineResilienceTest {
         assertEquals(null, sessionManager.get("263771234567", SessionConstant.PREV_STAGE));
     }
 
+    @Test
+    void menuButtonAfterTimeoutRestartsFreshFlow() {
+        Worker worker = createWorker(0, false, true, 60);
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-1"));
+        sessionManager.save(
+                "263771234567",
+                SessionConstant.LAST_ACTIVITY_KEY,
+                Utils.formatZonedDateTime(Utils.currentSystemDate().minusMinutes(5))
+        );
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("button1", "wamid-2"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("Menu", "wamid-3"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        String body = EngineTestSupport.childMap(EngineTestSupport.childMap(payload, "interactive"), "body").get("text").toString();
+
+        assertEquals("Test body", body);
+        assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
+    @Test
+    void globalStartTriggerBypassesExpiredSessionAndRestartsFlow() {
+        Worker worker = createWorker(0, false, true, 60);
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-1"));
+        sessionManager.save(
+                "263771234567",
+                SessionConstant.LAST_ACTIVITY_KEY,
+                Utils.formatZonedDateTime(Utils.currentSystemDate().minusMinutes(5))
+        );
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hi", "wamid-2"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        String body = EngineTestSupport.childMap(EngineTestSupport.childMap(payload, "interactive"), "body").get("text").toString();
+
+        assertEquals("Test body", body);
+        assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
     private Worker createWorker(long debounceTimeoutMs, boolean emulate, boolean handleSessionInactivity, int webhookTtlSeconds) {
         TemplateStorageProperties storageProperties = new TemplateStorageProperties();
         storageProperties.setTemplatesPath(templatesDir.toString());
