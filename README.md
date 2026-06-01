@@ -1,82 +1,124 @@
-# Java WhatsApp ChatBot Engine
-A dependency for creating complete WhatsApp chatbots with ease using a template-driven approach.
+# JaWCE: Java WhatsApp ChatBot Engine
 
-## Features
-- **Template-Driven Design**: By default, you can use YAML | JSON templates for conversational flows. But you can implement your own TemplateStorageManager
-- **Hooks for Business Logic**: Attach Java classes / spring beans / RESTful endpoints to process messages or actions.
-- Ships with basic default implementations for file sessions, YAML/JSON template loading, and `RestTemplate`-based HTTP client wiring. Override them by providing your own interface beans.
-- Abstracts the API for WhatsApp Cloud: focus on your core chatbot functions.
-- Supports all official WhatsApp message types including Flows
-- Supports dynamic messages with placeholders.
-- Auto configs via properties file
-- Event driven architecture with Spring Events
+[![Maven Central](https://img.shields.io/maven-central/v/zw.co.dcl.jawce/jengine.svg)](https://search.maven.org/artifact/zw.co.dcl.jawce/jengine)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Setup
-For a quick start - Fork the repository and attempt to run the chatbot in the `example` folder
+An enterprise-grade, Spring Boot-native framework for building robust WhatsApp chatbots. JaWCE brings the template-driven power of the WCE ecosystem to the Java world, leveraging Spring's dependency injection and event-driven architecture for industrial-scale deployments.
 
-> Developed with Java 17+ using maven
+## 🏗️ Architecture
 
-1. Clone repository
-```bash
-git clone git@github.com:DonnC/jawce.git
+JaWCE is built for high-performance and modularity, using Spring's `ApplicationEventPublisher` to decouple webhook reception from processing logic.
+
+```mermaid
+graph TD
+    Controller[Rest Controller] --> WebhookEvent[WebhookEvent]
+    WebhookEvent --> Worker[JaWCE Worker]
+    Worker --> Hooks[Business Logic Hooks]
+    Worker --> WhatsApp[WhatsApp Service]
+    
+    subgraph "Infrastructure"
+        Storage[Template Storage Manager]
+        Session[ISessionManager]
+    end
+    
+    Worker -.-> Storage
+    Worker -.-> Session
 ```
-2. Install all project maven dependencies
-- Install main engine dependencies in`jengine` folder
-- Install dependencies for the examples in the `example/` folder
 
-3. Navigate to the example chatbot >`example/ehailing/src/main/resources/application.yml` properties file 
-and replace configs with your WhatsApp account configs
+### Key Technical Features
+- **Event-Driven Core**: Incoming payloads are published as `WebhookEvent` and processed by the `Worker`.
+- **Dual Hook Support**: Choose between decoupled **Named Hooks** and direct **Reflective Dotted Hooks**.
+- **Template Portability**: Fully compatible with WCE YAML/JSON templates used in PyWCE.
+- **Enterprise Standards**: Interface-based design for custom session storage (file, database, or Redis) and template management.
 
-> Checkout the complete local [WhatsApp Chatbot Emulator](https://github.com/DonnC/wce-emulator.git) tool!
+---
 
-### Engine dependency
-> Refer to the [Example ChatBot](https://github.com/DonnC/jawce/tree/main/example/ehailing) for a quick getting started template
+## 🛠️ Installation (Maven)
 
-To include the jengine in your own project.
-
-In your `pom.xml` dependencies add the following
+Add the engine dependency to your `pom.xml`:
 
 ```xml
-<!-- your other dependencies -->
-
 <dependency>
     <groupId>zw.co.dcl.jawce</groupId>
     <artifactId>jengine</artifactId>
-    <version>LATEST-VERSION</version>
-    <scope>compile</scope>
+    <version>${jawce.version}</version>
 </dependency>
 ```
 
-Make sure you create a rest controller which handles 2 of the important logic
-- webhook verification
-- webhook payload
+---
 
-Checkout the `example` project for a starting point
+## 🚦 Business Logic Hooks
 
-## Documentation
+JaWCE provides two professional ways to integrate your business logic:
 
-Visit the [official documentation](https://docs.page/donnc/wce) for a detailed guide.
+### 1. Named Hooks (Decoupled)
+Define a name in your YAML template and map it to a Spring component using the `@NamedFlowHook` annotation. This is the recommended approach for clean separation.
 
-For a source-based comparison of how this Spring Boot port maps to the original Python engine, see [docs/project-findings.md](./docs/project-findings.md).
-For the Java-first evolution plan, including template portability and enterprise considerations, see [docs/implementation-plan.md](./docs/implementation-plan.md).
-For migration-oriented authoring guidance, see [docs/template-compatibility.md](./docs/template-compatibility.md).
-For the current message support view, see [docs/message-support-matrix.md](./docs/message-support-matrix.md).
-For practical dynamic rendering patterns, see [docs/dynamic-rendering.md](./docs/dynamic-rendering.md).
-For router-hook usage and backend-driven payment/biller flow design, see [docs/router-hook-and-backend-driven-flows.md](./docs/router-hook-and-backend-driven-flows.md).
-For advanced backend-built outbound templates, see [docs/advanced-dynamic-template-handling.md](./docs/advanced-dynamic-template-handling.md).
-For the most important current engine improvement areas, see [docs/engine-improvement-areas.md](./docs/engine-improvement-areas.md).
-For a step-by-step explanation of router redirects and a booking-bot walkthrough, see [docs/router-hook-walkthrough.md](./docs/router-hook-walkthrough.md).
-For load-testing guidance and high-load performance notes, see [docs/stress-testing-and-performance.md](./docs/stress-testing-and-performance.md).
-For the recommended `jawce` history-interface design, see [docs/history-interface-approach.md](./docs/history-interface-approach.md).
-For the implemented history feature, configuration, and file-rotation behavior, see [docs/history-feature.md](./docs/history-feature.md).
-For the preferred named-hook model, typed hook contracts, and method-backed named hooks, see [docs/named-hooks.md](./docs/named-hooks.md).
-For an honest multi-industry assessment of where `jawce` is strong, weak, and how it can improve as a chatbot backbone, see [docs/industry-chatbot-assessment.md](./docs/industry-chatbot-assessment.md).
-For an engine-only roadmap focused on fixing core orchestration weaknesses inside `jengine`, see [docs/core-engine-strategy.md](./docs/core-engine-strategy.md).
+**Template (`bot.yaml`):**
+```yaml
+"CONFIRM-STAGE":
+  type: button
+  on-receive: "captureResponse"
+  message:
+    body: "Press to confirm"
+```
 
-## Contributing
+**Java Hook:**
+```java
+@Service
+public class MyBotHooks {
+    @NamedFlowHook(value = "captureResponse", type = FlowHookType.RECEIVE)
+    public Hook handle(Hook arg) {
+        log.info("Processing: {}", arg.getUserInput());
+        return arg;
+    }
+}
+```
 
-We welcome contributions! Please check out the [Contributing Guide](https://github.com/DonnC/jawce/blob/master/CONTRIBUTING.md) for details.
+### 2. Reflective Dotted Hooks (Direct)
+Reference the full class path and method name directly in the template. Useful for quick integrations or when hooks are spread across different modules.
 
-## License
+**Template (`bot.yaml`):**
+```yaml
+"PROFILE-STAGE":
+  type: text
+  template: "com.myapp.service.UserService.fetchProfile"
+```
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/DonnC/jawce/blob/master/LICENCE) file for details.
+---
+
+## 🚀 Quick Start Example
+
+A complete implementation requires a Spring controller to feed the engine:
+
+```java
+@RestController
+public class WebhookController {
+    private final ApplicationEventPublisher eventPublisher;
+
+    @PostMapping("/webhook")
+    public String handle(@RequestBody Map<String, Object> payload) {
+        eventPublisher.publishEvent(new WebhookEvent(this, payload));
+        return "ACK";
+    }
+}
+```
+
+---
+
+## 🧪 Real-World Examples
+Check the `example/` folder for production-ready implementations:
+- **[eHailing Bot](./example/ehailing)**: Demonstrates location requests, named hooks, and complex conversational flows.
+- **[Live Support](./example/live-support)**: Shows hybrid AI + Live Agent handoff and WebSocket integration.
+
+---
+
+## 📚 Resources
+- [Official Documentation](https://docs.page/donnc/wce)
+- [WCE Emulator](https://github.com/DonnC/wce-emulator) (Recommended for local testing)
+
+---
+
+## 🤝 Contributing & License
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
+Project licensed under the [MIT License](./LICENSE).
