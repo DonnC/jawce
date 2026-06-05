@@ -60,7 +60,8 @@ public final class HookResultMapper {
                     hook,
                     null,
                     Collections.emptyMap(),
-                    Collections.emptyMap()
+                    Collections.emptyMap(),
+                    Collections.emptyList()
             );
         }
 
@@ -71,7 +72,8 @@ public final class HookResultMapper {
                 hook,
                 hook.getTemplateDynamicBody().getTemplate(),
                 renderPayload,
-                flowPayload
+                flowPayload,
+                hook.getTemplateDynamicBody().getDynamicChoices()
         );
     }
 }

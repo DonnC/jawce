@@ -19,6 +19,9 @@ import zw.co.dcl.jawce.engine.internal.dto.Webhook;
 import zw.co.dcl.jawce.engine.internal.events.OnceOffHookEvent;
 import zw.co.dcl.jawce.engine.internal.events.OnceOffMessageEvent;
 import zw.co.dcl.jawce.engine.internal.events.WebhookEvent;
+import zw.co.dcl.jawce.engine.internal.recovery.RecoveryDecision;
+import zw.co.dcl.jawce.engine.internal.recovery.RecoveryPolicyResolver;
+import zw.co.dcl.jawce.engine.internal.state.ConversationState;
 import zw.co.dcl.jawce.engine.internal.service.HistoryEventPublisher;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
@@ -87,29 +90,36 @@ public class Worker {
                 .build());
     }
 
-    Set<String> getMessageQueue(WaUser user) {
-        Set<String> queue = new HashSet<>();
-        if(this.session.get(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY) != null) {
-            var qHistory = this.session.get(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY, Set.class);
-            queue = new HashSet<String>(qHistory);
+    void applyRecoveryDecision(WaUser user, RecoveryDecision decision) {
+        var conversationState = new ConversationState(user.waId(), this.session);
+        if(decision.isClearSession()) {
+            conversationState.clear();
         }
-        return queue;
+
+        if(decision.isMarkRetryPending()) {
+            conversationState.markRetryPending();
+        }
+
+        conversationState.rememberRecoveryActions(decision.getRecoveryActions());
+
+        this.sendQuickButtonMessage(decision.getQuickButtonTemplate());
+    }
+
+    void recoverFrom(WaUser user, Exception exception) {
+        this.applyRecoveryDecision(user, RecoveryPolicyResolver.resolve(user, exception));
+    }
+
+    Set<String> getMessageQueue(WaUser user) {
+        return new ConversationState(user.waId(), this.session).messageHistory();
     }
 
     void addToMessageQueue(WaUser user) {
-        Set<String> queue = getMessageQueue(user);
-        queue.add(user.msgId());
-        if(queue.size() > EngineConstant.MESSAGE_QUEUE_COUNT) {
+        var conversationState = new ConversationState(user.waId(), this.session);
+        var existingSize = conversationState.messageHistory().size();
+        conversationState.rememberMessageId(user.msgId());
+        if(existingSize >= EngineConstant.MESSAGE_QUEUE_COUNT) {
             log.warn("Message queue limit reached, applying FIFO..");
-            Iterator<String> iterator = queue.iterator();
-            int count = 0;
-            while (iterator.hasNext() && count < queue.size() - 10) {
-                iterator.next();
-                iterator.remove();
-                count++;
-            }
         }
-        this.session.save(user.waId(), SessionConstant.SESSION_MESSAGE_HISTORY_KEY, queue);
     }
 
     void fireGlobalHook(String sessionId) {
@@ -133,6 +143,7 @@ public class Worker {
 
         var user = userOpt.get();
         var sessionId = user.waId();
+        var conversationState = new ConversationState(sessionId, this.session);
         var webhookTtl = this.jawceConfig.getWebhookTimestampThresholdSecs();
 
         if(webhookTtl > 0 && WhatsAppUtils.isOldWebhook(user.timestamp(), webhookTtl)) {
@@ -152,7 +163,7 @@ public class Worker {
         this.session = this.session.session(sessionId);
 
         if(this.jawceConfig.isHandleSessionQueue()) {
-            if(this.getMessageQueue(user).contains(user.msgId())) {
+            if(conversationState.hasProcessedMessageId(user.msgId())) {
                 log.warn("Duplicate message found: {}. Skipping..", message);
                 publishInboundEvent(
                         user,
@@ -165,13 +176,13 @@ public class Worker {
             }
         }
 
-        Long lastDebounceTimestamp = this.session.get(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, Long.class);
+        Long lastDebounceTimestamp = conversationState.currentDebounceTimestamp();
         long currentTime = System.currentTimeMillis();
 
         var debounceTime = this.jawceConfig.isEmulate() ? 0 : this.jawceConfig.getDebounceTimeoutMs();
 
         if(lastDebounceTimestamp == null || currentTime - lastDebounceTimestamp >= debounceTime) {
-            this.session.save(sessionId, SessionConstant.CURRENT_DEBOUNCE_KEY, currentTime);
+            conversationState.markDebounceAt(currentTime);
         } else {
             log.warn("Message ignored due to debounce..");
             publishInboundEvent(
@@ -188,15 +199,7 @@ public class Worker {
             this.addToMessageQueue(user);
         }
 
-        // --- save session defaults
-        if(this.session.get(sessionId, SessionConstant.DEFAULT_WA_USERNAME, String.class) == null) {
-            this.session.save(sessionId, SessionConstant.DEFAULT_WA_USERNAME, user.name());
-        }
-
-        if(this.session.get(sessionId, SessionConstant.DEFAULT_WA_MOBILE, String.class) == null) {
-            this.session.save(sessionId, SessionConstant.DEFAULT_WA_MOBILE, user.waId());
-        }
-        // --- end
+        conversationState.saveDefaultProfile(user.name(), user.waId());
 
         publishInboundEvent(
                 user,
@@ -235,7 +238,7 @@ public class Worker {
         );
 
         var payload = new PayloadGenerator(messageRequest).generate();
-        var resultPayload = new WebhookProcessorResult(payload, null, button.getRecipient(), false);
+        var resultPayload = new WebhookProcessorResult(payload, null, button.getRecipient(), false, java.util.List.of());
         this.historyEventPublisher.publish(ChatHistoryEvent.builder()
                 .timestamp(zw.co.dcl.jawce.engine.api.utils.Utils.currentSystemDate().toString())
                 .type(HistoryEventType.OUTBOUND_GENERATED)
@@ -267,7 +270,7 @@ public class Worker {
             );
 
             var payload = new PayloadGenerator(messageRequest).generate();
-            var resultPayload = new WebhookProcessorResult(payload, null, event.getUser().waId(), false);
+            var resultPayload = new WebhookProcessorResult(payload, null, event.getUser().waId(), false, java.util.List.of());
             this.historyEventPublisher.publish(userEventBuilder(event.getUser(), HistoryEventType.OUTBOUND_GENERATED)
                     .direction("outbound")
                     .templateType(event.getTemplate().getType())
@@ -297,90 +300,32 @@ public class Worker {
             try {
                 var result = this.webhookProcessor.process(message);
                 var response = this.service.sendWhatsAppRequest(result);
-                session.save(message.user().waId(), SessionConstant.CURRENT_MSG_ID_KEY, message.user().msgId());
+                new ConversationState(message.user().waId(), this.session).setCurrentMessageId(message.user().msgId());
                 log.debug("Webhook process response result: {} for msg: {}", WhatsAppUtils.isValidRequestResponse(response), message.user().msgId());
             } catch (HookException e) {
                 log.error("Hook processing failed: {}", e.getMessage());
-                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Message")
-                                .buttons(List.of(EngineConstant.BTN_RETRY))
-                                .message(e.getMessage())
-                                .build()
-                );
+                publishEngineError(message.user(), new ConversationState(message.user().waId(), this.session).currentStage(), e);
+                this.recoverFrom(message.user(), e);
             } catch (TemplateRenderException e) {
                 log.error("Template render failed: {}", e.getMessage());
-                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Message")
-                                .buttons(List.of(EngineConstant.BTN_RETRY, EngineConstant.BTN_REPORT))
-                                .message("Failed to process your message")
-                                .build()
-                );
+                publishEngineError(message.user(), new ConversationState(message.user().waId(), this.session).currentStage(), e);
+                this.recoverFrom(message.user(), e);
             } catch (ResponseException e) {
                 log.error("Engine response exception: {}", e.getError());
                 publishEngineError(message.user(), e.getError().stage(), e);
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Message")
-                                .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
-                                .message("%s.\n\n%s".formatted(e.getError().message(), "You may click the button to return to Menu"))
-                                .build()
-                );
+                this.recoverFrom(message.user(), e);
             } catch (UserSessionValidationException e) {
                 log.error("User session validation failed: {}", e.getMessage());
-                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Message")
-                                .buttons(List.of(EngineConstant.BTN_MENU))
-                                .message("Could not process request\n\n_AMB Err_")
-                                .build()
-                );
-
+                publishEngineError(message.user(), new ConversationState(message.user().waId(), this.session).currentStage(), e);
+                this.recoverFrom(message.user(), e);
             } catch (SessionExpiredException | SessionInactivityException e) {
                 log.error("Session expired / inactive, clearing user session..");
-                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
-
-                session.clear(message.user().waId());
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Security Check 🔐")
-                                .footer("Session Expired")
-                                .buttons(List.of(EngineConstant.BTN_MENU))
-                                .message(e.getMessage())
-                                .build()
-                );
+                publishEngineError(message.user(), new ConversationState(message.user().waId(), this.session).currentStage(), e);
+                this.recoverFrom(message.user(), e);
             } catch (Exception e) {
                 log.error("Engine failed to process webhook: {}", e.getMessage(), e);
-                publishEngineError(message.user(), session.get(message.user().waId(), SessionConstant.CURRENT_STAGE, String.class), e);
-
-                this.sendQuickButtonMessage(
-                        QuickBtnTemplate.builder()
-                                .recipient(message.user().waId())
-                                .messageId(message.user().msgId())
-                                .title("Message")
-                                .buttons(List.of(EngineConstant.BTN_MENU, EngineConstant.BTN_REPORT))
-                                .message("Something went wrong. Please try again later.")
-                                .build()
-                );
+                publishEngineError(message.user(), new ConversationState(message.user().waId(), this.session).currentStage(), e);
+                this.recoverFrom(message.user(), e);
             } finally {
                 MDC.remove(EngineConstant.MDC_WA_ID_KEY);
                 MDC.remove(EngineConstant.MDC_WA_NAME_KEY);

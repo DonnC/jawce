@@ -5,6 +5,7 @@ import zw.co.dcl.jawce.engine.api.annotation.FlowHookType;
 public enum HookExecutionType {
     RECEIVE,
     GENERATE,
+    DYNAMIC,
     ROUTER,
     MIDDLEWARE,
     TEMPLATE,

@@ -26,6 +26,7 @@ These are already a good fit for most production bots.
 
 - `on-receive`
 - `on-generate`
+- `dynamic`
 - `router`
 - `middleware`
 - `template`
@@ -34,9 +35,35 @@ The practical meaning is:
 
 - `on-receive` runs after user input is received
 - `on-generate` runs before the next outbound message is generated
+- `dynamic` decides the next message or template body to render, usually from backend-driven logic
 - `router` can override the next stage dynamically
 - `middleware` can apply cross-cutting logic
-- `template` can supply additional render data for some payload types
+- `template` affects the rendered message body and render payloads for known template types
+
+## 2.1 Dynamic stage contract
+
+`jawce` now treats dynamic rendering with a clearer split:
+
+- `type: dynamic` means the stage's final outbound shape is decided at runtime
+- `on-generate` prepares context before that outbound message is built
+- `dynamic` selects the actual runtime template or message to render
+- `template` remains the body/render hook, including compatibility with older dynamic-template behavior
+
+That means the most canonical dynamic pattern is:
+
+```yaml
+"ACCOUNT-SELECT":
+  type: dynamic
+  on-generate: "com.example.billing.AccountSelectorHook.prepare"
+  dynamic: "com.example.billing.AccountSelectorHook.render"
+  message: "placeholder"
+  routes:
+    "re:.*": "ACCOUNT-CONFIRM"
+```
+
+Use `on-generate` for preparation.
+Use `dynamic` for full runtime message selection.
+Use `template` when the message type is already known and you are shaping its body or render payload.
 
 ## 3. Recommended dynamic rendering pattern
 
@@ -177,7 +204,7 @@ There is also a more advanced dynamic-body path in the engine:
 - `templateDynamicBody.renderPayload`
 - dynamic session keys managed internally by the processor
 
-This is the more "fully dynamic" path.
+This is the more "fully dynamic" path, and `type: dynamic` is now the clearest public entry point for it.
 
 It can be useful when you want a hook to construct a template body dynamically at runtime instead of just filling placeholders.
 
@@ -207,6 +234,8 @@ That means `template` or render-oriented hooks are a good fit when:
 
 - the stage type is known,
 - but parts of the outbound payload must be computed dynamically.
+
+That is different from `type: dynamic`, where the hook returns the actual runtime `BaseEngineTemplate`.
 
 Examples:
 

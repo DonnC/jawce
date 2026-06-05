@@ -103,4 +103,48 @@ class HookServiceNamedHookTest {
 
         assertEquals("REPORT", result.getRedirectTo());
     }
+
+    @Test
+    void namedDynamicHookResolvesFromRegistry() throws Exception {
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerSingleton("namedDynamicHook", NamedHookBeans.NamedDynamicHook.class);
+        applicationContext.refresh();
+
+        HookService hookService = new HookService(
+                new EngineTestSupport.RecordingClientManager(),
+                new JawceConfig(),
+                applicationContext,
+                new FlowHookRegistry(applicationContext)
+        );
+
+        Hook hook = Hook.builder()
+                .hook("namedDynamic")
+                .build();
+
+        Hook result = hookService.processHook(hook, HookExecutionType.DYNAMIC);
+
+        assertEquals("text", result.getTemplateDynamicBody().getTemplate().getType());
+    }
+
+    @Test
+    void namedMethodDynamicHookResolvesFromRegistry() throws Exception {
+        StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerSingleton("namedMethodHooks", NamedHookBeans.NamedMethodHooks.class);
+        applicationContext.refresh();
+
+        HookService hookService = new HookService(
+                new EngineTestSupport.RecordingClientManager(),
+                new JawceConfig(),
+                applicationContext,
+                new FlowHookRegistry(applicationContext)
+        );
+
+        Hook hook = Hook.builder()
+                .hook("methodDynamic")
+                .build();
+
+        Hook result = hookService.processHook(hook, HookExecutionType.DYNAMIC);
+
+        assertEquals("text", result.getTemplateDynamicBody().getTemplate().getType());
+    }
 }

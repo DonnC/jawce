@@ -49,13 +49,10 @@
     "location_request": "RIDE-OFFER"
 
 "RIDE-OFFER":
-  type: button
-  message:
-    title: Ride Fee
-    body: "Your ride fee to your destination is USD $3.50\nYou will arrive in ~8mins"
-    buttons:
-      - Accept
-      - Counter Offer
+  type: dynamic
+  on-generate: "prepareRideOffer"
+  dynamic: "renderRideOffer"
+  message: "placeholder"
   routes:
     "accept": "RIDE-COMMENT"
     "counter offer": "RIDE-COUNTER-OFFER"

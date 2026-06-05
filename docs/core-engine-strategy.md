@@ -77,6 +77,9 @@ That is the same strategy that worked well for named hooks.
 
 ## Workstream 1: First-class dynamic choice handling
 
+Status:
+Phase 1 is now underway in the engine with stage-local dynamic choice registration, inbound validation for dynamic-choice stages, and structured selected-choice capture for hooks.
+
 ## Problem
 
 Today `jawce` can render dynamic buttons, lists, or text, but the next inbound response still depends on generic stage routing and session conventions.
@@ -129,6 +132,9 @@ The engine should be able to say:
 Dynamic flows become much easier to build without exploding templates or overusing custom session data.
 
 ## Workstream 2: Replace internal session-key magic with explicit engine state
+
+Status:
+Phase 1 is now well established with `ConversationState` introduced into the engine hot path for stage progression, retry state, rollback, activity updates, dynamic template state, duplicate protection, and debounce timing.
 
 ## Problem
 
@@ -210,6 +216,9 @@ Keep `Hook` as the stable execution context, but move toward narrower phase-owne
 Hook behavior becomes easier to reason about, document, and validate, without forcing an abrupt API rewrite.
 
 ## Workstream 4: Make recovery and restart semantics first-class
+
+Status:
+Phase 1 is now underway in the engine with explicit recovery intent resolution, retry checkpoint handling, and regression coverage for timeout restart and retry behavior.
 
 ## Problem
 

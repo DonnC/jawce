@@ -163,9 +163,11 @@ class WorkerEngineHooksTest {
                         "    buttons:\n" +
                         "      - Continue\n" +
                         "      - Template\n" +
+                        "      - Dynamic\n" +
                         "  routes:\n" +
                         "    \"continue\": \"NEXT-STAGE\"\n" +
                         "    \"template\": \"TEMPLATE-STAGE\"\n" +
+                        "    \"dynamic\": \"DYNAMIC-STAGE\"\n" +
                         "\n" +
                         "\"NEXT-STAGE\":\n" +
                         "  type: text\n" +
@@ -180,6 +182,13 @@ class WorkerEngineHooksTest {
                         "  message: Hello {{ name }}\n" +
                         "  routes:\n" +
                         "    \"re:.*\": \"START-MENU\"\n" +
+                        "\n" +
+                        "\"DYNAMIC-STAGE\":\n" +
+                        "  type: dynamic\n" +
+                        "  dynamic: namedDynamic\n" +
+                        "  message: placeholder\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"START-MENU\"\n" +
                         "\n"
         );
         Files.writeString(
@@ -191,6 +200,7 @@ class WorkerEngineHooksTest {
         applicationContext.registerSingleton("namedReceiveHook", NamedHookBeans.NamedReceiveHook.class);
         applicationContext.registerSingleton("namedGenerateHook", NamedHookBeans.NamedGenerateHook.class);
         applicationContext.registerSingleton("namedTemplateHook", NamedHookBeans.NamedTemplateHook.class);
+        applicationContext.registerSingleton("namedDynamicHook", NamedHookBeans.NamedDynamicHook.class);
         applicationContext.refresh();
 
         worker = createWorker(templatesDir, triggersDir, false, applicationContext);
@@ -208,6 +218,12 @@ class WorkerEngineHooksTest {
         worker.processWebhook(EngineTestSupport.buttonWebhook("template", "wamid-4"));
         Map<String, Object> templatePayload = clientManager.lastSentPayload();
         assertEquals("Hello NamedTemplate", EngineTestSupport.childMap(templatePayload, "text").get("body"));
+
+        worker = createWorker(templatesDir, triggersDir, false, applicationContext);
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-5"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("dynamic", "wamid-6"));
+        Map<String, Object> dynamicPayload = clientManager.lastSentPayload();
+        assertEquals("Named Dynamic", EngineTestSupport.childMap(dynamicPayload, "text").get("body"));
     }
 
     private Worker createWorker(Path templatesDir, Path triggersDir, boolean emulate) {

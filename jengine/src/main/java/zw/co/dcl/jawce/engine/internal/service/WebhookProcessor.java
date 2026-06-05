@@ -15,9 +15,11 @@ import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
 import zw.co.dcl.jawce.engine.internal.abstracts.BaseTemplateProcessor;
+import zw.co.dcl.jawce.engine.internal.dynamic.DynamicChoiceRegistry;
 import zw.co.dcl.jawce.engine.internal.dto.PreProcessorResult;
 import zw.co.dcl.jawce.engine.internal.dto.ResponseError;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
+import zw.co.dcl.jawce.engine.internal.state.ConversationState;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
@@ -149,7 +151,15 @@ public class WebhookProcessor extends BaseTemplateProcessor {
             throw new SessionInactivityException("You have been inactive for a while, let's start afresh");
         }
 
-        var checkpoint = this.session.get(this.sessionId, SessionConstant.SESSION_CHECKPOINT_KEY);
+        if(this.hasActiveDynamicChoices && this.dynamicChoiceSelection.isEmpty()) {
+            throw new ResponseException(new ResponseError(
+                    this.sessionId,
+                    "Invalid selection, please choose one of the available options",
+                    this.stage
+            ));
+        }
+
+        var checkpoint = this.conversationState.checkpointStage();
 
         var hasRetryGlobalRoute = new AtomicBoolean(false);
 
@@ -163,7 +173,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
                 && this.userInput.input() != null
                 && this.userInput.input().equalsIgnoreCase(EngineConstant.BTN_RETRY)
                 && checkpoint != null
-                && this.session.get(this.sessionId, SessionConstant.SESSION_DYNAMIC_RETRY_KEY) != null
+                && this.conversationState.isRetryPending()
                 && !this.isFromTrigger;
 
         if(gotoCheckpoint) return checkpoint.toString();
@@ -200,21 +210,26 @@ public class WebhookProcessor extends BaseTemplateProcessor {
     boolean hasInteractionActivityExpired() {
         if(!this.getConfig().isHandleSessionInactivity() || !this.template.isSession()) return false;
 
-        var lastActive = this.session.get(this.sessionId, SessionConstant.LAST_ACTIVITY_KEY, String.class);
+        var lastActive = this.conversationState.lastActivity();
 
         return Utils.hasInteractionExpired(lastActive, this.getConfig().getSessionTtlMins());
     }
 
     void authenticate(BaseEngineTemplate template) {
-        if(template.isAuthenticated()) {
-            if(this.session.get(this.sessionId, SessionConstant.AUTH_SET_KEY) == null) {
-                throw new SessionExpiredException("You are logged out or your session has expired. Kindly login again to access our Services");
-            }
+        if(template.isAuthenticated() && !this.conversationState.isAuthenticated()) {
+            throw new SessionExpiredException("You are logged out or your session has expired. Kindly login again to access our Services");
         }
     }
 
+    boolean isRetryRecoveryRequest() {
+        return this.userInput != null
+                && this.userInput.input() != null
+                && this.userInput.input().equalsIgnoreCase(EngineConstant.BTN_RETRY)
+                && this.conversationState.isRetryPending();
+    }
+
     PreProcessorResult preProcessor() throws Exception {
-        var shouldProcessPostHooks = !this.isFromTrigger || this.session.get(this.sessionId, SessionConstant.SESSION_DYNAMIC_RETRY_KEY) == null;
+        var shouldProcessPostHooks = !this.isRetryRecoveryRequest();
         if(shouldProcessPostHooks) {
             this.processPostHooks();
         }
@@ -226,7 +241,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         // i will get back to it in the future and document it
         if(hasDynamicTemplateBody(SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY)) {
             nextStage = EngineConstant.DYNAMIC_BODY_STAGE_KEY;
-            nextStageTemplate = SerializeUtils.toTemplate(this.session.get(this.sessionId, SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY, Map.class));
+            nextStageTemplate = SerializeUtils.toTemplate(this.conversationState.dynamicNextTemplateBody());
         } else {
             nextStage = this.getNextRoute();
 
@@ -270,6 +285,7 @@ public class WebhookProcessor extends BaseTemplateProcessor {
         var currentStage = this.stage;
 
         nextTemplate = this.processPreHooks(nextTemplate);
+        nextTemplate = this.materializeDynamicTemplate(nextTemplate);
         this.publishStageResolved(currentStage, nextStage, nextTemplate);
 
         var messageRequest = new PayloadGeneratorDto(
@@ -286,7 +302,16 @@ public class WebhookProcessor extends BaseTemplateProcessor {
 
         nestedCallCount = 0;
         this.isFromTrigger = false;
-        this.session.evict(this.sessionId, SessionConstant.SESSION_DYNAMIC_RETRY_KEY);
-        return new WebhookProcessorResult(payload, nextStage, this.sessionId, this.template.isSession());
+        this.conversationState.clearRetryPending();
+        var dynamicChoices = this.shouldRegisterDynamicChoices
+                ? DynamicChoiceRegistry.discoverChoices(nextTemplate, this.generatedDynamicChoices)
+                : java.util.List.<zw.co.dcl.jawce.engine.model.dto.DynamicChoice>of();
+        return new WebhookProcessorResult(
+                payload,
+                nextStage,
+                this.sessionId,
+                this.template.isSession(),
+                dynamicChoices
+        );
     }
 }

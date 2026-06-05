@@ -41,6 +41,22 @@ class WorkerEngineDynamicTemplateTest {
         Files.writeString(
                 templatesDir.resolve("dynamic.yaml"),
                 "\"START-MENU\":\n" +
+                        "  type: dynamic\n" +
+                        "  on-receive: \"zw.co.dcl.jawce.engine.support.TestHooks.captureSelectedDynamicChoice\"\n" +
+                        "  on-generate: \"zw.co.dcl.jawce.engine.support.TestHooks.prepareDynamicAccountSelector\"\n" +
+                        "  dynamic: \"zw.co.dcl.jawce.engine.support.TestHooks.renderDynamicAccountSelector\"\n" +
+                        "  message: \"placeholder\"\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"DONE\"\n" +
+                        "\n" +
+                        "\"LEGACY-TEMPLATE-DYNAMIC\":\n" +
+                        "  type: dynamic\n" +
+                        "  template: \"zw.co.dcl.jawce.engine.support.TestHooks.renderDynamicAccountSelector\"\n" +
+                        "  message: \"placeholder\"\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"DONE\"\n" +
+                        "\n" +
+                        "\"LEGACY-DYNAMIC\":\n" +
                         "  type: text\n" +
                         "  on-generate: \"zw.co.dcl.jawce.engine.support.TestHooks.renderDynamicAccountSelector\"\n" +
                         "  message: \"placeholder\"\n" +
@@ -56,7 +72,9 @@ class WorkerEngineDynamicTemplateTest {
 
         Files.writeString(
                 triggersDir.resolve("triggers.yaml"),
-                "\"START-MENU\": \"re:(?i)^(start|hi|hello)$\"\n"
+                "\"START-MENU\": \"re:(?i)^(start|hi|hello)$\"\n" +
+                        "\"LEGACY-TEMPLATE-DYNAMIC\": \"re:(?i)^legacy-template$\"\n" +
+                        "\"LEGACY-DYNAMIC\": \"re:(?i)^legacy$\"\n"
         );
 
         TemplateStorageProperties storageProperties = new TemplateStorageProperties();
@@ -112,13 +130,31 @@ class WorkerEngineDynamicTemplateTest {
 
         Map<String, Object> payload = clientManager.lastSentPayload();
         Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
+        Map<String, Object> body = EngineTestSupport.childMap(interactive, "body");
         Map<String, Object> action = EngineTestSupport.childMap(interactive, "action");
         List<?> buttons = (List<?>) action.get("buttons");
 
         assertEquals("interactive", payload.get("type"));
         assertEquals("button", interactive.get("type"));
+        assertEquals("Select a payment account", body.get("text"));
         assertEquals(2, buttons.size());
         assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+        assertEquals(List.of("dynamic_prepare", "dynamic_render"), sessionManager.getGlobal("events", List.class));
+    }
+
+    @Test
+    void buttonSelectionIsCapturedAsStructuredDynamicChoice() {
+        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque"));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-buttons-start"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("Savings", "wamid-buttons-select"));
+
+        Map<String, Object> selected = sessionManager.getGlobal("selectedDynamicChoice", Map.class);
+
+        assertEquals("Savings", selected.get("id"));
+        assertEquals("Savings", selected.get("label"));
+        assertEquals(1, selected.get("ordinal"));
+        assertEquals("DONE", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
     }
 
     @Test
@@ -139,6 +175,20 @@ class WorkerEngineDynamicTemplateTest {
     }
 
     @Test
+    void listSelectionIsCapturedAsStructuredDynamicChoice() {
+        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque", "USD", "Business"));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-list-start"));
+        worker.processWebhook(EngineTestSupport.buttonWebhook("acc-3", "wamid-list-select"));
+
+        Map<String, Object> selected = sessionManager.getGlobal("selectedDynamicChoice", Map.class);
+
+        assertEquals("acc-3", selected.get("id"));
+        assertEquals("USD", selected.get("label"));
+        assertEquals(3, selected.get("ordinal"));
+    }
+
+    @Test
     void onGenerateCanReplaceOutgoingTemplateWithText() {
         sessionManager.saveGlobal(
                 "accounts",
@@ -153,5 +203,71 @@ class WorkerEngineDynamicTemplateTest {
         assertEquals("text", payload.get("type"));
         assertTrue(body.contains("1. A1"));
         assertTrue(body.contains("11. A11"));
+    }
+
+    @Test
+    void staticStageOnGenerateTemplateOverrideRemainsSupportedForCompatibility() {
+        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque"));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("legacy", "wamid-legacy"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
+        Map<String, Object> action = EngineTestSupport.childMap(interactive, "action");
+        List<?> buttons = (List<?>) action.get("buttons");
+
+        assertEquals("interactive", payload.get("type"));
+        assertEquals("button", interactive.get("type"));
+        assertEquals(2, buttons.size());
+        assertEquals("LEGACY-DYNAMIC", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
+    @Test
+    void dynamicStageTemplateHookRemainsSupportedForCompatibility() {
+        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque"));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("legacy-template", "wamid-legacy-template"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
+        Map<String, Object> action = EngineTestSupport.childMap(interactive, "action");
+        List<?> buttons = (List<?>) action.get("buttons");
+
+        assertEquals("interactive", payload.get("type"));
+        assertEquals("button", interactive.get("type"));
+        assertEquals(2, buttons.size());
+        assertEquals("LEGACY-TEMPLATE-DYNAMIC", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
+    @Test
+    void textIndexedSelectionIsCapturedAsStructuredDynamicChoice() {
+        sessionManager.saveGlobal(
+                "accounts",
+                List.of("A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11")
+        );
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-text-start"));
+        worker.processWebhook(EngineTestSupport.textWebhook("11", "wamid-text-select"));
+
+        Map<String, Object> selected = sessionManager.getGlobal("selectedDynamicChoice", Map.class);
+
+        assertEquals("acc-11", selected.get("id"));
+        assertEquals("A11", selected.get("label"));
+        assertEquals(11, selected.get("ordinal"));
+    }
+
+    @Test
+    void invalidDynamicSelectionIsRejectedBeforeGenericRouteTransition() {
+        sessionManager.saveGlobal("accounts", List.of("Savings", "Cheque", "USD", "Business"));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("hello", "wamid-invalid-start"));
+        worker.processWebhook(EngineTestSupport.textWebhook("not-a-choice", "wamid-invalid-select"));
+
+        Map<String, Object> payload = clientManager.lastSentPayload();
+        Map<String, Object> interactive = EngineTestSupport.childMap(payload, "interactive");
+        String body = EngineTestSupport.childMap(interactive, "body").get("text").toString();
+
+        assertTrue(body.contains("Invalid selection"));
+        assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
     }
 }

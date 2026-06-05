@@ -73,6 +73,7 @@ public abstract class BaseEngineTemplate implements Serializable {
 
     // hooks
     private String template;
+    private String dynamic;
     @JsonProperty("on-receive")
     private String onReceive;
     @JsonProperty("on-generate")

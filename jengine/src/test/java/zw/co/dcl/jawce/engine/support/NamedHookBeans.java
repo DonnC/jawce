@@ -1,8 +1,10 @@
 package zw.co.dcl.jawce.engine.support;
 
+import zw.co.dcl.jawce.engine.api.exceptions.HookException;
 import zw.co.dcl.jawce.engine.api.annotation.FlowHookType;
 import zw.co.dcl.jawce.engine.api.annotation.NamedFlowHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IGenerateHook;
+import zw.co.dcl.jawce.engine.api.iface.hook.IDynamicHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IRouterHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.ITemplateHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IReceiveHook;
@@ -51,6 +53,22 @@ public final class NamedHookBeans {
         }
     }
 
+    @NamedFlowHook("namedDynamic")
+    public static class NamedDynamicHook implements IDynamicHook {
+        @Override
+        public Hook execute(Hook hook) {
+            hook.setTemplateDynamicBody(
+                    TemplateDynamicBody.builder()
+                            .template(zw.co.dcl.jawce.engine.api.utils.SerializeUtils.toTemplate(java.util.Map.of(
+                                    "type", "text",
+                                    "message", "Named Dynamic"
+                            )))
+                            .build()
+            );
+            return hook;
+        }
+    }
+
     @NamedFlowHook("namedTemplate")
     public static class NamedTemplateHook implements ITemplateHook {
         @Override
@@ -61,6 +79,14 @@ public final class NamedHookBeans {
                             .build()
             );
             return hook;
+        }
+    }
+
+    @NamedFlowHook("alwaysFailingReceive")
+    public static class AlwaysFailingReceiveHook implements IReceiveHook {
+        @Override
+        public Hook execute(Hook hook) {
+            throw new HookException("Temporary backend failure");
         }
     }
 
@@ -87,6 +113,19 @@ public final class NamedHookBeans {
         @NamedFlowHook(value = "methodRouter", type = FlowHookType.ROUTER)
         public Hook route(Hook hook) {
             hook.setRedirectTo("REPORT");
+            return hook;
+        }
+
+        @NamedFlowHook(value = "methodDynamic", type = FlowHookType.DYNAMIC)
+        public Hook dynamic(Hook hook) {
+            hook.setTemplateDynamicBody(
+                    TemplateDynamicBody.builder()
+                            .template(zw.co.dcl.jawce.engine.api.utils.SerializeUtils.toTemplate(java.util.Map.of(
+                                    "type", "text",
+                                    "message", "Method Dynamic"
+                            )))
+                            .build()
+            );
             return hook;
         }
     }

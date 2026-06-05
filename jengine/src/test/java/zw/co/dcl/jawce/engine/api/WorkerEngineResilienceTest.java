@@ -3,6 +3,7 @@ package zw.co.dcl.jawce.engine.api;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.StaticApplicationContext;
 import zw.co.dcl.jawce.engine.api.utils.Utils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
@@ -15,6 +16,7 @@ import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.internal.service.WebhookProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
 import zw.co.dcl.jawce.engine.support.EngineTestSupport;
+import zw.co.dcl.jawce.engine.support.NamedHookBeans;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -180,6 +182,85 @@ class WorkerEngineResilienceTest {
         assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
     }
 
+    @Test
+    void retryReturnsToCheckpointWithoutReinvokingFailingReceiveHook() throws Exception {
+        Files.writeString(
+                templatesDir.resolve("retry-flow.yaml"),
+                "\"RETRY-STAGE\":\n" +
+                        "  type: text\n" +
+                        "  on-receive: alwaysFailingReceive\n" +
+                        "  message: Enter anything\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"REPORT\"\n"
+        );
+
+        Worker worker = createWorker(0, false, true, 60);
+
+        sessionManager.save("263771234567", SessionConstant.CURRENT_STAGE, "RETRY-STAGE");
+        sessionManager.save("263771234567", SessionConstant.CURRENT_MSG_ID_KEY, "seed-msg");
+        sessionManager.save("263771234567", SessionConstant.LAST_ACTIVITY_KEY, Utils.formatZonedDateTime(Utils.currentSystemDate()));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("anything", "wamid-retry-1"));
+
+        Map<String, Object> failurePayload = clientManager.lastSentPayload();
+        String failureBody = EngineTestSupport.childMap(EngineTestSupport.childMap(failurePayload, "interactive"), "body").get("text").toString();
+
+        assertEquals("Temporary backend failure", failureBody);
+        assertEquals("RETRY-STAGE", sessionManager.get("263771234567", SessionConstant.SESSION_CHECKPOINT_KEY));
+        assertEquals(true, sessionManager.get("263771234567", SessionConstant.SESSION_DYNAMIC_RETRY_KEY));
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("Retry", "wamid-retry-2"));
+
+        Map<String, Object> retryPayload = clientManager.lastSentPayload();
+        assertEquals("text", retryPayload.get("type"));
+        assertEquals("Enter anything", EngineTestSupport.childMap(retryPayload, "text").get("body"));
+        assertEquals("RETRY-STAGE", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+        assertEquals(null, sessionManager.get("263771234567", SessionConstant.SESSION_DYNAMIC_RETRY_KEY));
+    }
+
+    @Test
+    void menuButtonAfterInvalidResponseFallbackReturnsToStartMenu() throws Exception {
+        Files.writeString(
+                templatesDir.resolve("strict-flow.yaml"),
+                "\"STRICT-STAGE\":\n" +
+                        "  type: button\n" +
+                        "  message:\n" +
+                        "    title: Strict\n" +
+                        "    body: Choose a valid option\n" +
+                        "    buttons:\n" +
+                        "      - Accept\n" +
+                        "      - Counter Offer\n" +
+                        "  routes:\n" +
+                        "    \"accept\": \"REPORT\"\n" +
+                        "    \"counter offer\": \"GITHUB-PROFILE\"\n"
+        );
+
+        Worker worker = createWorker(0, false, true, 60);
+
+        sessionManager.save("263771234567", SessionConstant.CURRENT_STAGE, "STRICT-STAGE");
+        sessionManager.save("263771234567", SessionConstant.PREV_STAGE, "PICKUP-LOCATION");
+        sessionManager.save("263771234567", SessionConstant.CURRENT_MSG_ID_KEY, "seed-msg");
+        sessionManager.save("263771234567", SessionConstant.LAST_ACTIVITY_KEY, Utils.formatZonedDateTime(Utils.currentSystemDate()));
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("Menu", "wamid-invalid-1"));
+
+        Map<String, Object> failurePayload = clientManager.lastSentPayload();
+        Map<String, Object> failureInteractive = EngineTestSupport.childMap(failurePayload, "interactive");
+        String failureBody = EngineTestSupport.childMap(failureInteractive, "body").get("text").toString();
+
+        assertTrue(failureBody.contains("Invalid response"));
+        assertEquals("STRICT-STAGE", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("Menu", "wamid-invalid-2"));
+
+        Map<String, Object> recoveredPayload = clientManager.lastSentPayload();
+        String recoveredBody = EngineTestSupport.childMap(EngineTestSupport.childMap(recoveredPayload, "interactive"), "body").get("text").toString();
+
+        assertEquals("Test body", recoveredBody);
+        assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+        assertEquals(null, sessionManager.get("263771234567", SessionConstant.SESSION_RECOVERY_ACTIONS_KEY));
+    }
+
     private Worker createWorker(long debounceTimeoutMs, boolean emulate, boolean handleSessionInactivity, int webhookTtlSeconds) {
         TemplateStorageProperties storageProperties = new TemplateStorageProperties();
         storageProperties.setTemplatesPath(templatesDir.toString());
@@ -203,6 +284,7 @@ class WorkerEngineResilienceTest {
         this.eventPublisher = new EngineTestSupport.CollectingEventPublisher();
 
         StaticApplicationContext applicationContext = new StaticApplicationContext();
+        applicationContext.registerBeanDefinition("alwaysFailingReceive", new RootBeanDefinition(NamedHookBeans.AlwaysFailingReceiveHook.class));
         applicationContext.refresh();
         FlowHookRegistry flowHookRegistry = new FlowHookRegistry(applicationContext);
         HookService hookService = new HookService(clientManager, jawceConfig, applicationContext, flowHookRegistry);

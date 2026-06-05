@@ -11,10 +11,13 @@ import zw.co.dcl.jawce.engine.api.utils.WhatsAppUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.constants.EngineConstant;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
+import zw.co.dcl.jawce.engine.constants.TemplateType;
 import zw.co.dcl.jawce.engine.internal.dto.UserInput;
 import zw.co.dcl.jawce.engine.internal.dto.Webhook;
 import zw.co.dcl.jawce.engine.internal.dto.GenerateHookResult;
 import zw.co.dcl.jawce.engine.internal.dto.HookResultMapper;
+import zw.co.dcl.jawce.engine.internal.dynamic.DynamicChoiceRegistry;
+import zw.co.dcl.jawce.engine.internal.state.ConversationState;
 import zw.co.dcl.jawce.engine.internal.service.HookExecutionType;
 import zw.co.dcl.jawce.engine.internal.service.RenderProcessor;
 import zw.co.dcl.jawce.engine.internal.service.WhatsAppHelperService;
@@ -22,9 +25,13 @@ import zw.co.dcl.jawce.engine.internal.service.HookService;
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.EngineRoute;
 import zw.co.dcl.jawce.engine.model.core.Hook;
+import zw.co.dcl.jawce.engine.model.dto.DynamicChoiceSelection;
+
+import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Getter
 @Slf4j
@@ -44,6 +51,11 @@ public abstract class BaseTemplateProcessor {
     protected String stage;
     protected String sessionId;
     protected ISessionManager session;
+    protected ConversationState conversationState;
+    protected Optional<DynamicChoiceSelection> dynamicChoiceSelection = Optional.empty();
+    protected boolean hasActiveDynamicChoices = false;
+    protected java.util.List<zw.co.dcl.jawce.engine.model.dto.DynamicChoice> generatedDynamicChoices = new ArrayList<>();
+    protected boolean shouldRegisterDynamicChoices = false;
     Map<String, Object> params;
 
     public BaseTemplateProcessor(
@@ -62,9 +74,14 @@ public abstract class BaseTemplateProcessor {
         this.params = new HashMap<>();
         this.isFirstTime = false;
         this.isFromTrigger = false;
+        this.hasActiveDynamicChoices = false;
+        this.dynamicChoiceSelection = Optional.empty();
+        this.generatedDynamicChoices = new ArrayList<>();
+        this.shouldRegisterDynamicChoices = false;
         this.message = message;
         this.sessionId = message.user().waId();
         this.session = this.sessionManager.session(this.sessionId);
+        this.conversationState = new ConversationState(this.sessionId, this.sessionManager);
 
         // initialize
         this.getCurrentTemplate();
@@ -83,7 +100,34 @@ public abstract class BaseTemplateProcessor {
         arg.setWaUser(message.user());
         arg.setUserInput(this.userInput.input());
         arg.setAdditionalData(this.userInput.data());
+        this.resolveDynamicChoiceSelection(arg);
         this.hookArg = arg;
+    }
+
+    void resolveDynamicChoiceSelection(Hook arg) {
+        this.hasActiveDynamicChoices = this.conversationState.hasDynamicChoicesForStage(this.stage);
+        if(!this.hasActiveDynamicChoices || this.userInput.input() == null) {
+            return;
+        }
+
+        var selection = DynamicChoiceRegistry.resolve(this.conversationState.dynamicChoices(), this.userInput.input())
+                .map(choice -> DynamicChoiceSelection.builder()
+                        .stage(this.stage)
+                        .input(this.userInput.input())
+                        .choice(choice)
+                        .metadata(choice.getMetadata())
+                        .build());
+
+        if(selection.isPresent()) {
+            Map<String, Object> merged = new HashMap<>();
+            if(arg.getAdditionalData() != null) {
+                merged.putAll(arg.getAdditionalData());
+            }
+            merged.putAll(this.conversationState.toAdditionalData(selection.get()));
+            arg.setAdditionalData(merged);
+        }
+
+        this.dynamicChoiceSelection = selection;
     }
 
     void showMessageIndicators() {
@@ -103,62 +147,48 @@ public abstract class BaseTemplateProcessor {
 
     void saveCheckpoint() {
         if(this.template.isCheckpoint()) {
-            this.session.save(this.sessionId, SessionConstant.SESSION_CHECKPOINT_KEY, stage);
+            this.conversationState.saveCheckpoint(stage);
         }
     }
 
     void checkSessionByPass() {
         if(!this.template.isSession()) {
             this.isFromTrigger = false;
-            this.session.save(this.sessionId, SessionConstant.CURRENT_STAGE, this.stage);
+            this.conversationState.setCurrentStage(this.stage);
         }
     }
 
     protected boolean hasDynamicTemplateBody(String key) {
-        return this.session.get(sessionId, key) instanceof Map;
+        return this.conversationState.get(key) instanceof Map;
     }
 
     void getCurrentTemplate() {
-        this.stage = this.session.get(this.sessionId, SessionConstant.CURRENT_STAGE, String.class);
+        this.stage = this.conversationState.currentStage();
 
         if(this.stage == null) {
             this.template = this.templateStorageManager
                     .getTemplate(this.config.getStartMenu())
                     .orElseThrow(() -> new InternalException(this.config.getStartMenu() + " stage not found"));
 
-            this.session.saveAll(
-                    this.sessionId,
-                    Map.of(
-                            SessionConstant.CURRENT_STAGE, this.config.getStartMenu(),
-                            SessionConstant.PREV_STAGE, this.config.getStartMenu()
-                    )
-            );
+            this.conversationState.initializeAtStartMenu(this.config.getStartMenu());
             this.isFirstTime = true;
             this.stage = this.config.getStartMenu();
             return;
         }
 
-        if(this.hasDynamicTemplateBody(SessionConstant.DYNAMIC_CURRENT_TEMPLATE_BODY_KEY)) {
+        if(this.conversationState.hasDynamicCurrentTemplateBody()) {
             this.stage = EngineConstant.DYNAMIC_BODY_STAGE_KEY;
-            this.template = SerializeUtils.toTemplate(session.get(sessionId,
-                    SessionConstant.DYNAMIC_CURRENT_TEMPLATE_BODY_KEY,
-                    Map.class
-            ));
+            this.template = SerializeUtils.toTemplate(this.conversationState.dynamicCurrentTemplateBody());
             return;
         }
 
-        if(!hasDynamicTemplateBody(SessionConstant.DYNAMIC_CURRENT_TEMPLATE_BODY_KEY) &&
-                hasDynamicTemplateBody(SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY)
-        ) {
-            var lastDynamicTplMessage = SerializeUtils.toTemplate(this.session.get(
-                    sessionId,
-                    SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY,
-                    Map.class
-            ));
+        if(!this.conversationState.hasDynamicCurrentTemplateBody() &&
+                this.conversationState.hasDynamicNextTemplateBody()) {
+            var lastDynamicTplMessage = SerializeUtils.toTemplate(this.conversationState.dynamicNextTemplateBody());
 
             if(this.isDynamicBodyTemplateLastStage(lastDynamicTplMessage)) {
                 this.template = lastDynamicTplMessage;
-                this.session.evict(sessionId, SessionConstant.DYNAMIC_NEXT_TEMPLATE_BODY_KEY);
+                this.conversationState.clearDynamicNextTemplateBody();
                 return;
             }
         }
@@ -185,6 +215,10 @@ public abstract class BaseTemplateProcessor {
 
     void processGlobalTriggersOnInput() {
         if(this.userInput.input() != null) {
+            if(handlePendingRecoveryAction()) {
+                return;
+            }
+
             for (EngineRoute trigger : this.templateStorageManager.triggers()) {
                 if(hasTriggered(trigger)) return;
             }
@@ -194,9 +228,33 @@ public abstract class BaseTemplateProcessor {
             return;
         }
 
-        if(this.session.get(sessionId, SessionConstant.CURRENT_MSG_ID_KEY) == null) {
+        if(this.conversationState.currentMessageId() == null) {
 //            this.session.clear();
             throw new InternalException("Ambiguous old webhook response, skipping..");
+        }
+    }
+
+    boolean handlePendingRecoveryAction() {
+        var recoveryAction = this.conversationState.recoveryIntentFor(this.userInput.input());
+        if(recoveryAction.isEmpty()) {
+            return false;
+        }
+
+        this.conversationState.clearRecoveryActions();
+
+        switch (recoveryAction.get()) {
+            case RESTART, RETURN_TO_MENU -> {
+                this.template = this.templateStorageManager
+                        .getTemplate(this.config.getStartMenu())
+                        .orElseThrow(() -> new InternalException(this.config.getStartMenu() + " stage not found"));
+                this.stage = this.config.getStartMenu();
+                this.isFromTrigger = true;
+                this.conversationState.initializeAtStartMenu(this.stage);
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 
@@ -219,7 +277,7 @@ public abstract class BaseTemplateProcessor {
         this.stage = trigger.getNextStage();
         log.info("Triggered template change: {}", this.stage);
         this.isFromTrigger = true;
-        this.session.save(this.sessionId, SessionConstant.CURRENT_STAGE, this.stage);
+        this.conversationState.setCurrentStage(this.stage);
 
         if(trigger.getInnerNextStage() != null) {
             this.hookArg.setRedirectTo(trigger.getInnerNextStage());
@@ -311,6 +369,7 @@ public abstract class BaseTemplateProcessor {
         GenerateHookResult generateHookResult = HookResultMapper.toGenerateResult(this.hookArg);
 
         if(generateHookResult.hasTemplateOverride()) {
+            applyDynamicChoiceState(generateHookResult, true);
             return generateHookResult.templateOverride();
         }
 
@@ -320,9 +379,54 @@ public abstract class BaseTemplateProcessor {
                     SerializeUtils.fromTemplate(nextTemplate),
                     generateHookResult.renderPayload()
             );
+            applyDynamicChoiceState(generateHookResult, false);
             return SerializeUtils.toTemplate(renderResult);
         }
 
+        applyDynamicChoiceState(generateHookResult, false);
         return nextTemplate;
+    }
+
+    protected BaseEngineTemplate materializeDynamicTemplate(BaseEngineTemplate nextTemplate) throws Exception {
+        if(nextTemplate.getDynamic() != null && !nextTemplate.getDynamic().isBlank()) {
+            processHookParams(nextTemplate);
+            Hook dynamicHookResult = this.processHook(nextTemplate.getDynamic(), HookExecutionType.DYNAMIC);
+            this.hookArg = HookResultMapper.merge(dynamicHookResult, this.hookArg);
+            GenerateHookResult generateHookResult = HookResultMapper.toGenerateResult(this.hookArg);
+
+            if(!generateHookResult.hasTemplateOverride()) {
+                throw new InternalException("dynamic hook for stage " + this.stage + " did not return a template body");
+            }
+
+            applyDynamicChoiceState(generateHookResult, true);
+            return generateHookResult.templateOverride();
+        }
+
+        if(!TemplateType.DYNAMIC.equals(nextTemplate.getType())) {
+            return nextTemplate;
+        }
+
+        if(nextTemplate.getTemplate() == null || nextTemplate.getTemplate().isBlank()) {
+            return nextTemplate;
+        }
+
+        processHookParams(nextTemplate);
+        Hook templateHookResult = this.processHook(nextTemplate.getTemplate(), HookExecutionType.TEMPLATE);
+        this.hookArg = HookResultMapper.merge(templateHookResult, this.hookArg);
+        GenerateHookResult generateHookResult = HookResultMapper.toGenerateResult(this.hookArg);
+
+        if(!generateHookResult.hasTemplateOverride()) {
+            throw new InternalException("dynamic stage " + this.stage + " did not return a template body");
+        }
+
+        applyDynamicChoiceState(generateHookResult, true);
+        return generateHookResult.templateOverride();
+    }
+
+    private void applyDynamicChoiceState(GenerateHookResult generateHookResult, boolean templateOverride) {
+        this.generatedDynamicChoices = generateHookResult.hasDynamicChoices()
+                ? generateHookResult.dynamicChoices()
+                : new ArrayList<>();
+        this.shouldRegisterDynamicChoices = generateHookResult.hasDynamicChoices() || templateOverride;
     }
 }

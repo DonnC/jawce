@@ -51,6 +51,14 @@ Add the engine dependency to your `pom.xml`:
 
 JaWCE provides two professional ways to integrate your business logic:
 
+Hook intent in the engine is split clearly:
+- `on-receive`: post-input business logic
+- `middleware`: cross-cutting logic
+- `router`: next-stage redirect logic
+- `on-generate`: pre-render preparation
+- `template`: render/body shaping
+- `dynamic`: backend-driven next message/template selection
+
 ### 1. Named Hooks (Decoupled)
 Define a name in your YAML template and map it to a Spring component using the `@NamedFlowHook` annotation. This is the recommended approach for clean separation.
 
@@ -116,6 +124,12 @@ Check the `example/` folder for production-ready implementations:
 ## 📚 Resources
 - [Official Documentation](https://docs.page/donnc/wce)
 - [WCE Emulator](https://github.com/DonnC/wce-emulator) (Recommended for local testing)
+- [Recovery Semantics](./docs/recovery-semantics.md)
+- [Core Engine Strategy](./docs/core-engine-strategy.md)
+- [Internal State Model](./docs/internal-state-model.md)
+- [Dynamic Choice Model](./docs/dynamic-choice-model.md)
+- [Dynamic Rendering](./docs/dynamic-rendering.md)
+- [Advanced Dynamic Template Handling](./docs/advanced-dynamic-template-handling.md)
 
 ---
 

@@ -16,6 +16,12 @@ The `ehailing` example also uses the newer named-hook approach:
 - Spring beans expose the hook logic
 - `jawce` resolves and validates the hook at startup
 
+It now also demonstrates the first-class `dynamic` hook contract in a real flow:
+
+- `on-generate` prepares the ride quote context
+- `dynamic` builds the actual ride-offer message shown to the user
+- the ride journey still stays readable in YAML
+
 If using the default file session manager, you may delete old session data by deleting the `.session` folder.
 
 

@@ -265,6 +265,7 @@ public class YmlJsonTemplateStorageManager implements ITemplateStorageManager {
     void validateHooks(String stage, BaseEngineTemplate template) {
         validateHookPath(stage, template.getOnReceive(), HookExecutionType.RECEIVE);
         validateHookPath(stage, template.getOnGenerate(), HookExecutionType.GENERATE);
+        validateHookPath(stage, template.getDynamic(), HookExecutionType.DYNAMIC);
         validateHookPath(stage, template.getRouter(), HookExecutionType.ROUTER);
         validateHookPath(stage, template.getMiddleware(), HookExecutionType.MIDDLEWARE);
         validateHookPath(stage, template.getTemplate(), HookExecutionType.TEMPLATE);

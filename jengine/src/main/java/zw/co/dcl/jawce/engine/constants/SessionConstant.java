@@ -48,6 +48,9 @@ public class SessionConstant {
      * and clear it after processing
      */
     public final static String SESSION_DYNAMIC_RETRY_KEY = "jRetryDynamic";
+    public final static String SESSION_DYNAMIC_CHOICE_STAGE_KEY = "jChoiceStage";
+    public final static String SESSION_DYNAMIC_CHOICE_REGISTRY_KEY = "jChoices";
+    public final static String SESSION_RECOVERY_ACTIONS_KEY = "jRecoveryActions";
 
 
     // session message history queue

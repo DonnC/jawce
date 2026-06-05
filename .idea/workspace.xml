@@ -4,14 +4,45 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="" />
+    <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.history/ehailing-history-20260530-191148-00001.ndjson" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/advanced-dynamic-template-handling.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced-dynamic-template-handling.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/core-engine-strategy.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/core-engine-strategy.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/dynamic-rendering.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/dynamic-rendering.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/annotation/FlowHookType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/annotation/FlowHookType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/FileSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/FileSessionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/GenerateHookResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/GenerateHookResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/HookResultMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/HookResultMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/FlowHookRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/FlowHookRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookExecutionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookExecutionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/WebhookProcessorResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/WebhookProcessorResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceNamedHookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceNamedHookTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/NamedHookBeans.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/NamedHookBeans.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/TestHooks.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/TestHooks.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="316" />
+    <option name="cachedIndexableFilesCount" value="367" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -132,73 +163,73 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.JCHATBOT LOCAL.executor": "Run",
-    "Application.LOCAL CONFIG.executor": "Run",
-    "Application.LOCAL EHAILING CONFIG.executor": "Run",
-    "Application.LOCAL LS CONFIG.executor": "Run",
-    "JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor": "Run",
-    "JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor": "Run",
-    "JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor": "Run",
-    "JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated.executor": "Run",
-    "JUnit.FileSessionManagerTest.testSingletonInstance.executor": "Run",
-    "JUnit.FileSessionManagerTest.testThreadSafeSingleton.executor": "Run",
-    "Maven.chatbot [clean,install].executor": "Run",
-    "Maven.chatbot [clean].executor": "Run",
-    "Maven.ehailing [clean].executor": "Run",
-    "Maven.engine [clean,install].executor": "Run",
-    "Maven.engine [clean].executor": "Run",
-    "Maven.engine [install].executor": "Run",
-    "Maven.java-engine [clean,install].executor": "Run",
-    "Maven.jawce [clean,install].executor": "Run",
-    "Maven.jawce-java-engine [clean,install].executor": "Run",
-    "Maven.jawce-session [clean,install].executor": "Run",
-    "Maven.jchatbot [clean,install].executor": "Run",
-    "Maven.jchatbot [clean].executor": "Run",
-    "Maven.jengine [clean,install].executor": "Run",
-    "Maven.jengine [clean].executor": "Run",
-    "Maven.jengine [install].executor": "Run",
-    "Maven.jsession [clean,install].executor": "Run",
-    "Maven.kengine [clean,install].executor": "Run",
-    "Maven.kt-engine [clean,install].executor": "Run",
-    "Maven.session [clean,install].executor": "Run",
-    "Notification.DisplayName-DoNotAsk-vcs.roots.invalid": "Invalid VCS root mapping",
-    "Notification.DoNotAsk-vcs.roots.invalid": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ChatbotApplication.executor": "Run",
-    "Spring Boot.EhailingApplication.executor": "Run",
-    "Spring Boot.JChatbot.executor": "Run",
-    "Spring Boot.JawceEngine.executor": "Run",
-    "Spring Boot.JchatbotApplication.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feat/new-hook",
-    "jdk.selected.JAVA_MODULE": "corretto-17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce/example/live-support/server/src/main/java/org/dcl/jawce/server",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "build.tools",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.JCHATBOT LOCAL.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LOCAL CONFIG.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LOCAL EHAILING CONFIG.executor&quot;: &quot;Run&quot;,
+    &quot;Application.LOCAL LS CONFIG.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testCleanUpDeletesSessionDirectory.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testGetInstanceDoesNotThrow.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testSingletonInstance.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FileSessionManagerTest.testThreadSafeSingleton.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.chatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ehailing [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.engine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-java-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jawce-session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jchatbot [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jengine [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.jsession [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kengine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.kt-engine [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.session [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-vcs.roots.invalid&quot;: &quot;Invalid VCS root mapping&quot;,
+    &quot;Notification.DoNotAsk-vcs.roots.invalid&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ChatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EhailingApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JChatbot.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JawceEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JchatbotApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/new-hook&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DEVELOPER/Documents/Personal/Personal/Projects/wce/jawce/example/live-support/server/src/main/java/org/dcl/jawce/server&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;build.tools&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEVELOPER\Documents\Personal\Personal\Projects\wce\jawce\example\live-support\server\src\main\java\org\dcl\jawce\server" />

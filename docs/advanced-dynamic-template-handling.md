@@ -33,7 +33,11 @@ Your account-selection example is a perfect fit:
 
 ## 2. What now works in `jawce`
 
-`jawce` now supports an `on-generate` hook returning a fully built `BaseEngineTemplate` for the current outbound response.
+`jawce` now supports a first-class dynamic-stage path where:
+
+- `type: dynamic` marks the stage as runtime-rendered
+- `on-generate` prepares context before rendering
+- `dynamic` returns the fully built `BaseEngineTemplate` for the current outbound response
 
 That means a hook can dynamically supply:
 
@@ -53,8 +57,9 @@ Example:
 
 ```yaml
 "ACCOUNT-SELECT":
-  type: text
-  on-generate: "com.example.billing.AccountSelectorHook.render"
+  type: dynamic
+  on-generate: "com.example.billing.AccountSelectorHook.prepare"
+  dynamic: "com.example.billing.AccountSelectorHook.render"
   message: "placeholder"
   routes:
     "re:.*": "ACCOUNT-CONFIRM"
@@ -63,7 +68,8 @@ Example:
 Important point:
 
 - the static YAML stage is only a shell,
-- the hook decides the final outbound template,
+- `on-generate` prepares anything the dynamic hook needs,
+- the `dynamic` hook decides the final outbound template,
 - the route can stay generic if the backend validates the chosen input afterward.
 
 ## 4. How the hook should think
@@ -91,9 +97,15 @@ import java.util.List;
 import java.util.Map;
 
 public class AccountSelectorHook {
+    public Hook prepare(Hook hook) {
+        hook.getSession().save(hook.getSessionId(), "prompt", "Select a payment account");
+        return hook;
+    }
+
     @SuppressWarnings("unchecked")
     public Hook render(Hook hook) {
         List<String> accounts = hook.getSession().getGlobal("accounts", List.class);
+        String prompt = String.valueOf(hook.getSession().get(hook.getSessionId(), "prompt"));
 
         Map<String, Object> templateMap;
 
@@ -101,7 +113,7 @@ public class AccountSelectorHook {
             templateMap = Map.of(
                     "type", "button",
                     "message", Map.of(
-                            "body", "Choose an account",
+                            "body", prompt,
                             "buttons", accounts
                     )
             );
@@ -120,13 +132,13 @@ public class AccountSelectorHook {
             templateMap = Map.of(
                     "type", "list",
                     "message", Map.of(
-                            "body", "Choose an account",
+                            "body", prompt,
                             "button", "Accounts",
                             "sections", Map.of("Accounts", rows)
                     )
             );
         } else {
-            StringBuilder body = new StringBuilder("Choose an account");
+            StringBuilder body = new StringBuilder(prompt);
             for (int i = 0; i < accounts.size(); i++) {
                 body.append("\\n").append(i + 1).append(". ").append(accounts.get(i));
             }
@@ -161,6 +173,17 @@ That is a strong fit when:
 ## 7. What to be careful about
 
 This pattern solves dynamic rendering, but not everything automatically.
+
+`jawce` still keeps compatibility with the older pattern where:
+
+- a `type: dynamic` stage uses `template` to return the runtime template body
+- or a normal static stage uses `on-generate` to replace the outbound template directly
+
+That remains supported, but for new work the clearer contract is:
+
+- full runtime message shaping: `type: dynamic` + `dynamic`
+- light preparation: `on-generate`
+- render/body shaping for known message types: `template`
 
 ### Input handling
 

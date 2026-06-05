@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -15,9 +14,10 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TemplateDynamicBody implements Serializable {
-    private BaseEngineTemplate template;
-    private Map<String, Object> flowPayload;
-    private Map<String, Object> renderPayload;
-    private java.util.List<DynamicChoice> dynamicChoices;
+public class DynamicChoiceSelection implements Serializable {
+    private String stage;
+    private String input;
+    private DynamicChoice choice;
+    @Builder.Default
+    private Map<String, Object> metadata = Map.of();
 }

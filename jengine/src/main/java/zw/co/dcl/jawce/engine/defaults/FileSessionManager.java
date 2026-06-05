@@ -1,5 +1,8 @@
 package zw.co.dcl.jawce.engine.defaults;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import zw.co.dcl.jawce.engine.api.iface.ISessionManager;
@@ -22,6 +25,11 @@ import java.util.*;
 public class FileSessionManager implements ISessionManager {
     private static final String USER_PROPS_KEY = "jProps";
     private static final String SESSION_FILE_EXT = ".session";
+    private static final ObjectMapper SESSION_OBJECT_MAPPER = new ObjectMapper()
+            .activateDefaultTyping(
+                    LaissezFaireSubTypeValidator.instance,
+                    ObjectMapper.DefaultTyping.NON_FINAL
+            );
 
     @Getter
     private final Path sessionDir;
@@ -199,12 +207,24 @@ public class FileSessionManager implements ISessionManager {
 
     private synchronized Map<String, Object> loadSessionData(String sessionId) {
         var sessionPath = sessionId == null ? globalSessionFile : getUserSessionFile(sessionId);
-        return SerializeUtils.readMapFromFile(sessionPath.toFile());
+        try {
+            return SESSION_OBJECT_MAPPER.readValue(sessionPath.toFile(), new TypeReference<Map<String, Object>>() {
+            });
+        } catch (Exception e) {
+            log.debug("Falling back to legacy session deserialization for {}: {}", sessionPath, e.getMessage());
+            return SerializeUtils.readMapFromFile(sessionPath.toFile());
+        }
     }
 
     private synchronized void saveSessionData(String sessionId, Map<String, Object> sessionData) {
         var sessionPath = sessionId == null ? globalSessionFile : getUserSessionFile(sessionId);
-        SerializeUtils.writeToFile(sessionPath.toFile(), sessionData);
+        try {
+            File file = sessionPath.toFile();
+            file.createNewFile();
+            SESSION_OBJECT_MAPPER.writeValue(file, sessionData);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create or write file: " + e.getMessage(), e);
+        }
     }
 
     public void cleanUp() {

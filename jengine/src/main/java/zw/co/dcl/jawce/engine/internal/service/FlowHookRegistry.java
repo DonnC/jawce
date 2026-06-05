@@ -7,6 +7,7 @@ import zw.co.dcl.jawce.engine.api.annotation.NamedFlowHook;
 import zw.co.dcl.jawce.engine.api.exceptions.InternalException;
 import zw.co.dcl.jawce.engine.api.iface.hook.IGenerateHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IGenericHook;
+import zw.co.dcl.jawce.engine.api.iface.hook.IDynamicHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IMiddlewareHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IReceiveHook;
 import zw.co.dcl.jawce.engine.api.iface.hook.IRouterHook;
@@ -30,6 +31,7 @@ public class FlowHookRegistry {
 
         registerAll(applicationContext.getBeansOfType(IReceiveHook.class), HookExecutionType.RECEIVE, bean -> bean::execute);
         registerAll(applicationContext.getBeansOfType(IGenerateHook.class), HookExecutionType.GENERATE, bean -> bean::execute);
+        registerAll(applicationContext.getBeansOfType(IDynamicHook.class), HookExecutionType.DYNAMIC, bean -> bean::execute);
         registerAll(applicationContext.getBeansOfType(IRouterHook.class), HookExecutionType.ROUTER, bean -> bean::execute);
         registerAll(applicationContext.getBeansOfType(IMiddlewareHook.class), HookExecutionType.MIDDLEWARE, bean -> bean::execute);
         registerAll(applicationContext.getBeansOfType(ITemplateHook.class), HookExecutionType.TEMPLATE, bean -> bean::execute);

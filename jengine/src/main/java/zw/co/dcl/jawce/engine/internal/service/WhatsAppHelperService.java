@@ -16,6 +16,7 @@ import zw.co.dcl.jawce.engine.api.utils.WhatsAppUtils;
 import zw.co.dcl.jawce.engine.configs.JawceConfig;
 import zw.co.dcl.jawce.engine.configs.WhatsAppConfig;
 import zw.co.dcl.jawce.engine.constants.SessionConstant;
+import zw.co.dcl.jawce.engine.internal.state.ConversationState;
 import zw.co.dcl.jawce.engine.model.dto.WebhookProcessorResult;
 import zw.co.dcl.jawce.engine.model.history.ChatHistoryEvent;
 import zw.co.dcl.jawce.engine.model.history.HistoryEventType;
@@ -51,37 +52,26 @@ public class WhatsAppHelperService {
 
     void onWhatsappRequestSuccess(WebhookProcessorResult requestDto) {
         if(requestDto.sessionId() == null) return;
-        var session = this.sessionManager.session(requestDto.sessionId());
+        var conversationState = new ConversationState(requestDto.sessionId(), this.sessionManager);
 
         if(requestDto.handleSession()) {
-            session.evict(requestDto.sessionId(), SessionConstant.CURRENT_STAGE_RETRY_COUNT);
-            var stageCode = session.get(requestDto.sessionId(), SessionConstant.CURRENT_STAGE);
-            session.save(requestDto.sessionId(), SessionConstant.PREV_STAGE, stageCode);
-            session.save(requestDto.sessionId(), SessionConstant.CURRENT_STAGE, requestDto.nextRoute());
+            conversationState.advanceTo(requestDto.nextRoute());
             log.debug("[onSuccess{}] Current route set to: {}", this.config.isEmulate() ? "(emulated)" : "", requestDto.nextRoute());
         }
+        conversationState.registerDynamicChoices(requestDto.nextRoute(), requestDto.dynamicChoices());
         if(config.isHandleSessionInactivity()) {
-            session.save(
-                    requestDto.sessionId(),
-                    SessionConstant.LAST_ACTIVITY_KEY,
-                    Utils.formatZonedDateTime(Utils.currentSystemDate())
-            );
+            conversationState.touchLastActivity(Utils.formatZonedDateTime(Utils.currentSystemDate()));
         }
     }
 
     void onRequestError(String sessionId) {
         if(sessionId == null) return;
 
-        var session = this.sessionManager.session(sessionId);
-        var currentStage = session.get(sessionId, SessionConstant.CURRENT_STAGE, String.class);
-        var previousStage = session.get(sessionId, SessionConstant.PREV_STAGE, String.class);
-
-        if(currentStage == null || currentStage.equalsIgnoreCase(config.getStartMenu())) {
+        var conversationState = new ConversationState(sessionId, this.sessionManager);
+        if(conversationState.currentStage() == null || conversationState.currentStage().equalsIgnoreCase(config.getStartMenu())) {
             log.warn("WhatsApp request exception - clearing session");
-            session.clear(sessionId);
-        } else {
-            session.save(sessionId, SessionConstant.CURRENT_STAGE, previousStage);
         }
+        conversationState.rollbackOrClear(config.getStartMenu());
     }
 
     public String sendWhatsAppRequest(WebhookProcessorResult requestDto) {
@@ -145,7 +135,7 @@ public class WhatsAppHelperService {
 
             var requestDto = new WebhookProcessorResult(
                     payload,
-                    null, null, false
+                    null, null, false, java.util.List.of()
             );
 
             var response = this.sendWhatsAppRequest(requestDto);
@@ -167,7 +157,7 @@ public class WhatsAppHelperService {
 
             var requestDto = new WebhookProcessorResult(
                     payload,
-                    null, null, false
+                    null, null, false, java.util.List.of()
             );
 
             var response = this.sendWhatsAppRequest(requestDto);
@@ -191,7 +181,7 @@ public class WhatsAppHelperService {
 
             var requestDto = new WebhookProcessorResult(
                     payload,
-                    null, null, false
+                    null, null, false, java.util.List.of()
             );
 
             var response = this.sendWhatsAppRequest(requestDto);

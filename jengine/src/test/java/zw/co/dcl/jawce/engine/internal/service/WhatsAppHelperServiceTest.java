@@ -51,7 +51,8 @@ class WhatsAppHelperServiceTest {
                 Map.of("type", "text"),
                 "REPORT",
                 "263771234567",
-                true
+                true,
+                java.util.List.of()
         ));
 
         assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.PREV_STAGE));
@@ -71,7 +72,8 @@ class WhatsAppHelperServiceTest {
                 Map.of("type", "text"),
                 "NEXT-STAGE",
                 "263771234567",
-                true
+                true,
+                java.util.List.of()
         )));
 
         assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
@@ -90,7 +92,8 @@ class WhatsAppHelperServiceTest {
                 Map.of("type", "text"),
                 "NEXT-STAGE",
                 "263771234567",
-                true
+                true,
+                java.util.List.of()
         )));
 
         assertEquals(Map.of(), sessionManager.fetchAll("263771234567"));
@@ -105,7 +108,8 @@ class WhatsAppHelperServiceTest {
                 Map.of("type", "reaction"),
                 null,
                 "263771234567",
-                false
+                false,
+                java.util.List.of()
         ));
 
         String lastActivity = sessionManager.get("263771234567", SessionConstant.LAST_ACTIVITY_KEY, String.class);

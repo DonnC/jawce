@@ -2,19 +2,23 @@ package zw.co.dcl.jawce.engine.internal.dto;
 
 import zw.co.dcl.jawce.engine.model.abs.BaseEngineTemplate;
 import zw.co.dcl.jawce.engine.model.core.Hook;
+import zw.co.dcl.jawce.engine.model.dto.DynamicChoice;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public record GenerateHookResult(
         Hook hook,
         BaseEngineTemplate templateOverride,
         Map<String, Object> renderPayload,
-        Map<String, Object> flowPayload
+        Map<String, Object> flowPayload,
+        List<DynamicChoice> dynamicChoices
 ) {
     public GenerateHookResult {
         renderPayload = renderPayload == null ? Collections.emptyMap() : Collections.unmodifiableMap(renderPayload);
         flowPayload = flowPayload == null ? Collections.emptyMap() : Collections.unmodifiableMap(flowPayload);
+        dynamicChoices = dynamicChoices == null ? List.of() : List.copyOf(dynamicChoices);
     }
 
     public boolean hasTemplateOverride() {
@@ -27,5 +31,9 @@ public record GenerateHookResult(
 
     public boolean hasFlowPayload() {
         return !this.flowPayload.isEmpty();
+    }
+
+    public boolean hasDynamicChoices() {
+        return !this.dynamicChoices.isEmpty();
     }
 }
