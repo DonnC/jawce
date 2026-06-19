@@ -129,6 +129,7 @@ Check the `example/` folder for production-ready implementations:
 - [Internal State Model](./docs/internal-state-model.md)
 - [Dynamic Choice Model](./docs/dynamic-choice-model.md)
 - [Dynamic Rendering](./docs/dynamic-rendering.md)
+- [Pagination In `jawce`](./docs/pagination.md)
 - [Advanced Dynamic Template Handling](./docs/advanced-dynamic-template-handling.md)
 
 ---

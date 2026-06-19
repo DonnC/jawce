@@ -242,7 +242,7 @@ class WorkerEngineResilienceTest {
         sessionManager.save("263771234567", SessionConstant.CURRENT_MSG_ID_KEY, "seed-msg");
         sessionManager.save("263771234567", SessionConstant.LAST_ACTIVITY_KEY, Utils.formatZonedDateTime(Utils.currentSystemDate()));
 
-        worker.processWebhook(EngineTestSupport.buttonWebhook("Menu", "wamid-invalid-1"));
+        worker.processWebhook(EngineTestSupport.textWebhook("unknown", "wamid-invalid-1"));
 
         Map<String, Object> failurePayload = clientManager.lastSentPayload();
         Map<String, Object> failureInteractive = EngineTestSupport.childMap(failurePayload, "interactive");

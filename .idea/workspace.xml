@@ -5,36 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.history/ehailing-history-20260530-191148-00001.ndjson" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/advanced-dynamic-template-handling.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/advanced-dynamic-template-handling.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/core-engine-strategy.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/core-engine-strategy.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/dynamic-rendering.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/dynamic-rendering.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/annotation/FlowHookType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/api/annotation/FlowHookType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/constants/SessionConstant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/FileSessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/FileSessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/defaults/YmlJsonTemplateStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/abstracts/BaseTemplateProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/GenerateHookResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/GenerateHookResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/HookResultMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/dto/HookResultMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/FlowHookRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/FlowHookRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookExecutionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/HookExecutionType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WebhookProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/abs/BaseEngineTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/TemplateDynamicBody.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/WebhookProcessorResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/main/java/zw/co/dcl/jawce/engine/model/dto/WebhookProcessorResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineDynamicTemplateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineHooksTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/api/WorkerEngineResilienceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceNamedHookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/HookServiceNamedHookTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/internal/service/WhatsAppHelperServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/NamedHookBeans.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/NamedHookBeans.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/TestHooks.java" beforeDir="false" afterPath="$PROJECT_DIR$/jengine/src/test/java/zw/co/dcl/jawce/engine/support/TestHooks.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -417,11 +388,11 @@
       <item itemvalue="JUnit.FileSessionManagerTest.testGlobalSessionFileIsCreated" />
       <item itemvalue="JUnit.FileSessionManagerTest.testSessionDirectoryIsCreated" />
       <item itemvalue="JUnit.FileSessionManagerTest.testThreadSafeSingleton" />
-      <item itemvalue="Spring Boot.ServerApplication" />
-      <item itemvalue="Spring Boot.EhailingApplication" />
       <item itemvalue="Spring Boot.ChatbotApplication" />
-      <item itemvalue="Spring Boot.JawceEngineKtApplication" />
+      <item itemvalue="Spring Boot.EhailingApplication" />
       <item itemvalue="Spring Boot.JChatbot" />
+      <item itemvalue="Spring Boot.JawceEngineKtApplication" />
+      <item itemvalue="Spring Boot.ServerApplication" />
     </list>
     <recent_temporary>
       <list>

@@ -1,5 +1,9 @@
 package zw.co.dcl.jawce.engine.support;
 
+import zw.co.dcl.jawce.engine.api.pagination.PaginationRequest;
+import zw.co.dcl.jawce.engine.api.pagination.PaginationSelection;
+import zw.co.dcl.jawce.engine.api.pagination.PaginationSupport;
+import zw.co.dcl.jawce.engine.api.pagination.PaginationMode;
 import zw.co.dcl.jawce.engine.api.utils.SerializeUtils;
 import zw.co.dcl.jawce.engine.model.core.Hook;
 import zw.co.dcl.jawce.engine.model.dto.DynamicChoice;
@@ -122,6 +126,75 @@ public class TestHooks {
     public Hook captureSelectedDynamicChoice(Hook hook) {
         if(hook.getAdditionalData() != null && hook.getAdditionalData().containsKey("dynamicChoice")) {
             hook.getSession().saveGlobal("selectedDynamicChoice", hook.getAdditionalData().get("dynamicChoice"));
+        }
+        return hook;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Hook renderPaginatedAccountsList(Hook hook) {
+        List<Map<String, Object>> rawAccounts = hook.getSession().getGlobal("pagedAccounts", List.class);
+        List<Map<String, Object>> accounts = rawAccounts == null ? List.of() : rawAccounts;
+
+        var request = PaginationRequest.builder()
+                .stateKey("accounts")
+                .mode(PaginationMode.LIST)
+                .pageSize(10)
+                .title("Accounts")
+                .prompt("Select an account")
+                .buttonLabel("Choose")
+                .sectionTitle("Account options")
+                .choices(PaginationSupport.mapChoices(
+                        accounts,
+                        account -> account.get("id").toString(),
+                        account -> account.get("label").toString(),
+                        account -> account.get("description").toString(),
+                        (account, ordinal) -> Map.of("accountId", account.get("id"), "accountLabel", account.get("label"))
+                ))
+                .build();
+
+        hook.setTemplateDynamicBody(PaginationSupport.render(hook, request));
+        return hook;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Hook renderPaginatedAccountsText(Hook hook) {
+        List<Map<String, Object>> rawAccounts = hook.getSession().getGlobal("pagedAccounts", List.class);
+        List<Map<String, Object>> accounts = rawAccounts == null ? List.of() : rawAccounts;
+
+        var request = PaginationRequest.builder()
+                .stateKey("accounts")
+                .mode(PaginationMode.TEXT)
+                .pageSize(10)
+                .prompt("Select an account")
+                .choices(PaginationSupport.mapChoices(
+                        accounts,
+                        account -> account.get("id").toString(),
+                        account -> account.get("label").toString(),
+                        account -> null,
+                        (account, ordinal) -> Map.of("accountId", account.get("id"), "accountLabel", account.get("label"))
+                ))
+                .build();
+
+        hook.setTemplateDynamicBody(PaginationSupport.render(hook, request));
+        return hook;
+    }
+
+    public Hook capturePaginatedAccountSelection(Hook hook) {
+        var selection = PaginationSupport.handleSelection(hook);
+        selection.ifPresent(value -> hook.getSession().saveGlobal("paginationSelection", SerializeUtils.toMap(value)));
+
+        if(selection.isPresent() && selection.get().isItem() && hook.getAdditionalData() != null && hook.getAdditionalData().containsKey("dynamicChoice")) {
+            hook.getSession().saveGlobal("selectedDynamicChoice", hook.getAdditionalData().get("dynamicChoice"));
+        }
+
+        return hook;
+    }
+
+    public Hook routePaginatedAccountSelection(Hook hook) {
+        PaginationSelection selection = PaginationSupport.selection(hook).orElse(null);
+        if(selection != null && selection.isNavigation()) {
+            Object rerenderStage = hook.getParams() == null ? null : hook.getParams().get("rerenderStage");
+            hook.setRedirectTo(rerenderStage == null ? "START-MENU" : rerenderStage.toString());
         }
         return hook;
     }

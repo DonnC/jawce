@@ -223,6 +223,10 @@ For most real bots, prefer:
 
 Use the deeper dynamic-body path only when the normal pattern becomes clearly insufficient.
 
+For paginated dynamic option sets, there is now a first-class helper approach rather than hand-rolling page state in your own hooks:
+
+- [Pagination In `jawce`](./pagination.md)
+
 ## 7. When to use `templateDynamicBody.renderPayload`
 
 The current engine already uses render payload data for cases like:

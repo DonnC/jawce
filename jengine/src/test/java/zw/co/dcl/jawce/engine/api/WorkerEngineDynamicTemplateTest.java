@@ -63,6 +63,28 @@ class WorkerEngineDynamicTemplateTest {
                         "  routes:\n" +
                         "    \"re:.*\": \"DONE\"\n" +
                         "\n" +
+                        "\"PAGINATED-LIST\":\n" +
+                        "  type: dynamic\n" +
+                        "  on-receive: \"zw.co.dcl.jawce.engine.support.TestHooks.capturePaginatedAccountSelection\"\n" +
+                        "  dynamic: \"zw.co.dcl.jawce.engine.support.TestHooks.renderPaginatedAccountsList\"\n" +
+                        "  router: \"zw.co.dcl.jawce.engine.support.TestHooks.routePaginatedAccountSelection\"\n" +
+                        "  params:\n" +
+                        "    rerenderStage: PAGINATED-LIST\n" +
+                        "  message: \"placeholder\"\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"DONE\"\n" +
+                        "\n" +
+                        "\"PAGINATED-TEXT\":\n" +
+                        "  type: dynamic\n" +
+                        "  on-receive: \"zw.co.dcl.jawce.engine.support.TestHooks.capturePaginatedAccountSelection\"\n" +
+                        "  dynamic: \"zw.co.dcl.jawce.engine.support.TestHooks.renderPaginatedAccountsText\"\n" +
+                        "  router: \"zw.co.dcl.jawce.engine.support.TestHooks.routePaginatedAccountSelection\"\n" +
+                        "  params:\n" +
+                        "    rerenderStage: PAGINATED-TEXT\n" +
+                        "  message: \"placeholder\"\n" +
+                        "  routes:\n" +
+                        "    \"re:.*\": \"DONE\"\n" +
+                        "\n" +
                         "\"DONE\":\n" +
                         "  type: text\n" +
                         "  message: \"Done\"\n" +
@@ -73,6 +95,8 @@ class WorkerEngineDynamicTemplateTest {
         Files.writeString(
                 triggersDir.resolve("triggers.yaml"),
                 "\"START-MENU\": \"re:(?i)^(start|hi|hello)$\"\n" +
+                        "\"PAGINATED-LIST\": \"re:(?i)^paged-list$\"\n" +
+                        "\"PAGINATED-TEXT\": \"re:(?i)^paged-text$\"\n" +
                         "\"LEGACY-TEMPLATE-DYNAMIC\": \"re:(?i)^legacy-template$\"\n" +
                         "\"LEGACY-DYNAMIC\": \"re:(?i)^legacy$\"\n"
         );
@@ -269,5 +293,81 @@ class WorkerEngineDynamicTemplateTest {
 
         assertTrue(body.contains("Invalid selection"));
         assertEquals("START-MENU", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
+    @Test
+    void listPaginationMovesForwardAndBackWithinSameStage() {
+        sessionManager.saveGlobal("pagedAccounts", samplePagedAccounts(23));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("paged-list", "wamid-page-list-start"));
+
+        Map<String, Object> firstPayload = clientManager.lastSentPayload();
+        Map<String, Object> firstInteractive = EngineTestSupport.childMap(firstPayload, "interactive");
+        Map<String, Object> firstAction = EngineTestSupport.childMap(firstInteractive, "action");
+        List<?> firstSections = (List<?>) firstAction.get("sections");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> firstSection = (Map<String, Object>) firstSections.get(0);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> firstRows = (List<Map<String, Object>>) firstSection.get("rows");
+
+        assertEquals(9, firstRows.size());
+        assertEquals("acc-1", firstRows.get(0).get("id"));
+        assertEquals("accounts::NEXT::1", firstRows.get(firstRows.size() - 1).get("id"));
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("accounts::NEXT::1", "wamid-page-list-next"));
+
+        Map<String, Object> secondPayload = clientManager.lastSentPayload();
+        Map<String, Object> secondInteractive = EngineTestSupport.childMap(secondPayload, "interactive");
+        Map<String, Object> secondAction = EngineTestSupport.childMap(secondInteractive, "action");
+        List<?> secondSections = (List<?>) secondAction.get("sections");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> secondSection = (Map<String, Object>) secondSections.get(0);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> secondRows = (List<Map<String, Object>>) secondSection.get("rows");
+
+        assertEquals("acc-9", secondRows.get(0).get("id"));
+        assertEquals("accounts::PREVIOUS::0", secondRows.get(8).get("id"));
+        assertEquals("accounts::NEXT::2", secondRows.get(9).get("id"));
+        assertEquals("PAGINATED-LIST", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+
+        worker.processWebhook(EngineTestSupport.buttonWebhook("accounts::PREVIOUS::0", "wamid-page-list-prev"));
+
+        Map<String, Object> backPayload = clientManager.lastSentPayload();
+        Map<String, Object> backInteractive = EngineTestSupport.childMap(backPayload, "interactive");
+        Map<String, Object> backAction = EngineTestSupport.childMap(backInteractive, "action");
+        List<?> backSections = (List<?>) backAction.get("sections");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> backSection = (Map<String, Object>) backSections.get(0);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> backRows = (List<Map<String, Object>>) backSection.get("rows");
+
+        assertEquals("acc-1", backRows.get(0).get("id"));
+    }
+
+    @Test
+    void paginatedTextSelectionUsesVisiblePageOrdinals() {
+        sessionManager.saveGlobal("pagedAccounts", samplePagedAccounts(23));
+
+        worker.processWebhook(EngineTestSupport.textWebhook("paged-text", "wamid-page-text-start"));
+        worker.processWebhook(EngineTestSupport.textWebhook("Next", "wamid-page-text-next"));
+        worker.processWebhook(EngineTestSupport.textWebhook("1", "wamid-page-text-select"));
+
+        Map<String, Object> selected = sessionManager.getGlobal("selectedDynamicChoice", Map.class);
+
+        assertEquals("acc-11", selected.get("id"));
+        assertEquals("Account 11", selected.get("label"));
+        assertEquals("DONE", sessionManager.get("263771234567", SessionConstant.CURRENT_STAGE));
+    }
+
+    private List<Map<String, Object>> samplePagedAccounts(int count) {
+        List<Map<String, Object>> accounts = new java.util.ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            accounts.add(Map.of(
+                    "id", "acc-" + i,
+                    "label", "Account " + i,
+                    "description", "Use Account " + i
+            ));
+        }
+        return accounts;
     }
 }

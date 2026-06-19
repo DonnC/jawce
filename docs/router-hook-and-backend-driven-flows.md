@@ -43,12 +43,17 @@ Example:
 - 3 options: use buttons
 - 20 options: use list
 - 1 option: send text and continue
+- 23 options: stay on one stage and paginate the presentation
 
 The router can redirect to:
 
 - `SHOW-OPTIONS-BUTTON`
 - `SHOW-OPTIONS-LIST`
 - `SHOW-OPTIONS-TEXT`
+
+If the requirement is page navigation within the same business step, prefer the pagination helper pattern instead of creating one stage per page:
+
+- [Pagination In `jawce`](./pagination.md)
 
 ### Existing workflow recovery
 
