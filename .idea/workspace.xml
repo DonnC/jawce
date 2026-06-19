@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a8b2f45-48ac-4b32-b446-bbe27948377a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/hooks/RideOfferHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/java/zw/co/dcl/ehailing/hooks/RideOfferHook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/main/resources/templates/ehailing-bot.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ehailing/src/test/java/zw/co/dcl/ehailing/hooks/RideOfferHookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ehailing/src/test/java/zw/co/dcl/ehailing/hooks/RideOfferHookTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="367" />
+    <option name="cachedIndexableFilesCount" value="377" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">

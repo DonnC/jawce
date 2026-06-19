@@ -46,7 +46,16 @@
   type: request-location
   message: "Where would you like to go?"
   routes:
-    "location_request": "RIDE-OFFER"
+    "location_request": "AVAILABLE-DRIVERS"
+
+"AVAILABLE-DRIVERS":
+  type: dynamic
+  on-receive: "captureSelectedDriver"
+  dynamic: "renderAvailableDrivers"
+  router: "routeDriverSelection"
+  message: "placeholder"
+  routes:
+    "re:.*": "RIDE-OFFER"
 
 "RIDE-OFFER":
   type: dynamic
@@ -79,9 +88,9 @@
     title: PickDrive Ride
     body: |
       - Ride: `{{ p.rideType }}`
-      - Driver: `Donald`
-      - Vehicle Color: `Silver`
-      - Reg Number: `QZW 0123`
+      - Driver: `{{ s.selectedDriverName }}`
+      - Vehicle: `{{ s.selectedDriverVehicle }}`
+      - Reg Number: `{{ s.selectedDriverPlate }}`
       
       Confirm to notify the driver to come pick you up now
     buttons:

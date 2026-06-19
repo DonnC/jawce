@@ -27,6 +27,9 @@ class RideOfferHookTest {
         FileSessionManager sessionManager = createSessionManager();
         String sessionId = "263771234567";
         sessionManager.saveProp(sessionId, "rideType", "Standard");
+        sessionManager.save(sessionId, "selectedDriverName", "Nyasha G.");
+        sessionManager.save(sessionId, "selectedDriverEtaMins", 8);
+        sessionManager.save(sessionId, "selectedDriverPriceNote", "Economy fare");
 
         RideOfferHook hook = new RideOfferHook();
         Hook arg = Hook.builder()
@@ -43,6 +46,7 @@ class RideOfferHookTest {
 
         ButtonTemplate template = (ButtonTemplate) result.getTemplateDynamicBody().getTemplate();
         assertEquals("Your Standard fee to your destination is USD $4.25\nYou will arrive in ~6mins", template.getMessage().getBody());
+        assertEquals("Driver Nyasha G. | 8 mins away | Economy fare", template.getMessage().getFooter());
         assertEquals(java.util.List.of("Accept", "Counter Offer"), template.getMessage().getButtons());
     }
 
@@ -65,5 +69,6 @@ class RideOfferHookTest {
 
         ButtonTemplate template = (ButtonTemplate) result.getTemplateDynamicBody().getTemplate();
         assertEquals("Your Ride fee to your destination is USD $3.50\nYou will arrive in ~8mins", template.getMessage().getBody());
+        assertEquals("Driver is being matched | 8 mins away | Metered fare", template.getMessage().getFooter());
     }
 }

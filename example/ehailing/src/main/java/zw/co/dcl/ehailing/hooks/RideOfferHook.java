@@ -16,6 +16,9 @@ public class RideOfferHook {
     private static final String QUOTE_AMOUNT_KEY = "quoteAmount";
     private static final String QUOTE_WAIT_MINS_KEY = "quoteWaitMins";
     private static final String QUOTE_LABEL_KEY = "quoteLabel";
+    private static final String DRIVER_NAME_KEY = "selectedDriverName";
+    private static final String DRIVER_ETA_KEY = "selectedDriverEtaMins";
+    private static final String DRIVER_PRICE_NOTE_KEY = "selectedDriverPriceNote";
 
     @NamedFlowHook(value = "prepareRideOffer", type = FlowHookType.GENERATE)
     public Hook prepare(Hook hook) {
@@ -33,6 +36,9 @@ public class RideOfferHook {
         String amount = hook.getSession().get(hook.getSessionId(), QUOTE_AMOUNT_KEY, String.class);
         Integer waitMins = hook.getSession().get(hook.getSessionId(), QUOTE_WAIT_MINS_KEY, Integer.class);
         String label = hook.getSession().get(hook.getSessionId(), QUOTE_LABEL_KEY, String.class);
+        String driverName = hook.getSession().get(hook.getSessionId(), DRIVER_NAME_KEY, String.class);
+        Integer driverEta = hook.getSession().get(hook.getSessionId(), DRIVER_ETA_KEY, Integer.class);
+        String priceNote = hook.getSession().get(hook.getSessionId(), DRIVER_PRICE_NOTE_KEY, String.class);
 
         Map<String, Object> templateMap = Map.of(
                 "type", "button",
@@ -40,6 +46,9 @@ public class RideOfferHook {
                         "title", "Ride Fee",
                         "body", "Your " + safe(label, "Ride") + " fee to your destination is USD $" +
                                 safe(amount, "3.50") + "\nYou will arrive in ~" + safe(waitMins, 8) + "mins",
+                        "footer", "Driver " + safe(driverName, "is being matched") +
+                                " | " + safe(driverEta, waitMins == null ? 8 : waitMins) + " mins away" +
+                                " | " + safe(priceNote, "Metered fare"),
                         "buttons", java.util.List.of("Accept", "Counter Offer")
                 )
         );
